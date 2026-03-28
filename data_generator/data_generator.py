@@ -99,30 +99,28 @@ os.makedirs("plots", exist_ok=True)
 
 def plot_law(generate_func, headers, law_name, x_idx, y_idx):
     """Genera plot de línea con los 3 niveles de ruido"""
-    base_data = generate_func()
-    plt.figure()
+    base_data = generate_func() #generamos los datos base
+    plt.figure() #comenzamos con la figura
+    colors = {"no_noise": "red", "low_noise": "green", "high_noise": "blue"} # definir los colores para cada nivel de ruido
+    alpha_values = {"no_noise": 1.0, "low_noise": 0.8, "high_noise": 0.6} # añadimos algo de transparencia
 
-    # Orden de plot: no_noise adelante, luego low_noise, luego high_noise al fondo
-    colors = {"no_noise": "red", "low_noise": "green", "high_noise": "blue"}
-    alpha_values = {"no_noise": 1.0, "low_noise": 0.7, "high_noise": 0.4}
-
-    for noise_name in ["no_noise", "low_noise", "high_noise"]:
-        data = base_data.copy()
-        data[:, -1] = add_noise(data[:, -1], NOISE_LEVELS[noise_name])
-        # ordenar por x para que las líneas se vean correctas
-        sorted_idx = np.argsort(data[:, x_idx])
+    for noise_name in ["high_noise", "low_noise", "no_noise"]: # Orden de plot: no_noise adelante, luego low_noise, luego high_noise al fondo
+        data = base_data.copy() # cargamos los valores de los resultados de las leyes
+        data[:, -1] = add_noise(data[:, -1], NOISE_LEVELS[noise_name]) # añadimos ruido
+        sorted_idx = np.argsort(data[:, x_idx]) # ordenamos los valores por x para que las líneas se vean correctamente
         plt.plot(data[sorted_idx, x_idx], data[sorted_idx, y_idx],
                  color=colors[noise_name], alpha=alpha_values[noise_name],
-                 label=noise_name)
+                 label=noise_name) #ploteamos los datos
 
-    plt.xlabel(headers[x_idx])
+    # el nombre de los ejes son los de los encabezados
+    plt.xlabel(headers[x_idx]) 
     plt.ylabel(headers[y_idx])
-    plt.title(law_name)
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(f"plots/{law_name}.png")
-    plt.show()
-    plt.close()
+    plt.title(law_name) # el título es el de la ley de la que obtenemos los datos
+    plt.legend() # mostramos la leyenda en la figura
+    plt.tight_layout() # estilo de la figura
+    plt.savefig(f"plots/{law_name}.png") # guardamos la figura en la carpeta plot con el nombre de la ley
+    plt.show() # mostramos la figura
+    plt.close() # la cerramos (en Spyder o VS Code con una extensión aparece la imagen)
 
 
 if __name__ == "__main__":
