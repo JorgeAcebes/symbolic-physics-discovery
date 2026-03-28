@@ -1,247 +1,146 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*- 
 """
 Created on Thu Mar 26 14:11:53 2026
 
 @author: jfcte
 """
-
+#importo las librerías
 import numpy as np
+import matplotlib.pyplot as plt
+import os
 
-np.random.seed(42)
+np.random.seed(1) # inicializamos el random
 
-# =========================
-# CONFIGURACIÓN GENERAL
-# =========================
-N_SAMPLES = 1000
+N_SAMPLES = 1000 # puntos para cada ley
 
 NOISE_LEVELS = {
     "no_noise": 0.0,
     "low_noise": 0.01,
     "high_noise": 0.1
-}
+} # diferentes niveles de ruido que luego aplicaremos para distinguir los casos limpios de los ruidosos
 
-# =========================
-# FUNCIONES DE LEYES FÍSICAS
-# =========================
-
+# Funciones de las leyes físicas
 def coulomb_law(q1, q2, r):
     k = 8.99e9
     return k * (q1 * q2) / (r**2)
-
 def harmonic_oscillator(x):
     k = 1.0
     return -k * x
-
 def kepler_third_law(r):
-    # T^2 = r^3  → T = sqrt(r^3)
     return np.sqrt(r**3)
-
 def ideal_gas_law(n, T, V):
     R = 8.314
     return (n * R * T) / V
 
-
-# =========================
-# FUNCIÓN PARA AÑADIR RUIDO
-# =========================
-
+# Función que añade ruido gaussiano proporcional a la desviación estándar de y
 def add_noise(y, noise_level):
+    #np.random.rand Genera números aleatorios con distribución normal.
+    #*y.shape asegura que el array de ruido e y tengan la misma forma 
+    #np.std obtiene la desviación estándar de y, así se escala el ruido con la magnitud de los datos
+    #noise_level sirve para modular cuánto ruido se quiere añadir
     noise = noise_level * np.std(y) * np.random.randn(*y.shape)
-    return y + noise
+    return y + noise #devuelve y + el ruido
 
-
-# =========================
-# GENERACIÓN DE DATOS
-# =========================
-
+# Generación de datos
+# column_stack aplica arrays 1D para formar columnas de una matriz de 2D
 def generate_coulomb():
+    #elijo valores aleatorios de q1, q2, r y obtengo las fuerzas de coulomb
     q1 = np.random.uniform(1e-6, 1e-3, N_SAMPLES)
     q2 = np.random.uniform(1e-6, 1e-3, N_SAMPLES)
-    r = np.random.uniform(0.01, 1.0, N_SAMPLES)
-
+    r = np.random.uniform(0.01, 1.0, N_SAMPLES)#r = np.linspace(0.01, 1.0, N_SAMPLES)#
     y = coulomb_law(q1, q2, r)
     return np.column_stack((q1, q2, r, y))
 
-
 def generate_oscillator():
+    #elijo valores aleatorios de x y obtengo las fuerzas de un muelle
     x = np.random.uniform(-10, 10, N_SAMPLES)
     y = harmonic_oscillator(x)
     return np.column_stack((x, y))
 
-
 def generate_kepler():
+    #obtengo valores aleatorios del perihelio y obtengo los periodos de traslación
     r = np.random.uniform(0.1, 10, N_SAMPLES)
     T = kepler_third_law(r)
     return np.column_stack((r, T))
 
-
 def generate_ideal_gas():
+    #obtengo valores aleatorios de n,T,V y obtengo la presión correspondiente
     n = np.random.uniform(0.1, 10, N_SAMPLES)
     T = np.random.uniform(100, 500, N_SAMPLES)
-    V = np.random.uniform(0.1, 10, N_SAMPLES)
-
+    V = np.random.uniform(0.1, 10, N_SAMPLES) #V = np.linspace(0.1, 10, N_SAMPLES)#
     P = ideal_gas_law(n, T, V)
     return np.column_stack((n, T, V, P))
 
-
-# =========================
-# GUARDADO DE DATOS
-# =========================
-
-def save_dataset(filename, headers, datasets):
+# Guarda los datos en un .txt con el título que se desee, los encabezados deseado
+# y para los datasets en matrices 2D como se han generado con los generate_*
+def save_dataset(filename, headers, data):
+    """Guarda un dataset 2D en un archivo con encabezados"""
     with open(filename, "w") as f:
-        for label, data in datasets.items():
-            f.write(f"# ===== {label} =====\n")
-            f.write("# " + " ".join(headers) + "\n")
-            np.savetxt(f, data, fmt="%.6e")
-            f.write("\n\n")
+        f.write("# " + " ".join(headers) + "\n") # escribe los encabezados de las columnas (ej: q1 q2 r F)
+        np.savetxt(f, data, fmt="%.6e") # guarda la matriz 2D en el archivo
+    return 0
 
+# Función que unifica las funciones anteriores y crea 3 archivos .txt (1 por tipo de ruido) por ley
+def process_law(generate_func, headers, law_name):
+    base_data = generate_func() # Llama a la función generate_func() para generar el dataset base sin ruido    
+    os.makedirs("datasets", exist_ok=True) # Crea la carpeta 'datasets' si no existe, para guardar los archivos
+    
+    #llamaremos noise_name a las claves (strings) y noise_level a los valores (floats)
+    for noise_name, noise_level in NOISE_LEVELS.items(): # Itera sobre los distintos niveles de ruido definidos en NOISE_LEVELS
+        data = base_data.copy() # Copia el dataset base
+        data[:, -1] = add_noise(data[:, -1], noise_level) # Añade ruido solo a la columna dependiente (última columna del dataset)
+        filename = f"datasets/{law_name}_{noise_name}.txt" # Nombra el archivo creado
+        save_dataset(filename, headers, data) # guarda el dataset con la función definida anteriormente
+    return 0
 
-# =========================
-# PIPELINE PRINCIPAL
-# =========================
-
-def process_law(generate_func, headers, filename):
-    base_data = generate_func()
-
-    datasets = {}
-
-    for noise_name, noise_level in NOISE_LEVELS.items():
-        noisy_data = base_data.copy()
-        y = noisy_data[:, -1]
-        noisy_data[:, -1] = add_noise(y, noise_level)
-
-        datasets[noise_name] = noisy_data
-
-    save_dataset(filename, headers, datasets)
-
-
-def main():
-    # Ley de Coulomb
-    process_law(
-        generate_coulomb,
-        headers=["q1", "q2", "r", "F"],
-        filename="coulomb_data.txt"
-    )
-
-    # Oscilador armónico
-    process_law(
-        generate_oscillator,
-        headers=["x", "F"],
-        filename="oscillator_data.txt"
-    )
-
-    # Ley de Kepler
-    process_law(
-        generate_kepler,
-        headers=["r", "T"],
-        filename="kepler_data.txt"
-    )
-
-    # Gas ideal
-    process_law(
-        generate_ideal_gas,
-        headers=["n", "T", "V", "P"],
-        filename="ideal_gas_data.txt"
-    )
-
-    print("Datasets generados correctamente.")
-
-import matplotlib.pyplot as plt
-import os
-
-# Crear carpeta para plots
+# Plots -- hay que tener en cuenta que ni el gas ideal ni la ley de Coulomb son dependientes de una única variable
+# por eso las relaciones que se muestran en el plot no son exactas (el resto de valores varían)
 os.makedirs("plots", exist_ok=True)
 
-
-def plot_dataset(datasets, title, x_idx, y_idx, labels, filename):
+def plot_law(generate_func, headers, law_name, x_idx, y_idx):
+    """Genera plot de línea con los 3 niveles de ruido"""
+    base_data = generate_func()
     plt.figure()
 
-    for name, data in datasets.items():
-        x = data[:, x_idx]
-        y = data[:, y_idx]
-        plt.scatter(x, y, s=10, label=name)
+    # Orden de plot: no_noise adelante, luego low_noise, luego high_noise al fondo
+    colors = {"no_noise": "red", "low_noise": "green", "high_noise": "blue"}
+    alpha_values = {"no_noise": 1.0, "low_noise": 0.7, "high_noise": 0.4}
 
-    plt.xlabel(labels[0])
-    plt.ylabel(labels[1])
-    plt.title(title)
+    for noise_name in ["no_noise", "low_noise", "high_noise"]:
+        data = base_data.copy()
+        data[:, -1] = add_noise(data[:, -1], NOISE_LEVELS[noise_name])
+        # ordenar por x para que las líneas se vean correctas
+        sorted_idx = np.argsort(data[:, x_idx])
+        plt.plot(data[sorted_idx, x_idx], data[sorted_idx, y_idx],
+                 color=colors[noise_name], alpha=alpha_values[noise_name],
+                 label=noise_name)
+
+    plt.xlabel(headers[x_idx])
+    plt.ylabel(headers[y_idx])
+    plt.title(law_name)
     plt.legend()
     plt.tight_layout()
-
-    plt.savefig(f"plots/{filename}")
+    plt.savefig(f"plots/{law_name}.png")
     plt.show()
     plt.close()
 
 
-def plot_all_laws():
-    # Coulomb (usar r vs F para visualizar bien)
-    base = generate_coulomb()
-    datasets = {}
-    for noise_name, noise_level in NOISE_LEVELS.items():
-        d = base.copy()
-        d[:, -1] = add_noise(d[:, -1], noise_level)
-        datasets[noise_name] = d
+if __name__ == "__main__":
+    
+    # Coulomb
+    process_law(generate_coulomb, ["q1", "q2", "r", "F"], "coulomb")
+    plot_law(generate_coulomb, ["q1", "q2", "r", "F"], "Coulomb (F vs r)", x_idx=2, y_idx=3)
 
-    plot_dataset(
-        datasets,
-        title="Ley de Coulomb (F vs r)",
-        x_idx=2,  # r
-        y_idx=3,  # F
-        labels=["r", "F"],
-        filename="coulomb.png"
-    )
-
-    # Oscilador armónico
-    base = generate_oscillator()
-    datasets = {}
-    for noise_name, noise_level in NOISE_LEVELS.items():
-        d = base.copy()
-        d[:, -1] = add_noise(d[:, -1], noise_level)
-        datasets[noise_name] = d
-
-    plot_dataset(
-        datasets,
-        title="Oscilador armónico (F vs x)",
-        x_idx=0,
-        y_idx=1,
-        labels=["x", "F"],
-        filename="oscillator.png"
-    )
+    # Oscilador
+    process_law(generate_oscillator, ["x", "F"], "oscillator")
+    plot_law(generate_oscillator, ["x", "F"], "Oscillator (F vs x)", x_idx=0, y_idx=1)
 
     # Kepler
-    base = generate_kepler()
-    datasets = {}
-    for noise_name, noise_level in NOISE_LEVELS.items():
-        d = base.copy()
-        d[:, -1] = add_noise(d[:, -1], noise_level)
-        datasets[noise_name] = d
+    process_law(generate_kepler, ["r", "T"], "kepler")
+    plot_law(generate_kepler, ["r", "T"], "Kepler (T vs r)", x_idx=0, y_idx=1)
 
-    plot_dataset(
-        datasets,
-        title="Ley de Kepler (T vs r)",
-        x_idx=0,
-        y_idx=1,
-        labels=["r", "T"],
-        filename="kepler.png"
-    )
+    # Gas ideal
+    process_law(generate_ideal_gas, ["n", "T", "V", "P"], "ideal_gas")
+    plot_law(generate_ideal_gas, ["n", "T", "V", "P"], "Ideal Gas (P vs V)", x_idx=2, y_idx=3)
 
-    # Gas ideal (usar V vs P)
-    base = generate_ideal_gas()
-    datasets = {}
-    for noise_name, noise_level in NOISE_LEVELS.items():
-        d = base.copy()
-        d[:, -1] = add_noise(d[:, -1], noise_level)
-        datasets[noise_name] = d
-
-    plot_dataset(
-        datasets,
-        title="Gas ideal (P vs V)",
-        x_idx=2,  # V
-        y_idx=3,  # P
-        labels=["V", "P"],
-        filename="ideal_gas.png"
-    )
-
-if __name__ == "__main__":
-    main()
-    plot_all_laws()
+    print("Datasets y plots generados correctamente.")
