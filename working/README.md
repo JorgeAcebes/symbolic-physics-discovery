@@ -1,0 +1,1 @@
+Esta carpeta es para dejar archivos temporales que no sabemos si serán de utilidad o no. No hace falta que esté muy bien estructurado.
