@@ -77,6 +77,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*/.ipynb_checkpoints/*
 
 # IPython
 profile_default/
@@ -216,6 +217,20 @@ __marimo__/
 statistics.csv
 hall_of_fame.csv
 hall_of_fame.csv.bkp
+Manifest.toml
+Project.toml
+pysr_options.pkl  
 
 # VS Code
 .vscode/
+
+# LaTeX
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+*.toc
+*.blg
+*.bbl
+*.out
