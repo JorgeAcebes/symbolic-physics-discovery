@@ -1,0 +1,6 @@
+docs/** linguist-documentation
+
+*.tex linguist-documentation
+*.bib linguist-documentation
+*.sty linguist-documentation
+*.cls linguist-documentation
