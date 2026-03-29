@@ -4,7 +4,7 @@ Este directorio contiene los conjuntos de datos sintéticos generados para el en
 
 ## Estructura de archivos
 - Los archivos deben usar el formato `.csv`.
-- Nomenclatura: `[ley]_[muestras]_[distribución].csv` (ej: `kepler_500_n01.csv`).
+- Nomenclatura: `[ley]_[nivel_ruido]_[distribución].csv` (ej: `kepler_500_n01.csv`).
 
 ## Estándar de Contenido
 Cada dataset debe incluir columnas normalizadas y una columna de target con ruido inyectado $\epsilon \sim \mathcal{N}(0, \sigma^2)$.
