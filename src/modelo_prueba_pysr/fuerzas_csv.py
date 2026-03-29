@@ -6,6 +6,23 @@ import sympy
 from datetime import datetime
 
 
+'''
+TODO: 
+
+- Revisar cómo simplifica sympy (e.g., no queremos que 8.314 nos lo simplifique a una división de números enteros)
+
+- Improve hiperparámetros (actualmente, con 50 iterations, 10 population y 15 maxsize da resultados decentes)
+
+- Estoy cansado y a lo mejor no estoy pensando muy bien, pero, ¿siempre conocemos los grados de libertad de nuestro sistema? Porque 
+nosotros le estamos introduciendo manualmente las variables de la función, pero tal vez la física depende de una variable extra que 
+no le estamos dando (obviamente en el caso de nuestros datos sintéticos no, pero con datos del mundo real...). O sea, mi objetivo es
+estructurar el proyecto de tal manera que si alguien nos diese una serie de datos y nos dice de qué experimento es (de ahí podríamos 
+sacar las variables) poder conseguir la ecuación. PD: si hay variables irrelevantes no me importa porque la multiplicaría por 0 y ya 
+está, pero no sé qué pasa si hay más variables.
+
+'''
+
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Ruta absoluta POSIX (Julia es sensible a esto)
 RESULTS_BASE = os.path.abspath(os.path.join(BASE_DIR, "../../results/testing_pysr")).replace("\\", "/")
