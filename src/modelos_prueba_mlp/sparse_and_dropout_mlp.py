@@ -1,3 +1,4 @@
+# %%
 import os
 import glob
 import torch
@@ -8,9 +9,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Configuración de directorios
-DATA_DIR = "data"
-RES_SPARSE = "results/testing_mlp/sparse_mlp"
-RES_DROPOUT = "results/testing_mlp/dropout_mlp"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, "../..", "data"))
+RESULTS_BASE = os.path.abspath(os.path.join(BASE_DIR, "../../results/testing_mlp"))
+RES_SPARSE = os.path.join(RESULTS_BASE, "sparse_mlp")
+RES_DROPOUT = os.path.join(RESULTS_BASE, "dropout_mlp")
 os.makedirs(RES_SPARSE, exist_ok=True)
 os.makedirs(RES_DROPOUT, exist_ok=True)
 
@@ -127,7 +130,7 @@ def train_mc_dropout(X, y, dataset_name, epochs=1000, lr=1e-3):
 def main():
     csv_files = glob.glob(os.path.join(DATA_DIR, "*.csv"))
     if not csv_files:
-        print("Fallo de I/O: No se encontraron archivos CSV en el directorio.")
+        print(f"Fallo de I/O: No se encontraron archivos CSV en el directorio {csv_files}")
         return
 
     for file in csv_files:
