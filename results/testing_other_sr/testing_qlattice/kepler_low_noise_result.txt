@@ -1,0 +1,2 @@
+Equation obtained for kepler_low_noise:
+14.04*(0.005936*r + 0.54)*(0.1965*r + 0.17)*log(0.499*r + 0.1561) + 2.203

@@ -19,11 +19,19 @@ RES_QLATTICE = os.path.join(RESULTS_BASE, "testing_qlattice")
 RES_GPLEARN = os.path.join(RESULTS_BASE, "testing_gplearn")
 RES_PYSINDY = os.path.join(RESULTS_BASE, "testing_pysindy")
 
+
+# ================================================================================================
 # This should be temporary. We should implemet a confing.json in where we would choose what models
 
-qlattice = 1 # Currently 
+qlattice = 1 # Currently working only on it
 gplearn = 0
 sindy = 0
+
+# Only dataset containing these words will be used. Using OR, not AND.
+names = ['kepler_low_noise'] 
+
+# TODO: Implement logic so that when "all" is written, all datasets are used
+# ================================================================================================
 
 
 for path in [RES_QLATTICE, RES_GPLEARN, RES_PYSINDY]:
@@ -35,28 +43,37 @@ for path in [RES_QLATTICE, RES_GPLEARN, RES_PYSINDY]:
 
 def run_qlattice(df, target_col, dataset_name):
     """
-    QLattice: Explora un hipergrafo cuántico-probabilístico para extraer subgrafos
+    QLattice: Explora un hipergrafo probabilístico para extraer subgrafos
     que representan las leyes físicas.
     """
+    # Dividimos nuestra data. Actualmente lo realizo dentro de la función run_qlattice,
+    # sería interesante poder realizar el split fuera para que fuese igual para todos.
+
+    train_data, val_data, test_data = feyn.tools.split(df, ratio=[0.6, 0.2, 0.2], random_state=42)
+
     # Instanciamos el hipergrafo
-    ql = feyn.QLattice()
+    ql = feyn.QLattice(random_seed=42)
     
     # auto_run maneja el ciclo de entrenamiento (epoching) internamente
     models = ql.auto_run(
-        data=df,
+        data=train_data,
         output_name=target_col,
+        loss_function=None, # Default --> MSE para problemas de regresión
+        n_epochs=10,      # 10 épocas (default)
         max_complexity=7, # Forzamos parsimonia para física
-        criterion="bic"   # Bayesian Information Criterion para penalizar sobreajuste
+        criterion="bic"  # Bayesian Information Criterion para penalizar sobreajuste
     )
-    
+
     # El índice 0 contiene el modelo topológico óptimo
     best_model = models[0]
+    best_model.plot(train_data, filename=os.path.join(RES_QLATTICE, f"{dataset_name}_plot.html"))
+    best_model.plot_signal(train_data, filename=os.path.join(RES_QLATTICE, f"{dataset_name}_plot_signal.html"))
     best_expr = str(best_model.sympify(signif=4))
     
     # Guardar resultados
     out_path = os.path.join(RES_QLATTICE, f"{dataset_name}_result.txt")
     with open(out_path, "w") as f:
-        f.write(f"Ecuación extraída para {dataset_name}:\n")
+        f.write(f"Equation obtained for {dataset_name}:\n")
         f.write(best_expr + "\n")
     
     print(f"[QLattice] {dataset_name}: {best_expr}")
@@ -151,6 +168,7 @@ def run_pysindy(X, y, dataset_name, feature_names):
 # 2. Ejecución Principal
 # -------------------------------------------------------------------------
 
+
 def main():
     csv_files = glob.glob(os.path.join(DATA_DIR, "*.csv"))
     if not csv_files:
@@ -158,7 +176,10 @@ def main():
         return
 
     for file in csv_files:
-        dataset_name = os.path.basename(file).replace('.csv', '')
+        if any(name in file for name in names):            
+            dataset_name = os.path.basename(file).replace('.csv', '')
+        else:
+            continue
         
         df = pd.read_csv(file)
         
