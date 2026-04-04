@@ -19,6 +19,13 @@ RES_QLATTICE = os.path.join(RESULTS_BASE, "testing_qlattice")
 RES_GPLEARN = os.path.join(RESULTS_BASE, "testing_gplearn")
 RES_PYSINDY = os.path.join(RESULTS_BASE, "testing_pysindy")
 
+# This should be temporary. We should implemet a confing.json in where we would choose what models
+
+qlattice = 1 # Currently 
+gplearn = 0
+sindy = 0
+
+
 for path in [RES_QLATTICE, RES_GPLEARN, RES_PYSINDY]:
     os.makedirs(path, exist_ok=True)
 
@@ -29,7 +36,7 @@ for path in [RES_QLATTICE, RES_GPLEARN, RES_PYSINDY]:
 def run_qlattice(df, target_col, dataset_name):
     """
     QLattice: Explora un hipergrafo cuántico-probabilístico para extraer subgrafos
-    que representan las leyes físicas. No requiere compilación local en C++.
+    que representan las leyes físicas.
     """
     # Instanciamos el hipergrafo
     ql = feyn.QLattice()
@@ -169,10 +176,14 @@ def main():
         
         print(f"--- Procesando {dataset_name} ---")
         
+        if qlattice:
+            run_qlattice(df, target_col, dataset_name)
         
-        # run_qlattice(df, target_col, dataset_name)
-        # run_gplearn(X, y, dataset_name)
-        run_pysindy(X, y, dataset_name, feature_cols)
+        if gplearn:
+            run_gplearn(X, y, dataset_name)
+        
+        if sindy:
+            run_pysindy(X, y, dataset_name, feature_cols)
         
 
 if __name__ == "__main__":

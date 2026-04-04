@@ -1,0 +1,2 @@
+Ecuación extraída para ideal_gas_no_noise:
+-432.2 + 13220.0*(0.001404*T + 0.09119*n - 0.3654)/(0.6254*V - 0.01498)
