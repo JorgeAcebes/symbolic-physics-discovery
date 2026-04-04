@@ -1,0 +1,2 @@
+Ecuación extraída para kepler_high_noise:
+43.42*tanh(0.1073*r - 1.148) + 34.81
