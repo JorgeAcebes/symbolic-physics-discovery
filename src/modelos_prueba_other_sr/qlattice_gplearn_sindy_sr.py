@@ -1,3 +1,4 @@
+# %%
 import os
 import glob
 import pandas as pd
@@ -8,6 +9,7 @@ import feyn # QLattice
 from gplearn.genetic import SymbolicRegressor
 import pysindy as ps
 from gplearn.functions import make_function
+
 
 
 # Configuración de directorios
@@ -68,6 +70,7 @@ def run_qlattice(df, target_col, dataset_name):
     best_model = models[0]
     best_model.plot(train_data, filename=os.path.join(RES_QLATTICE, f"{dataset_name}_plot.html"))
     best_model.plot_signal(train_data, filename=os.path.join(RES_QLATTICE, f"{dataset_name}_plot_signal.html"))
+    feyn.plots.plot_model_summary(best_model, train_data, filename=os.path.join(RES_QLATTICE, f"{dataset_name}_plot_summary.html"))
     best_expr = str(best_model.sympify(signif=4))
     
     # Guardar resultados
