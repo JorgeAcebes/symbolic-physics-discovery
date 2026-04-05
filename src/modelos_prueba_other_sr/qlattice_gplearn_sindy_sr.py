@@ -3,13 +3,14 @@ import os
 import glob
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Regresores Simbólicos
 import feyn # QLattice
+from feyn.losses import squared_error
 from gplearn.genetic import SymbolicRegressor
 import pysindy as ps
 from gplearn.functions import make_function
-
 
 
 # Configuración de directorios
@@ -25,7 +26,8 @@ RES_PYSINDY = os.path.join(RESULTS_BASE, "testing_pysindy")
 # ================================================================================================
 # This should be temporary. We should implemet a confing.json in where we would choose what models
 
-qlattice = 1 # Currently working only on it
+qlattice = 0 # Currently working only on it
+qlattice_manual = 1
 gplearn = 0
 sindy = 0
 
@@ -48,19 +50,22 @@ def run_qlattice(df, target_col, dataset_name):
     QLattice: Explora un hipergrafo probabilístico para extraer subgrafos
     que representan las leyes físicas.
     """
+
+    random_state = 42
+
     # Dividimos nuestra data. Actualmente lo realizo dentro de la función run_qlattice,
     # sería interesante poder realizar el split fuera para que fuese igual para todos.
+    train_data, val_data, test_data = feyn.tools.split(df, ratio=[0.6, 0.2, 0.2], random_state=random_state)
 
-    train_data, val_data, test_data = feyn.tools.split(df, ratio=[0.6, 0.2, 0.2], random_state=42)
+    # Instanciamos el hipergrafo. Escogemos QLattice en vez de connect_qlattice() porque queremos correr en local + no necesitar API de Abzu
+    ql = feyn.QLattice(random_seed=random_state)
 
-    # Instanciamos el hipergrafo
-    ql = feyn.QLattice(random_seed=42)
-    
+
     # auto_run maneja el ciclo de entrenamiento (epoching) internamente
     models = ql.auto_run(
         data=train_data,
         output_name=target_col,
-        loss_function=None, # Default --> MSE para problemas de regresión
+        loss_function='squared_error', # MSE (realmente no hacemos la media pero para optimizar es idéntico)
         n_epochs=10,      # 10 épocas (default)
         max_complexity=7, # Forzamos parsimonia para física
         criterion="bic"  # Bayesian Information Criterion para penalizar sobreajuste
@@ -80,6 +85,88 @@ def run_qlattice(df, target_col, dataset_name):
         f.write(best_expr + "\n")
     
     print(f"[QLattice] {dataset_name}: {best_expr}")
+
+
+
+def plot_losses(train_losses, val_losses, epoch, loss_type = None, filename=None):
+    x0 = list(range(1, epoch+1))
+    plt.figure(figsize=(10, 5))
+    plt.plot(x0, train_losses, label='Train loss')
+    plt.plot(x0, val_losses, label='Validation loss')
+    plt.title('Model loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss' if not loss_type else f'Loss ({loss_type})')
+    plt.legend()
+    if filename:
+        plt.savefig(filename)
+    plt.show()
+
+# Lo anterior era un modelo bastante poco modular. Quiero poder modificar a mi gusto ciertas cosas. Esto es un intento:
+def run_qlattice_manual(df, target_col, dataset_name, filename=None):
+    random_state = 42
+    kind = 'regression'
+    loss_function = 'squared_error'
+    output_name = target_col
+    n_epochs = 10
+    threads = 4 
+    criterion = 'bic'
+    max_complexity = 7   
+
+
+    feyn.validate_data(df, kind, output_name) # Valida el DataFrame
+    train, val, test = feyn.tools.split(df, ratio=[0.6, 0.2, 0.2], random_state=random_state)
+
+
+    ql = feyn.QLattice(random_seed=random_state)
+
+    train_losses = []
+    val_losses = []
+    models = []
+
+    for epoch in range(1, n_epochs+1):
+        models += ql.sample_models(train, output_name, kind, max_complexity=max_complexity)
+
+        models = feyn.fit_models(models, train, threads=threads, loss_function=loss_function, criterion=criterion)
+        models = feyn.prune_models(models)
+
+        # Append the latest loss value of the top model and display the loss with our function
+        train_losses.append(models[0].loss_value)
+
+        val_loss = np.mean(squared_error(val[output_name], models[0].predict(val)))
+        val_losses.append(val_loss)
+
+
+        # Note: because we use IPython.display (update_display=True) in show_model, the order here is important.
+
+        feyn.show_model(
+            models[0],
+            # Just a simple label. Auto_run is more sophisticated.
+            label=f"Epoch {epoch}/{n_epochs}.",
+            update_display=True,
+        )
+
+        ql.update(models)
+
+    models = feyn.get_diverse_models(models)
+    
+    out_path = os.path.join(RES_QLATTICE, f"{dataset_name}_{filename}.png")
+    # Display the final model and the loss graph
+    plot_losses(train_losses, val_losses, epoch, loss_type='MSE', filename=out_path)
+    best_model = models[0]
+    best_model.show(update_display=True)
+    best_model.plot(train, filename=os.path.join(RES_QLATTICE, f"{dataset_name}_plot.html"))
+    best_expr = str(best_model.sympify(signif=4))
+    
+    # Guardar resultados
+    out_path = os.path.join(RES_QLATTICE, f"{dataset_name}_result_manual.txt")
+    with open(out_path, "w") as f:
+        f.write(f"Equation obtained for {dataset_name}:\n")
+        f.write(best_expr + "\n")
+    
+    print(f"[QLattice] {dataset_name}: {best_expr}")
+
+
+# %%
 
 
 #---- Working on it ------
@@ -202,6 +289,10 @@ def main():
         
         if qlattice:
             run_qlattice(df, target_col, dataset_name)
+        
+        if qlattice_manual:
+            run_qlattice_manual(df, target_col, dataset_name, filename='manual')
+
         
         if gplearn:
             run_gplearn(X, y, dataset_name)
