@@ -18,6 +18,6 @@ Research project for the discovery of fundamental physical laws through **Symbol
 - `data/`: Datasets generated for the experiments.
 
 ## Team Members
-- Jorge Acebes Hernández
-- Andrés López Serna
-- Lorenzo Ji
+- [Jorge Acebes Hernández](https://github.com/JorgeAcebes)
+- [Andrés López Serna](https://github.com/an-coder38)
+- [Lorenzo Ji](https://github.com/Lorsimu)
