@@ -1,2 +1,5 @@
 gplearn expr:
-sub(add(div(div(X1, 0.126), X2), add(div(X1, X2), sub(add(div(X1, div(X2, X0)), add(add(sub(X1, X2), X2), add(add(div(X1, X2), div(X1, X2)), mul(mul(X0, X0), div(X1, X2))))), X1))), div(mul(mul(mul(X0, X0), add(sub(-0.544, X0), mul(X0, div(X1, X2)))), X0), add(0.854, X1)))
+add(sub(sub(sub(div(div(add(div(mul(div(X0, 0.415), X1), X2), div(mul(div(X0, 0.415), X1), X2)), 0.676), 0.862), div(sub(sin(sub(div(div(add(div(mul(div(X0, div(X0, 0.415)), X1), X2), cos(sub(div(X0, X0), div(div(add(div(mul(div(X0, 0.415), X1), X2), div(mul(div(X0, 0.415), X1), X2)), 0.676), 0.862)))), 0.676), 0.862), sin(sin(sin(mul(X2, 0.060)))))), sub(div(X0, -0.766), mul(X0, sub(div(X2, X0), cos(X0))))), X2)), div(sub(sin(sub(div(div(add(div(mul(div(X0, div(X0, 0.415)), X1), X2), div(mul(div(X0, 0.415), X1), X2)), 0.676), 0.862), sin(sin(sin(mul(X2, 0.060)))))), sub(div(X0, -0.766), mul(X0, sub(div(X2, X0), cos(X0))))), X2)), sub(div(X0, 0.415), X2)), div(X0, sin(mul(X2, 0.060))))
+MSE Train: 1.869228e+04
+MSE Val: 1.800713e+04
+MSE Test: 2.159348e+04

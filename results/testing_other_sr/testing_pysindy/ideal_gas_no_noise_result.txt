@@ -1,2 +1,0 @@
-PySINDy expr:
- 8.314 n T (1/V)

@@ -1,2 +1,0 @@
-PySINDy expr:
--1.000 1 x
