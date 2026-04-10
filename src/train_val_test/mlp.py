@@ -23,7 +23,21 @@ import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+import random
 
+def set_seed(seed=42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+
+    # Para reproducibilidad completa (puede ser más lento)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -165,8 +179,8 @@ def train_model(model, train_loader, val_loader, epochs=20, lr=1e-3):
 def prepare_data(X, y, batch_size=32):
 
     # SPLIT 60/20/20
-    X_temp, X_test, y_temp, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
-    X_train, X_val, y_train, y_val = train_test_split(X_temp, y_temp, test_size=0.25, random_state=1)
+    X_temp, X_test, y_temp, y_test = train_test_split(X, y, test_size=0.2, random_state=1) # 0.2 para test
+    X_train, X_val, y_train, y_val = train_test_split(X_temp, y_temp, test_size=0.25, random_state=1) # 0.25*0.8 para validation
 
     # SCALING (solo train → NO DATA LEAKAGE)
     scaler_X = StandardScaler()
@@ -194,6 +208,10 @@ def prepare_data(X, y, batch_size=32):
     train_loader = DataLoader(TensorDataset(X_train, y_train), batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(TensorDataset(X_val, y_val), batch_size=batch_size)
     test_loader = DataLoader(TensorDataset(X_test, y_test), batch_size=batch_size)
+
+    print("Train size:", len(train_loader.dataset))
+    print("Val size:", len(val_loader.dataset))
+    print("Test size:", len(test_loader.dataset))
 
     return train_loader, val_loader, test_loader
 
@@ -238,6 +256,8 @@ def run_experiment(filename, input_cols, target_col, name):
 # =========================
 
 if __name__ == "__main__":
+
+    set_seed(42)
 
     run_experiment("oscillator_no_noise.csv", ["x"], "F", "Oscilador")
     run_experiment("kepler_no_noise.csv", ["r"], "T", "Kepler")
