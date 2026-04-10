@@ -146,7 +146,7 @@ def train_model(model, train_loader, val_loader, epochs=20, lr=1e-3):
         history["loss"].append(train_loss)
         history["val_loss"].append(val_loss)
 
-        print(f"Epoch {epoch+1}: train={train_loss:.4f} val={val_loss:.4f}")
+        print(f"Epoch {epoch+1}: train={train_loss:.8f} val={val_loss:.8f}")
 
         # early stopping básico
         if val_loss < best_val_loss:
