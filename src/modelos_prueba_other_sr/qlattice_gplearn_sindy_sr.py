@@ -12,6 +12,9 @@ from gplearn.genetic import SymbolicRegressor
 import pysindy as ps
 from gplearn.functions import make_function
 
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
 
 # Configuración de directorios
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,20 +25,24 @@ RES_QLATTICE = os.path.join(RESULTS_BASE, "testing_qlattice")
 RES_GPLEARN = os.path.join(RESULTS_BASE, "testing_gplearn")
 RES_PYSINDY = os.path.join(RESULTS_BASE, "testing_pysindy")
 
+# TODO: Asemejarlo al código de Andrés para que sea el mismo pipeline
+# TODO: Plot en log (y) si es loss muy grande.
+# TODO: Implementar funciones en gplearn y en syndy. 
+
+
 
 # ================================================================================================
 # This should be temporary. We should implemet a confing.json in where we would choose what models
 
-qlattice = 0 # Currently working only on it
-qlattice_manual = 1
+qlattice = 0
 gplearn = 0
-sindy = 0
+sindy = 1
 
 # Only dataset containing these words will be used. Using OR, not AND.
-names = ['kepler_low_noise'] 
+names = ['ideal_gas_low_noise'] 
 
 # TODO: Implement logic so that when "all" is written, all datasets are used
-# ================================================================================================
+# =============================S===================================================================
 
 
 for path in [RES_QLATTICE, RES_GPLEARN, RES_PYSINDY]:
@@ -45,77 +52,41 @@ for path in [RES_QLATTICE, RES_GPLEARN, RES_PYSINDY]:
 # 1. Modelos de Regresión Simbólica
 # -------------------------------------------------------------------------
 
-def run_qlattice(df, target_col, dataset_name):
-    """
-    QLattice: Explora un hipergrafo probabilístico para extraer subgrafos
-    que representan las leyes físicas.
-    """
-
-    random_state = 42
-
-    # Dividimos nuestra data. Actualmente lo realizo dentro de la función run_qlattice,
-    # sería interesante poder realizar el split fuera para que fuese igual para todos.
-    train_data, val_data, test_data = feyn.tools.split(df, ratio=[0.6, 0.2, 0.2], random_state=random_state)
-
-    # Instanciamos el hipergrafo. Escogemos QLattice en vez de connect_qlattice() porque queremos correr en local + no necesitar API de Abzu
-    ql = feyn.QLattice(random_seed=random_state)
-
-
-    # auto_run maneja el ciclo de entrenamiento (epoching) internamente
-    models = ql.auto_run(
-        data=train_data,
-        output_name=target_col,
-        loss_function='squared_error', # MSE (realmente no hacemos la media pero para optimizar es idéntico)
-        n_epochs=10,      # 10 épocas (default)
-        max_complexity=7, # Forzamos parsimonia para física
-        criterion="bic"  # Bayesian Information Criterion para penalizar sobreajuste
-    )
-
-    # El índice 0 contiene el modelo topológico óptimo
-    best_model = models[0]
-    best_model.plot(train_data, filename=os.path.join(RES_QLATTICE, f"{dataset_name}_plot.html"))
-    best_model.plot_signal(train_data, filename=os.path.join(RES_QLATTICE, f"{dataset_name}_plot_signal.html"))
-    feyn.plots.plot_model_summary(best_model, train_data, filename=os.path.join(RES_QLATTICE, f"{dataset_name}_plot_summary.html"))
-    best_expr = str(best_model.sympify(signif=4))
+def plot_losses(train_losses, val_losses, epochs, loss_type=None, filename=None, model=None):
+    x0 = list(range(1, epochs + 1))
     
-    # Guardar resultados
-    out_path = os.path.join(RES_QLATTICE, f"{dataset_name}_result.txt")
-    with open(out_path, "w") as f:
-        f.write(f"Equation obtained for {dataset_name}:\n")
-        f.write(best_expr + "\n")
-    
-    print(f"[QLattice] {dataset_name}: {best_expr}")
-
-
-
-def plot_losses(train_losses, val_losses, epoch, loss_type = None, filename=None):
-    x0 = list(range(1, epoch+1))
     plt.figure(figsize=(10, 5))
-    plt.plot(x0, train_losses, label='Train loss')
-    plt.plot(x0, val_losses, label='Validation loss')
-    plt.title('Model loss')
-    plt.xlabel('Epochs')
+    plt.plot(x0, train_losses, label='Train loss', linewidth=1.5)
+    plt.plot(x0, val_losses, label='Validation loss', linewidth=1.5)
+    
+    plt.title('Evolución del Error' if not model else f'Evolución del Error [{model}]')
+    plt.xlabel('Iteraciones (Épocas / Generaciones)')
     plt.ylabel('Loss' if not loss_type else f'Loss ({loss_type})')
+    
+    # Añadido rigor visual para analizar convergencia
+    plt.grid(True, linestyle='--', alpha=0.6)
     plt.legend()
+    
     if filename:
-        plt.savefig(filename)
+        # bbox_inches asegura que no se recorten las etiquetas al guardar
+        plt.savefig(filename, bbox_inches='tight', dpi=300)
+        
     plt.show()
 
-# Lo anterior era un modelo bastante poco modular. Quiero poder modificar a mi gusto ciertas cosas. Esto es un intento:
-def run_qlattice_manual(df, target_col, dataset_name, filename=None):
+
+def run_qlattice(df, target_col, dataset_name):
     random_state = 42
     kind = 'regression'
-    loss_function = 'squared_error'
     output_name = target_col
-    n_epochs = 10
+    n_epochs = 10 
     threads = 4 
-    criterion = 'bic'
-    max_complexity = 7   
+    criterion = 'bic' 
+    max_complexity = 7 
 
-
-    feyn.validate_data(df, kind, output_name) # Valida el DataFrame
+    feyn.validate_data(df, kind, output_name)
+    
+    # División nativa directa en 60/20/20
     train, val, test = feyn.tools.split(df, ratio=[0.6, 0.2, 0.2], random_state=random_state)
-
 
     ql = feyn.QLattice(random_seed=random_state)
 
@@ -123,24 +94,19 @@ def run_qlattice_manual(df, target_col, dataset_name, filename=None):
     val_losses = []
     models = []
 
-    for epoch in range(1, n_epochs+1):
+    for epoch in range(1, n_epochs + 1):
         models += ql.sample_models(train, output_name, kind, max_complexity=max_complexity)
-
-        models = feyn.fit_models(models, train, threads=threads, loss_function=loss_function, criterion=criterion)
+        models = feyn.fit_models(models, train, threads=threads, loss_function='squared_error', criterion=criterion)
         models = feyn.prune_models(models)
 
-        # Append the latest loss value of the top model and display the loss with our function
-        train_losses.append(models[0].loss_value)
-
-        val_loss = np.mean(squared_error(val[output_name], models[0].predict(val)))
-        val_losses.append(val_loss)
-
-
-        # Note: because we use IPython.display (update_display=True) in show_model, the order here is important.
+        train_mse = np.mean(squared_error(train[output_name], models[0].predict(train)))
+        val_mse = np.mean(squared_error(val[output_name], models[0].predict(val)))
+        
+        train_losses.append(train_mse)
+        val_losses.append(val_mse)
 
         feyn.show_model(
             models[0],
-            # Just a simple label. Auto_run is more sophisticated.
             label=f"Epoch {epoch}/{n_epochs}.",
             update_display=True,
         )
@@ -149,64 +115,88 @@ def run_qlattice_manual(df, target_col, dataset_name, filename=None):
 
     models = feyn.get_diverse_models(models)
     
-    out_path = os.path.join(RES_QLATTICE, f"{dataset_name}_{filename}.png")
-    # Display the final model and the loss graph
-    plot_losses(train_losses, val_losses, epoch, loss_type='MSE', filename=out_path)
+    out_plot = os.path.join(RES_QLATTICE, f"{dataset_name}_qlattice_loss.png")
+    plot_losses(train_losses, val_losses, n_epochs, loss_type='MSE', filename=out_plot, model ='QLattice')
+    
     best_model = models[0]
     best_model.show(update_display=True)
     best_model.plot(train, filename=os.path.join(RES_QLATTICE, f"{dataset_name}_plot.html"))
+
     best_expr = str(best_model.sympify(signif=4))
     
-    # Guardar resultados
-    out_path = os.path.join(RES_QLATTICE, f"{dataset_name}_result_manual.txt")
-    with open(out_path, "w") as f:
-        f.write(f"Equation obtained for {dataset_name}:\n")
-        f.write(best_expr + "\n")
+    # Evaluación ciega en el test set
+    test_mse = np.mean(squared_error(test[output_name], best_model.predict(test)))
     
-    print(f"[QLattice] {dataset_name}: {best_expr}")
+    out_path = os.path.join(RES_QLATTICE, f"{dataset_name}_result.txt")
+    with open(out_path, "w") as f:
+        f.write("QLattice expr:\n")
+        f.write(f"{best_expr}\n")
+        f.write(f"MSE Train: {train_losses[-1]:.6e}\n")
+        f.write(f"MSE Val: {val_losses[-1]:.6e}\n")
+        f.write(f"MSE Test: {test_mse:.6e}\n")
+    
+    print(f"[QLattice] {dataset_name}: y = {best_expr} | MSE_test = {test_mse:.4e}")
 
-
-# %%
-
-
-#---- Working on it ------
-
-##Creación de función exponencial (gplearn no la tiene definida por defecto)
-# def _protected_exp(x):
-#     with np.errstate(over='ignore'):
-#         return np.where(np.abs(x) < 100, np.exp(x), 0.0)
-
-# exp_func = make_function(function=_protected_exp, name='exp', arity=1)
 
 
 def run_gplearn(X, y, dataset_name):
+    # Separación en dos fases: primero 20% test, luego 25% del resto (que es 20% del total) para val
+    X_temp, X_test, y_temp, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_val, y_train, y_val = train_test_split(X_temp, y_temp, test_size=0.25, random_state=42)
+
     model = SymbolicRegressor(
         population_size=2000,
-        generations=30,
+        generations=1,
+        warm_start=True,
         function_set=('add', 'sub', 'mul', 'div', 'sin', 'cos'),
         metric='mse',
         p_crossover=0.7,
         p_subtree_mutation=0.1,
-        p_hoist_mutation=0.05, # Control de parsimonia (poda)
+        p_hoist_mutation=0.05,
         p_point_mutation=0.1,
-        n_jobs=-1 # Paralelización multinúcleo
+        n_jobs=-1,
+        random_state=42
     )
-    
-    model.fit(X, y)
+
+    train_losses = []
+    val_losses = []
+    n_generations = 30
+
+    for gen in range(1, n_generations + 1):
+        model.set_params(generations=gen)
+        model.fit(X_train, y_train)
+        
+        y_pred_train = model.predict(X_train)
+        y_pred_val = model.predict(X_val)
+        
+        train_losses.append(mean_squared_error(y_train, y_pred_train))
+        val_losses.append(mean_squared_error(y_val, y_pred_val))
+
+    out_plot = os.path.join(RES_GPLEARN, f"{dataset_name}_gplearn_loss.png")
+    plot_losses(train_losses, val_losses, n_generations, loss_type='MSE', filename=out_plot, model='GPLearn')
+
     best_expr = str(model._program)
     
-    with open(os.path.join(RES_GPLEARN, f"{dataset_name}_result.txt"), "w") as f:
-        f.write(f"gplearn expr:\n{best_expr}\n")
-    print(f"[gplearn] {dataset_name}: {best_expr}")
+    # Evaluación ciega final
+    test_mse = mean_squared_error(y_test, model.predict(X_test))
 
+    with open(os.path.join(RES_GPLEARN, f"{dataset_name}_result.txt"), "w") as f:
+        f.write("gplearn expr:\n")
+        f.write(f"{best_expr}\n")
+        f.write(f"MSE Train: {train_losses[-1]:.6e}\n")
+        f.write(f"MSE Val: {val_losses[-1]:.6e}\n")
+        f.write(f"MSE Test: {test_mse:.6e}\n")
+        
+    print(f"[gplearn] {dataset_name}: {best_expr} | MSE_test = {test_mse:.4e}")
 
 
 def run_pysindy(X, y, dataset_name, feature_names):
-    # Corrección 1: Asegurar que y es un vector columna (N, 1) para evitar AxesWarning
     if y.ndim == 1:
         y = y.reshape(-1, 1)
 
-    # Corrección 2: Definir nombres analíticos para la CustomLibrary
+    X_temp, X_test, y_temp, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_val, y_train, y_val = train_test_split(X_temp, y_temp, test_size=0.25, random_state=42)
+
     library_functions = [
         lambda x: x,
         lambda x: 1.0 / (x + 1e-8),
@@ -224,35 +214,38 @@ def run_pysindy(X, y, dataset_name, feature_names):
     
     lib_poly = ps.PolynomialLibrary(degree=2, include_interaction=True)
     
-    # Intentamos crear un producto tensorial de librerías para capturar (q1 * q2 * 1/r^2).
-    # Si la versión de PySINDy es antigua, hace fallback a la concatenación lineal.
     try:
         combined_lib = ps.TensoredLibrary([lib_poly, lib_custom])
     except AttributeError:
         combined_lib = ps.GeneralizedLibrary([lib_poly, lib_custom])
 
     optimizer = ps.STLSQ(threshold=0.01)
-    
-    # Corrección 3: Pasamos la biblioteca combinada correctamente
     model = ps.SINDy(feature_library=combined_lib, optimizer=optimizer)
 
     try:
-        # Corrección 4: Se requiere el dummy t=1.0 para que el validador estático funcione
-        model.fit(X, t=1.0, x_dot=y, feature_names=feature_names)
+        # Entrenamiento estricto sobre el 60%
+        model.fit(X_train, t=1.0, x_dot=y_train, feature_names=feature_names)
         
         eqs = model.equations()
         best_expr = eqs[0] if eqs else "0"
         
-        # Asume que RES_PYSINDY está definido globalmente en tu script
+        # Extracción de errores analíticos
+        train_mse = mean_squared_error(y_train, model.predict(X_train))
+        val_mse = mean_squared_error(y_val, model.predict(X_val))
+        test_mse = mean_squared_error(y_test, model.predict(X_test))
+        
         output_path = os.path.join(RES_PYSINDY, f"{dataset_name}_result.txt")
         with open(output_path, "w") as f:
-            f.write(f"PySINDy expr:\n{best_expr}\n")
-    
-        print(f"[PySINDy] {dataset_name}: y = {best_expr}")
+            f.write("PySINDy expr:\n")
+            f.write(f"{best_expr}\n")
+            f.write(f"MSE Train: {train_mse:.6e}\n")
+            f.write(f"MSE Val: {val_mse:.6e}\n")
+            f.write(f"MSE Test: {test_mse:.6e}\n")
+            
+        print(f"[PySINDy] {dataset_name}: y = {best_expr} | MSE_test = {test_mse:.4e}")
         
     except Exception as e:
         print(f"Error en SINDy ({dataset_name}): {e}")
-        
 
 # -------------------------------------------------------------------------
 # 2. Ejecución Principal
@@ -289,9 +282,6 @@ def main():
         
         if qlattice:
             run_qlattice(df, target_col, dataset_name)
-        
-        if qlattice_manual:
-            run_qlattice_manual(df, target_col, dataset_name, filename='manual')
 
         
         if gplearn:

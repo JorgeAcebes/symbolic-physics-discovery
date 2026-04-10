@@ -271,7 +271,7 @@ def run_polynomial_regression_experiment(X, y, degree=2, name="PolyReg", plot=Fa
     y = y.flatten()
 
     # =========================
-    # SPLIT (igual que tu pipeline)
+    # SPLIT
     # =========================
     X_temp, X_test, y_temp, y_test = train_test_split(
         X, y, test_size=0.2, random_state=1
@@ -282,7 +282,7 @@ def run_polynomial_regression_experiment(X, y, degree=2, name="PolyReg", plot=Fa
     )
 
     # =========================
-    # PIPELINE (SIN DATA LEAKAGE)
+    # PIPELINE
     # =========================
     model = Pipeline([
         ("poly", PolynomialFeatures(degree=degree, include_bias=False)),
