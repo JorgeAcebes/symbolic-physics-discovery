@@ -24,6 +24,12 @@ from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import random
+#añadir para polyfit
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
 
 def set_seed(seed=42):
     random.seed(seed)
@@ -37,7 +43,7 @@ def set_seed(seed=42):
     # Para reproducibilidad completa (puede ser más lento)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
-    
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -160,7 +166,7 @@ def train_model(model, train_loader, val_loader, epochs=20, lr=1e-3):
         history["loss"].append(train_loss)
         history["val_loss"].append(val_loss)
 
-        print(f"Epoch {epoch+1}: train={train_loss:.8f} val={val_loss:.8f}")
+        print(f"Epoch {epoch+1}: train={train_loss:.10f} val={val_loss:.10f}")
 
         # early stopping básico
         if val_loss < best_val_loss:
@@ -236,8 +242,17 @@ def run_experiment(filename, input_cols, target_col, name):
     print("\n==============================")
     print(f"{name}")
     print("==============================")
-    print(f"Test Loss: {test_loss:.6f}")
-    print(f"Test MAE: {test_mae:.6f}")
+    print(f"Test Loss: {test_loss:.10f}")
+    print(f"Test MAE: {test_mae:.10f}")
+
+    # =========================
+    # POLYNOMIAL REGRESSION (MULTIVARIABLE)
+    # =========================
+    run_polynomial_regression_experiment(
+        X, y,
+        degree=3,
+        name=name + " PolyReg"
+    )
 
     # gráfica
     plt.figure()
@@ -248,8 +263,98 @@ def run_experiment(filename, input_cols, target_col, name):
     plt.xlabel("Epochs")
     plt.ylabel("Loss")
     plt.grid()
-    plt.show()
+    # plt.show()
 
+#Función que hace un ajuste polinómico de los datos, para comparar con MLP
+def run_polynomial_regression_experiment(X, y, degree=2, name="PolyReg", plot=False):
+
+    y = y.flatten()
+
+    # =========================
+    # SPLIT (igual que tu pipeline)
+    # =========================
+    X_temp, X_test, y_temp, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=1
+    )
+
+    X_train, X_val, y_train, y_val = train_test_split(
+        X_temp, y_temp, test_size=0.25, random_state=1
+    )
+
+    # =========================
+    # PIPELINE (SIN DATA LEAKAGE)
+    # =========================
+    model = Pipeline([
+        ("poly", PolynomialFeatures(degree=degree, include_bias=False)),
+        ("reg", LinearRegression())
+    ])
+
+    # FIT SOLO EN TRAIN
+    model.fit(X_train, y_train)
+
+    # =========================
+    # EVALUACIÓN
+    # =========================
+    def evaluate(X_split, y_split):
+        y_pred = model.predict(X_split)
+        mse = mean_squared_error(y_split, y_pred)
+        mae = mean_absolute_error(y_split, y_pred)
+        r2 = r2_score(y_split, y_pred)
+        return mse, mae, r2
+
+    train_metrics = evaluate(X_train, y_train)
+    val_metrics = evaluate(X_val, y_val)
+    test_metrics = evaluate(X_test, y_test)
+
+    print("\n==============================")
+    print(f"{name} (grado {degree})")
+    print("==============================")
+
+    print("Train  -> MSE: {:.3e} | MAE: {:.3e} | R2: {:.4f}".format(*train_metrics))
+    print("Val    -> MSE: {:.3e} | MAE: {:.3e} | R2: {:.4f}".format(*val_metrics))
+    print("Test   -> MSE: {:.3e} | MAE: {:.3e} | R2: {:.4f}".format(*test_metrics))
+
+    # =========================
+    # MOSTRAR ECUACIÓN
+    # =========================
+    poly = model.named_steps["poly"]
+    reg = model.named_steps["reg"]
+
+    feature_names = poly.get_feature_names_out()
+
+    print("\nEcuación aproximada:")
+    terms = []
+    for coef, name_feat in zip(reg.coef_, feature_names):
+        terms.append(f"{coef:.3e}*{name_feat}")
+
+    equation = " + ".join(terms)
+    equation += f" + {reg.intercept_:.3e}"
+
+    print("y =", equation)
+
+    # =========================
+    # PLOT SOLO SI 1D
+    # =========================
+    if plot and X.shape[1] == 1:
+        x_plot = np.linspace(X.min(), X.max(), 500).reshape(-1, 1)
+        y_plot = model.predict(x_plot)
+
+        plt.figure()
+        plt.scatter(X_train, y_train, alpha=0.4, label="Train")
+        plt.scatter(X_val, y_val, alpha=0.4, label="Val")
+        plt.scatter(X_test, y_test, alpha=0.4, label="Test")
+        plt.plot(x_plot, y_plot, label=f"Poly grado {degree}", linewidth=2)
+
+        plt.title(name)
+        plt.legend()
+        plt.grid()
+        plt.show()
+
+    return model, {
+        "train": train_metrics,
+        "val": val_metrics,
+        "test": test_metrics
+    }
 
 # =========================
 # MAIN
