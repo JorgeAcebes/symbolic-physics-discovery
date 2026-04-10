@@ -1,2 +1,0 @@
-Ecuación extraída para kepler_no_noise:
-14.76*sqrt(0.1642*r + 0.01885)*(0.1673*r - 0.01052) + 0.01019
