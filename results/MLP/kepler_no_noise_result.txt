@@ -1,0 +1,8 @@
+=== Model: MLP | Dataset: kepler_no_noise ===
+
+Equation / Structure:
+Red Neuronal (Caja Negra)
+
+Metrics:
+Test MSE: 5.050455e-03
+Test MAE: 5.693574e-02

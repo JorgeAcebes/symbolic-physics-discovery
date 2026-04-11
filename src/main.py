@@ -17,8 +17,10 @@ def run_all_experiments():
     ]
 
     for ds in datasets_info:
-        filepath = os.path.join("data", ds["file"])
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        filepath = os.path.join(base_dir, "data", ds["file"])
         if not os.path.exists(filepath):
+            print(f"Archivo no encontrado: {filepath}")
             continue
             
         dataset_name = ds["file"].replace(".csv", "")
@@ -39,7 +41,7 @@ def run_all_experiments():
             "Polynomial": PolynomialWrapper(degree=3, feature_names=dataset.feature_names, scaler_y=dataset.scaler_y),
             "GPLearn": GPLearnWrapper(generations=30),
             "PySINDy": PySINDyWrapper(feature_names=dataset.feature_names),
-            # "QLattice": QLatticeWrapper(feature_names=dataset.feature_names, target_name=ds["target"])
+            "QLattice": QLatticeWrapper(feature_names=dataset.feature_names, target_name=ds["target"])
         }
 
         for model_name, model in models.items():
@@ -61,12 +63,13 @@ def run_all_experiments():
                 mse, mae = evaluate_physical_space(model, X_test, y_test, dataset.scaler_y)
 
             # Consola
-            print(f"Ecuación: {model.equation}")
+            print(f"Equation: {model.equation}")
             print(f"Test MSE: {mse:.4e} | Test MAE: {mae:.4e}")
 
             # Exportación a disco
             metrics = {"mse": mse, "mae": mae}
-            save_experiment_results(model_name, dataset_name, metrics, model.equation, model.history)
+            history = getattr(model, "history", None)
+            save_experiment_results(model_name, dataset_name, metrics, model.equation, history)
 
 if __name__ == "__main__":
     run_all_experiments()

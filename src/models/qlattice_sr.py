@@ -6,6 +6,7 @@ from models.base import PhysicalModel
 
 class QLatticeWrapper(PhysicalModel):
     def __init__(self, feature_names=None, target_name="y", epochs=10, max_complexity=7):
+        super().__init__()
         self.epochs = epochs
         self.max_complexity = max_complexity
         self.target_name = target_name

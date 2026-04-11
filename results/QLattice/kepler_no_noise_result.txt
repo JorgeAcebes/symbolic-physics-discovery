@@ -1,0 +1,8 @@
+=== Model: QLattice | Dataset: kepler_no_noise ===
+
+Equation / Structure:
+1.507*(0.2668*r + 0.2519)*(0.05375*r + sqrt(0.9322*r + 1.884) + 0.7902) - 0.97
+
+Metrics:
+Test MSE: 7.122895e-06
+Test MAE: 2.183394e-03

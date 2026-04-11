@@ -1,0 +1,8 @@
+=== Model: MLP | Dataset: coulomb_no_noise ===
+
+Equation / Structure:
+Red Neuronal (Caja Negra)
+
+Metrics:
+Test MSE: 3.365850e+11
+Test MAE: 2.580733e+05
