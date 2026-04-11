@@ -1,8 +1,3 @@
-"""
-Created on Thu Mar 26 14:11:53 2026
-
-@author: jfcte
-"""
 #importo las librerías
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,11 +13,11 @@ NOISE_LEVELS = {
     "high_noise": 0.1
 } # diferentes niveles de ruido que luego aplicaremos para distinguir los casos limpios de los ruidosos
 
-# Carpeta donde está este script (data_generator/)
+# Carpeta donde está este script
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Carpeta destino: symbolic-physics-regression/data/
-DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "data"))
+DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, "../..", "data"))
 
 # Funciones de las leyes físicas
 def coulomb_law(q1, q2, r):
