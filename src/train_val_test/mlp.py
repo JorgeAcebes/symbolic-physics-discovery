@@ -81,9 +81,9 @@ class MLP(nn.Module):
 
         self.net = nn.Sequential(
             nn.Linear(input_dim, 64),
-            nn.ReLU(),
+            nn.SiLU(), # Imponemos continuidad en las derivadas superiores, a diferencia de ReLU
             nn.Linear(64, 64),
-            nn.ReLU(),
+            nn.SiLU(),
             nn.Linear(64, 1)
         )
 
