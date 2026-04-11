@@ -1,1 +1,0 @@
-Thhis folder has to be deleted or moved to the corresponding results dir.

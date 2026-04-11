@@ -3,6 +3,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import torch
 
+
+
+
 # Clase para la validación del Dataset y partición del train validation test
 class PhysicalDataset:
     def __init__(self, filepath, target_col, scale=True):
@@ -10,9 +13,13 @@ class PhysicalDataset:
         valid_mask = ~df.isna().any(axis=1) & ~df.isin([float('inf'), float('-inf')]).any(axis=1)
         df = df[valid_mask]
 
-        X = df.drop(columns=[target_col]).values
-        y = df[target_col].values.reshape(-1, 1)
+        # Extracción generalizada de nomenclaturas físicas
+        self.target_name = target_col
+        self.feature_names = [col for col in df.columns if col != target_col]
 
+        X = df[self.feature_names].values
+        y = df[self.target_name].values.reshape(-1, 1)
+        
         X_temp, self.X_test, y_temp, self.y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(X_temp, y_temp, test_size=0.25, random_state=42)
 
