@@ -98,24 +98,28 @@ class MLP(nn.Module):
 def mae_torch(preds, targets):
     return torch.mean(torch.abs(preds - targets))
 
-
-def evaluate_model(model, data_loader, loss_fn):
+def evaluate_model(model, data_loader, loss_fn, scaler_y=None):
     model.eval()
-
-    total_loss = 0.0
-    total_mae = 0.0
-    total_count = 0
+    total_loss, total_mae, total_count = 0.0, 0.0, 0
 
     with torch.no_grad():
         for x, y in data_loader:
-            x, y = x.to(device), y.to(device)
+            x_dev = x.to(device)
+            preds = model(x_dev).cpu().numpy()
+            y_true = y.numpy()
 
-            preds = model(x)
-            loss = loss_fn(preds, y)
-            mae = mae_torch(preds, y)
+            # Recuperar unidades físicas reales
+            if scaler_y is not None:
+                preds = scaler_y.inverse_transform(preds)
+                y_true = scaler_y.inverse_transform(y_true)
+
+            preds_t = torch.tensor(preds, dtype=torch.float32)
+            y_t = torch.tensor(y_true, dtype=torch.float32)
+
+            loss = loss_fn(preds_t, y_t)
+            mae = torch.mean(torch.abs(preds_t - y_t))
 
             batch_size = x.size(0)
-
             total_loss += loss.item() * batch_size
             total_mae += mae.item() * batch_size
             total_count += batch_size
@@ -127,7 +131,7 @@ def evaluate_model(model, data_loader, loss_fn):
 # ENTRENAMIENTO
 # =========================
 
-def train_model(model, train_loader, val_loader, epochs=20, lr=1e-3):
+def train_model(model, train_loader, val_loader, epochs=20, lr=1e-3, scaler_y=None):
 
     model = model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -137,6 +141,10 @@ def train_model(model, train_loader, val_loader, epochs=20, lr=1e-3):
 
     best_val_loss = float("inf")
     best_state = None
+
+    # Variables iniciales de early stopping
+    patience = 5
+    epochs_no_improve = 0
 
     for epoch in range(epochs):
 
@@ -161,7 +169,7 @@ def train_model(model, train_loader, val_loader, epochs=20, lr=1e-3):
             total_count += batch_size
 
         train_loss = running_loss / total_count
-        val_loss, _ = evaluate_model(model, val_loader, loss_fn)
+        val_loss, _ = evaluate_model(model, val_loader, loss_fn, scaler_y=scaler_y)
 
         history["loss"].append(train_loss)
         history["val_loss"].append(val_loss)
@@ -172,8 +180,13 @@ def train_model(model, train_loader, val_loader, epochs=20, lr=1e-3):
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             best_state = model.state_dict()
-
-    model.load_state_dict(best_state)
+            epochs_no_improve = 0
+        else:
+            epochs_no_improve += 1
+            if epochs_no_improve >= patience:
+                print(f"Early stopping activado en la época {epoch+1}")
+                break
+        model.load_state_dict(best_state)
 
     return model, history
 
@@ -219,8 +232,7 @@ def prepare_data(X, y, batch_size=32):
     print("Val size:", len(val_loader.dataset))
     print("Test size:", len(test_loader.dataset))
 
-    return train_loader, val_loader, test_loader
-
+    return train_loader, val_loader, test_loader, scaler_y
 
 # =========================
 # EXPERIMENTO
@@ -230,14 +242,14 @@ def run_experiment(filename, input_cols, target_col, name):
 
     X, y = load_dataset(filename, input_cols, target_col)
 
-    train_loader, val_loader, test_loader = prepare_data(X, y)
+    train_loader, val_loader, test_loader, scaler_y = prepare_data(X, y)
 
     model = MLP(input_dim=X.shape[1])
 
-    model, history = train_model(model, train_loader, val_loader)
+    model, history = train_model(model, train_loader, val_loader, scaler_y=scaler_y)
 
     # evaluación final
-    test_loss, test_mae = evaluate_model(model, test_loader, nn.MSELoss())
+    test_loss, test_mae = evaluate_model(model, test_loader, nn.MSELoss(), scaler_y=scaler_y)
 
     print("\n==============================")
     print(f"{name}")
