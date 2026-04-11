@@ -24,18 +24,20 @@ class MLPWrapper(PhysicalModel):
         self.lr = lr
 
     def fit(self, train_loader, val_loader=None):
-        optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
-        loss_fn = nn.MSELoss()
-        
-        self.model.train()
-        for epoch in range(self.epochs):
-            for x, y in train_loader:
-                x, y = x.to(device), y.to(device)
-                optimizer.zero_grad()
-                loss = loss_fn(self.model(x), y)
-                loss.backward()
-                optimizer.step()
-        return self
+            optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
+            loss_fn = nn.MSELoss()
+            
+            self.model.train()
+            for epoch in range(self.epochs):
+                for x, y in train_loader:
+                    x, y = x.to(device), y.to(device)
+                    optimizer.zero_grad()
+                    loss = loss_fn(self.model(x), y)
+                    loss.backward()
+                    optimizer.step()
+                    
+            self.equation = "Red Neuronal (Caja Negra)" 
+            return self
 
     def predict(self, X):
         self.model.eval()

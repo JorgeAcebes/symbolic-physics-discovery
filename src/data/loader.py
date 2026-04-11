@@ -23,14 +23,16 @@ class PhysicalDataset:
         X_temp, self.X_test, y_temp, self.y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(X_temp, y_temp, test_size=0.25, random_state=42)
 
+        self.scaler_X = None
         self.scaler_y = None
+        
         if scale:
-            scaler_X = StandardScaler()
+            self.scaler_X = StandardScaler()
             self.scaler_y = StandardScaler()
             
-            self.X_train = scaler_X.fit_transform(self.X_train)
-            self.X_val = scaler_X.transform(self.X_val)
-            self.X_test = scaler_X.transform(self.X_test)
+            self.X_train = self.scaler_X.fit_transform(self.X_train)
+            self.X_val = self.scaler_X.transform(self.X_val)
+            self.X_test = self.scaler_X.transform(self.X_test)
             
             self.y_train = self.scaler_y.fit_transform(self.y_train)
             self.y_val = self.scaler_y.transform(self.y_val)

@@ -20,6 +20,7 @@ class GPLearnWrapper(PhysicalModel):
     def fit(self, X_train, y_train):
         # GPLearn exige vectores unidimensionales [N,] para y
         self.model.fit(X_train, y_train.ravel())
+        self.equation = str(self.model._program)
         print(f"[GPLearn] Ecuación: {self.model._program}")
         return self
 
