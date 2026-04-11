@@ -104,29 +104,31 @@ def evaluate_model(model, data_loader, loss_fn, scaler_y=None):
 
     with torch.no_grad():
         for x, y in data_loader:
-            x_dev = x.to(device)
-            preds = model(x_dev).cpu().numpy()
-            y_true = y.numpy()
+            x_dev, y_dev = x.to(device), y.to(device)
+            
+            # Predicción en el espacio N(0,1)
+            preds = model(x_dev)
+            
+            # Loss para validación (coherente con train_loss)
+            loss = loss_fn(preds, y_dev)
+            
+            # Transformación al espacio físico para el MAE
+            preds_np = preds.cpu().numpy()
+            y_true_np = y.numpy()
 
-            # Recuperar unidades físicas reales
             if scaler_y is not None:
-                preds = scaler_y.inverse_transform(preds)
-                y_true = scaler_y.inverse_transform(y_true)
+                preds_np = scaler_y.inverse_transform(preds_np)
+                y_true_np = scaler_y.inverse_transform(y_true_np)
 
-            preds_t = torch.tensor(preds, dtype=torch.float32)
-            y_t = torch.tensor(y_true, dtype=torch.float32)
-
-            loss = loss_fn(preds_t, y_t)
-            mae = torch.mean(torch.abs(preds_t - y_t))
+            # MAE en unidades físicas reales
+            mae = np.mean(np.abs(preds_np - y_true_np))
 
             batch_size = x.size(0)
             total_loss += loss.item() * batch_size
-            total_mae += mae.item() * batch_size
+            total_mae += mae * batch_size
             total_count += batch_size
 
     return total_loss / total_count, total_mae / total_count
-
-
 # =========================
 # ENTRENAMIENTO
 # =========================
@@ -279,39 +281,42 @@ def run_experiment(filename, input_cols, target_col, name):
 
 #Función que hace un ajuste polinómico de los datos, para comparar con MLP
 def run_polynomial_regression_experiment(X, y, degree=2, name="PolyReg", plot=False):
-
     y = y.flatten()
 
     # =========================
     # SPLIT
     # =========================
-    X_temp, X_test, y_temp, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=1
-    )
-
-    X_train, X_val, y_train, y_val = train_test_split(
-        X_temp, y_temp, test_size=0.25, random_state=1
-    )
+    X_temp, X_test, y_temp, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
+    X_train, X_val, y_train, y_val = train_test_split(X_temp, y_temp, test_size=0.25, random_state=1)
 
     # =========================
-    # PIPELINE
+    # PIPELINE CON ESTABILIZACIÓN NUMÉRICA
     # =========================
+    scaler_y = StandardScaler()
+    y_train_s = scaler_y.fit_transform(y_train.reshape(-1, 1)).flatten()
+    y_val_s = scaler_y.transform(y_val.reshape(-1, 1)).flatten()
+    y_test_s = scaler_y.transform(y_test.reshape(-1, 1)).flatten()
+
     model = Pipeline([
         ("poly", PolynomialFeatures(degree=degree, include_bias=False)),
+        ("scaler_X", StandardScaler()),
         ("reg", LinearRegression())
     ])
 
-    # FIT SOLO EN TRAIN
-    model.fit(X_train, y_train)
+    # Fit en el espacio estandarizado (bien condicionado)
+    model.fit(X_train, y_train_s)
 
     # =========================
-    # EVALUACIÓN
+    # EVALUACIÓN EN ESPACIO FÍSICO
     # =========================
-    def evaluate(X_split, y_split):
-        y_pred = model.predict(X_split)
-        mse = mean_squared_error(y_split, y_pred)
-        mae = mean_absolute_error(y_split, y_pred)
-        r2 = r2_score(y_split, y_pred)
+    def evaluate(X_split, y_split_real):
+        # Predicción en el espacio escalado y retorno al físico
+        y_pred_s = model.predict(X_split)
+        y_pred = scaler_y.inverse_transform(y_pred_s.reshape(-1, 1)).flatten()
+        
+        mse = mean_squared_error(y_split_real, y_pred)
+        mae = mean_absolute_error(y_split_real, y_pred)
+        r2 = r2_score(y_split_real, y_pred)
         return mse, mae, r2
 
     train_metrics = evaluate(X_train, y_train)
@@ -321,52 +326,62 @@ def run_polynomial_regression_experiment(X, y, degree=2, name="PolyReg", plot=Fa
     print("\n==============================")
     print(f"{name} (grado {degree})")
     print("==============================")
-
     print("Train  -> MSE: {:.3e} | MAE: {:.3e} | R2: {:.4f}".format(*train_metrics))
     print("Val    -> MSE: {:.3e} | MAE: {:.3e} | R2: {:.4f}".format(*val_metrics))
     print("Test   -> MSE: {:.3e} | MAE: {:.3e} | R2: {:.4f}".format(*test_metrics))
 
     # =========================
-    # MOSTRAR ECUACIÓN
+    # RECUPERACIÓN ANALÍTICA DE LA ECUACIÓN FÍSICA
     # =========================
     poly = model.named_steps["poly"]
+    scaler_X = model.named_steps["scaler_X"]
     reg = model.named_steps["reg"]
 
     feature_names = poly.get_feature_names_out()
 
-    print("\nEcuación aproximada:")
+    # Parámetros de transformación
+    sigma_y = scaler_y.scale_[0]
+    mu_y = scaler_y.mean_[0]
+    sigma_P = scaler_X.scale_
+    mu_P = scaler_X.mean_
+    beta = reg.coef_
+    beta_0 = reg.intercept_
+
+    # Cálculo exacto
+    c = (sigma_y * beta) / sigma_P
+    c_0 = sigma_y * beta_0 + mu_y - np.sum(c * mu_P)
+
+    print("\nEcuación física recuperada:")
     terms = []
-    for coef, name_feat in zip(reg.coef_, feature_names):
-        terms.append(f"{coef:.3e}*{name_feat}")
+    for coef, name_feat in zip(c, feature_names):
+        # Filtramos coeficientes despreciables (ruido numérico)
+        if abs(coef) > 1e-10: 
+            terms.append(f"{coef:.3e}*{name_feat}")
 
     equation = " + ".join(terms)
-    equation += f" + {reg.intercept_:.3e}"
-
+    equation += f" {'+' if c_0 >= 0 else '-'} {abs(c_0):.3e}"
     print("y =", equation)
 
     # =========================
-    # PLOT SOLO SI 1D
+    # PLOT (SOLO 1D)
     # =========================
     if plot and X.shape[1] == 1:
         x_plot = np.linspace(X.min(), X.max(), 500).reshape(-1, 1)
-        y_plot = model.predict(x_plot)
+        y_plot_s = model.predict(x_plot)
+        y_plot = scaler_y.inverse_transform(y_plot_s.reshape(-1, 1)).flatten()
 
         plt.figure()
         plt.scatter(X_train, y_train, alpha=0.4, label="Train")
         plt.scatter(X_val, y_val, alpha=0.4, label="Val")
         plt.scatter(X_test, y_test, alpha=0.4, label="Test")
-        plt.plot(x_plot, y_plot, label=f"Poly grado {degree}", linewidth=2)
+        plt.plot(x_plot, y_plot, label=f"Poly grado {degree}", linewidth=2, color="red")
 
         plt.title(name)
         plt.legend()
         plt.grid()
         plt.show()
 
-    return model, {
-        "train": train_metrics,
-        "val": val_metrics,
-        "test": test_metrics
-    }
+    return model, {"train": train_metrics, "val": val_metrics, "test": test_metrics}
 
 # =========================
 # MAIN
