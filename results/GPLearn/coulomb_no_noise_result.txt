@@ -1,0 +1,8 @@
+=== Model: GPLearn | Dataset: coulomb_no_noise ===
+
+Equation / Structure:
+mul(sub(0.699, cos(mul(mul(sub(0.699, sub(X2, sin(X2))), add(X2, -0.045)), add(add(sub(-0.305, 0.547), cos(X2)), cos(X2))))), mul(mul(sub(sin(X2), X2), mul(sub(0.699, cos(sub(0.634, X2))), X2)), add(mul(mul(sub(mul(add(X2, -0.045), add(sub(-0.305, sub(sin(X2), X2)), cos(X2))), sin(add(X0, X2))), mul(mul(sub(sin(X2), X2), mul(sub(sin(X2), X2), mul(sub(0.699, cos(sub(0.634, X2))), X2))), mul(sub(sin(X2), X2), add(X2, -0.045)))), X2), sub(mul(X1, X2), X0))))
+
+Metrics:
+Test MSE: 9.925125e+10
+Test MAE: 2.403225e+05

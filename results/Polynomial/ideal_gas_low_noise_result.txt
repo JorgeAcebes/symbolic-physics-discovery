@@ -1,0 +1,8 @@
+=== Model: Polynomial | Dataset: ideal_gas_low_noise ===
+
+Equation / Structure:
+2.940e+03*n + 6.298e+00*T + -5.923e+03*V + 2.587e+01*n^2 + 2.139e+01*n T + -2.066e+03*n V + 1.804e-01*T^2 + -4.042e+01*T V + 3.374e+03*V^2 + -1.640e+01*n^3 + -5.596e-01*n^2 T + 5.957e+01*n^2 V + -7.315e-03*n T^2 + -1.255e+00*n T V + 1.410e+02*n V^2 + -2.034e-04*T^3 + 7.962e-03*T^2 V + 3.338e+00*T V^2 + -2.860e+02*V^3 - 1.151e+03
+
+Metrics:
+Test MSE: 4.470316e+07
+Test MAE: 4.833616e+03

@@ -1,3 +1,4 @@
+# %%
 import os
 from data.loader import PhysicalDataset
 from models.mlp import MLPWrapper
@@ -10,10 +11,10 @@ from utils.io import save_experiment_results
 
 def run_all_experiments():
     datasets_info = [
-        {"file": "oscillator_no_noise.csv", "target": "F"},
-        {"file": "kepler_no_noise.csv", "target": "T"},
+        # {"file": "oscillator_no_noise.csv", "target": "F"},
+        # {"file": "kepler_no_noise.csv", "target": "T"},
         {"file": "coulomb_no_noise.csv", "target": "F"},
-        {"file": "ideal_gas_no_noise.csv", "target": "P"}
+        {"file": "ideal_gas_low_noise.csv", "target": "P"}
     ]
 
     for ds in datasets_info:

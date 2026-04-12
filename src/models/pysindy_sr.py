@@ -28,7 +28,6 @@ class PySINDyWrapper(PhysicalModel):
         eqs = self.model.equations()
         best_expr = eqs[0] if eqs else "0"
         self.equation = best_expr
-        print(f"[SINDy] Ecuación: {best_expr}")
         return self
 
     def predict(self, X):

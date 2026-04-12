@@ -22,7 +22,6 @@ class GPLearnWrapper(PhysicalModel):
         # GPLearn exige vectores unidimensionales [N,] para y
         self.model.fit(X_train, y_train.ravel())
         self.equation = str(self.model._program)
-        print(f"[GPLearn] Ecuación: {self.model._program}")
         
         if hasattr(self.model, 'run_details_') and 'best_fitness' in self.model.run_details_:
             self.history["train_loss"] = self.model.run_details_['best_fitness']

@@ -48,7 +48,6 @@ class QLatticeWrapper(PhysicalModel):
             
         self.best_model = models[0]
         self.equation = str(self.best_model.sympify(signif=4))
-        print(f"[QLattice] Ecuación: {self.best_model.sympify(signif=4)}")
         return self
 
     def predict(self, X):

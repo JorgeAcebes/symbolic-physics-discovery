@@ -1,0 +1,8 @@
+=== Model: MLP | Dataset: ideal_gas_low_noise ===
+
+Equation / Structure:
+Red Neuronal (Caja Negra)
+
+Metrics:
+Test MSE: 4.130974e+07
+Test MAE: 3.244896e+03
