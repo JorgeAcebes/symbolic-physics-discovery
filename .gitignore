@@ -220,6 +220,7 @@ hall_of_fame.csv.bkp
 Manifest.toml
 Project.toml
 pysr_options.pkl  
+src/outputs
 
 # VS Code
 .vscode/
@@ -234,3 +235,4 @@ pysr_options.pkl
 *.blg
 *.bbl
 *.out
+

@@ -1,4 +1,5 @@
 # %%
+import pysr
 import os
 from data.loader import PhysicalDataset
 from models.mlp import MLPWrapper

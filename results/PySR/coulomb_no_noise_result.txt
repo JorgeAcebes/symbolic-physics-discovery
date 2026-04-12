@@ -1,0 +1,8 @@
+=== Model: PySR | Dataset: coulomb_no_noise ===
+
+Equation / Structure:
+((1.1274741**q2 - 1*0.4837326)**2/104.86473**(2*r))*4.773376e-6 - 0.19425783
+
+Metrics:
+Test MSE: 3.156904e+11
+Test MAE: 1.408016e+05

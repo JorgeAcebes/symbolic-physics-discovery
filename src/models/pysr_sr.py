@@ -1,6 +1,6 @@
+from pysr import PySRRegressor
 import numpy as np
 from models.base import PhysicalModel
-from pysr import PySRRegressor
 from sklearn.metrics import mean_squared_error
 
 class PySRWrapper(PhysicalModel):
