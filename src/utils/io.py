@@ -32,5 +32,5 @@ def save_experiment_results(model_name, dataset_name, metrics, equation, history
         
         plot_path = os.path.join(base_dir, f"{dataset_name}_loss.png")
         plt.savefig(plot_path, bbox_inches='tight')
-        print("Gráfica de loss guardada")
+        print("Loss graph saved")
         plt.close()

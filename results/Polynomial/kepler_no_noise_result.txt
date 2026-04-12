@@ -1,8 +1,0 @@
-=== Model: Polynomial | Dataset: kepler_no_noise ===
-
-Equation / Structure:
-1.023e+00*r + 2.883e-01*r^2 + -7.235e-03*r^3 - 2.690e-01
-
-Metrics:
-Test MSE: 1.174533e-03
-Test MAE: 2.656529e-02

@@ -10,6 +10,11 @@ import torch
 class PhysicalDataset:
     def __init__(self, filepath, target_col, scale=True):
         df = pd.read_csv(filepath)
+
+        # Limpieza de espacios en los nombres de las columnas
+        df.columns = df.columns.str.strip()
+
+        # Limpieza de valores nulos o infinitos
         valid_mask = ~df.isna().any(axis=1) & ~df.isin([float('inf'), float('-inf')]).any(axis=1)
         df = df[valid_mask]
 

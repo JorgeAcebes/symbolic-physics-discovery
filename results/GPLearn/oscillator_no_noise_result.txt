@@ -1,8 +1,0 @@
-=== Model: GPLearn | Dataset: oscillator_no_noise ===
-
-Equation / Structure:
-sub(sin(mul(add(-0.012, X0), sub(X0, X0))), X0)
-
-Metrics:
-Test MSE: 0.000000e+00
-Test MAE: 0.000000e+00

@@ -4,5 +4,5 @@ Equation / Structure:
 Red Neuronal (Caja Negra)
 
 Metrics:
-Test MSE: 3.479427e+11
-Test MAE: 2.691998e+05
+Test MSE: 3.304042e+11
+Test MAE: 2.527607e+05

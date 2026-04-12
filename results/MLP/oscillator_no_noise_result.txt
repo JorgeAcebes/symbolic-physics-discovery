@@ -1,8 +1,0 @@
-=== Model: MLP | Dataset: oscillator_no_noise ===
-
-Equation / Structure:
-Red Neuronal (Caja Negra)
-
-Metrics:
-Test MSE: 2.343389e-04
-Test MAE: 1.275141e-02
