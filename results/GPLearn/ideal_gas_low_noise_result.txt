@@ -1,0 +1,8 @@
+=== Model: GPLearn | Dataset: ideal_gas_low_noise ===
+
+Equation / Structure:
+mul(mul(mul(sub(X2, add(X0, X1)), add(sub(sub(X2, sin(mul(cos(mul(sub(0.547, cos(mul(mul(sub(0.699, cos(mul(mul(sub(0.699, cos(sub(0.634, X2))), add(X2, -0.045)), add(add(sub(-0.305, 0.547), cos(X2)), cos(X2))))), X2), add(sub(0.547, cos(mul(mul(sub(X2, sin(sin(X2))), add(sub(sin(X2), 0.547), cos(X2))), X2))), cos(X2))))), add(X2, cos(X2)))), X2))), 0.547), cos(X2))), add(X2, -0.045)), add(div(-0.305, 0.547), cos(X2)))
+
+Metrics:
+Test MSE: 3.570531e+07
+Test MAE: 3.991088e+03
