@@ -3,11 +3,12 @@ import numpy as np
 from models.base import PhysicalModel
 
 class PySINDyWrapper(PhysicalModel):
-    def __init__(self, feature_names=None):
+    def __init__(self, feature_names=None, degree=2):
         super().__init__()
         self.feature_names = feature_names
+        self.degree = degree
         
-        lib_poly = ps.PolynomialLibrary(degree=2, include_interaction=True)
+        lib_poly = ps.PolynomialLibrary(degree=self.degree, include_interaction=True)
         lib_custom = ps.CustomLibrary(
             library_functions=[lambda x: 1.0 / (x + 1e-8), lambda x: 1.0 / (x**2 + 1e-8)],
             function_names=[lambda x: f"(1/{x})", lambda x: f"(1/{x}^2)"]

@@ -20,13 +20,7 @@ class GPLearnWrapper(PhysicalModel):
         # Recuperación de la dinámica de convergencia en espacio estandarizado
         if hasattr(self.model, 'run_details_') and 'best_fitness' in self.model.run_details_:
             self.history["train_loss"] = self.model.run_details_['best_fitness']
-            
-        if X_val is not None and y_val is not None:
-            # Dado que GPLearn no itera el val_loss intrínsecamente, evaluamos
-            # el modelo convergido como baseline.
-            final_val_loss = mean_squared_error(y_val.ravel(), self.model.predict(X_val))
-            self.history["val_loss"] = [final_val_loss] * len(self.history["train_loss"])
-            
+                        
         return self
 
     def predict(self, X):

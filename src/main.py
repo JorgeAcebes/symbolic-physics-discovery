@@ -2,6 +2,7 @@
 import os
 from data.loader import PhysicalDataset
 from models.mlp import MLPWrapper
+from models.pysr_sr import PySRWrapper
 from models.pysindy_sr import PySINDyWrapper
 from models.qlattice_sr import QLatticeWrapper
 from models.gplearn_sr import GPLearnWrapper
@@ -42,6 +43,7 @@ def run_all_experiments():
             "MLP_Sparse":   MLPWrapper(input_dim=X_train.shape[1], model_type='sparse', epochs=1000, l1_alpha=1e-3),
             "MLP_Dropout":  MLPWrapper(input_dim=X_train.shape[1], model_type='dropout', epochs=500),
             "Polynomial":   PolynomialWrapper(degree=3, feature_names=dataset.feature_names, scaler_y=dataset.scaler_y),
+            "PySR":         PySRWrapper(feature_names=dataset.feature_names),
             "GPLearn":      GPLearnWrapper(generations=30),
             "PySINDy":      PySINDyWrapper(feature_names=dataset.feature_names),
             "QLattice":     QLatticeWrapper(feature_names=dataset.feature_names, target_name=ds["target"], epochs=15)
@@ -59,12 +61,12 @@ def run_all_experiments():
                 model.fit(X_train_unscaled, y_train)
                 mse, mae = evaluate_physical_space(model, X_test_unscaled, y_test, dataset.scaler_y)
                 
-            elif model_name in ["GPLearn", "QLattice"]:
+            elif model_name in ["PySR", "QLattice"]:
                 # Inyección de validación para registro de historial
                 model.fit(X_train, y_train, X_val=X_val, y_val=y_val)
                 mse, mae = evaluate_physical_space(model, X_test, y_test, dataset.scaler_y)
                 
-            else: # PySINDy y otros Regresores Simbólicos básicos
+            else:
                 model.fit(X_train, y_train)
                 mse, mae = evaluate_physical_space(model, X_test, y_test, dataset.scaler_y)
 
