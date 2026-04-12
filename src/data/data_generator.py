@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-np.random.seed(1) # inicializamos el random
+np.random.seed(1) # Aseguramos reproducibilidad
 
 N_SAMPLES = 1000 # puntos para cada ley
 
@@ -12,6 +12,7 @@ NOISE_LEVELS = {
     "low_noise": 0.01,
     "high_noise": 0.1
 } # diferentes niveles de ruido que luego aplicaremos para distinguir los casos limpios de los ruidosos
+# Resulta en una ponderación del 
 
 # Carpeta donde está este script
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,12 +39,36 @@ def ideal_gas_law(n, T, V):
 
 # Función que añade ruido gaussiano proporcional a la desviación estándar de y
 def add_noise(y, noise_level):
-    #np.random.rand Genera números aleatorios con distribución normal.
+    #np.random.randn: Genera números aleatorios con distribución normal.
     #*y.shape asegura que el array de ruido e y tengan la misma forma 
     #np.std obtiene la desviación estándar de y, así se escala el ruido con la magnitud de los datos
     #noise_level sirve para modular cuánto ruido se quiere añadir
     noise = noise_level * np.std(y) * np.random.randn(*y.shape)
     return y + noise #devuelve y + el ruido
+
+
+def add_pink_noise(y, noise_level):
+    """
+    Genera ruido con densidad espectral de potencia proporcional a 1/f.
+    Típico para sistemas de astrofísica o electrónica de semiconductores.
+    """
+    n = len(y)
+    # Generamos ruido blanco en el dominio de la frecuencia
+    white_fft = np.fft.rfft(np.random.randn(n))
+    f = np.fft.rfftfreq(n)
+    
+    # El ruido rosa escala la amplitud por 1/sqrt(f) (potencia 1/f)
+    f[0] = f[1] # Evitar división por cero en la componente DC
+    scaler = 1 / np.sqrt(f)
+    pink_fft = white_fft * scaler
+    
+    # Volvemos al dominio del tiempo
+    pink_noise = np.fft.irfft(pink_fft, n)
+    
+    # Normalización y escalado proporcional a la señal y
+    pink_noise = (pink_noise / np.std(pink_noise)) * (noise_level * np.std(y))
+    
+    return y + pink_noise
 
 
 # Generación de datos
