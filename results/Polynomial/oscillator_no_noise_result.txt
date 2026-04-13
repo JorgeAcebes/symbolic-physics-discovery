@@ -1,0 +1,8 @@
+=== Model: Polynomial | Dataset: oscillator_no_noise ===
+
+Equation / Structure:
+-1.0*x
+
+Metrics:
+Test MSE: 5.787019e-30
+Test MAE: 1.666167e-15

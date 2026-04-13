@@ -1,0 +1,8 @@
+=== Model: PySR | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+T*n*(8.314 + 2.3428959e-7/V)/V
+
+Metrics:
+Test MSE: 6.052725e-06
+Test MAE: 1.023626e-03
