@@ -4,6 +4,9 @@ from sklearn.metrics import mean_squared_error
 from models.base import PhysicalModel
 
 
+# TODO: If you want to play with the hyperparameters, the main ones to modify are:
+# generations, pop size, p_crossover, p_subtree, p_hoist, p_point
+
 class GPLearnWrapper(PhysicalModel):
     # Definimos las condiciones de contorno del algoritmo genético, por Default: 2000 ecuaciones "compitiendo" durante 30 ciclos
     def __init__(self, feature_names=None, generations=30, population_size=2000): 
