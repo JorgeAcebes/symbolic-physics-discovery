@@ -2,6 +2,7 @@
 from gplearn.genetic import SymbolicRegressor
 from sklearn.metrics import mean_squared_error
 from models.base import PhysicalModel
+import sympy as sp
 
 
 # TODO: If you want to play with the hyperparameters, the main ones to modify are:
@@ -22,16 +23,32 @@ class GPLearnWrapper(PhysicalModel):
             # La suma de las probabilidades debe ser inferior a 1
             n_jobs=-1, # Usar todos los núcleos del procesador
             random_state=42, # Para reproducibilidad
+            parsimony_coefficient=0.1, # Para reducir complejidad
             feature_names=feature_names # Nombre de las features
         )
 
     def fit(self, X_train, y_train, X_val=None, y_val=None):
         self.model.fit(X_train, y_train.ravel()) # Ravel: similar a flatten pero más eficiente. 
         # Realizamos el fit que tiene implementado el modelo de GPLearn
-        self.equation = str(self.model._program) # Obtenemos la función ganadora y la proyectamos en una cadena de texto
 
-        # TODO: Estaría guay que a posteriori el resultado estuviese simplificado y legible para sympy...
+        raw_equation = str(self.model._program) # Obtenemos la función ganadora y la proyectamos en una cadena de texto
 
+        # Diccionario de transformaciones para SymPy
+        locals_dict = {
+            'add': lambda x, y: x + y,
+            'sub': lambda x, y: x - y,
+            'mul': lambda x, y: x * y,
+            'div': lambda x, y: x / y,
+            'inv': lambda x: 1/x,
+            'sin': sp.sin,
+            'cos': sp.cos
+        }
+
+        try: 
+            expr = sp.sympify(raw_equation, locals=locals_dict) # De GPLearn a Sympy
+            self.equation = sp.simplify(expr) # Simplificación algebraica
+        except:
+            self.equation = raw_equation # Por si las cosas fallan
 
         # Recuperación de la dinámica de convergencia.
         if hasattr(self.model, 'run_details_') and 'best_fitness' in self.model.run_details_:
