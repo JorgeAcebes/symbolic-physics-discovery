@@ -4,5 +4,5 @@ Equation / Structure:
 Red Neuronal (sparse)
 
 Metrics:
-Test MSE: 5.705762e-03
-Test MAE: 4.547496e-02
+Test MSE: 5.847806e-03
+Test MAE: 5.185067e-02

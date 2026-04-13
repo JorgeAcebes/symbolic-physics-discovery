@@ -4,5 +4,5 @@ Equation / Structure:
 Red Neuronal (standard)
 
 Metrics:
-Test MSE: 2.282819e-05
-Test MAE: 3.931017e-03
+Test MSE: 1.452942e-06
+Test MAE: 1.031884e-03
