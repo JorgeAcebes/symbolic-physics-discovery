@@ -100,7 +100,7 @@ def run_all_experiments():
 
             # Generación de gráficas
             results_base = os.path.abspath(os.path.join(base_dir, "results")) # Ruta a la carpeta de resultados
-            plot_residual_analysis(y_test_physical, y_pred_physical, model_name, dataset_name, results_base) # Gráfica de residuos (con el test FÍSICO)
+            plot_residual_analysis(y_test_physical, y_pred_physical, model_name, dataset_name, results_base, target_name=ds["target"]) # Gráfica de residuos (con el test FÍSICO)
             
             # I/O de resultados:
             print(f"Expresión descubierta: {model.equation}")
