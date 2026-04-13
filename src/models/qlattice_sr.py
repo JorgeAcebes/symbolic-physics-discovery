@@ -24,7 +24,7 @@ class QLatticeWrapper(PhysicalModel):
     def fit(self, X_train, y_train, X_val=None, y_val=None):
         df_train = self._to_dataframe(X_train, y_train)
         if X_val is not None and y_val is not None:
-            df_val = self._to_dataframe(X_val)
+            df_val = self._to_dataframe(X_val, y_val) # Inyección rigurosa del target
             
         models = []
         for epoch in range(self.epochs):
@@ -37,14 +37,14 @@ class QLatticeWrapper(PhysicalModel):
             models = feyn.prune_models(models)
             self.ql.update(models)
             
-            # Evaluación del mejor sub-grafo de la época actual
             best_epoch_model = models[0]
             
-            train_mse = mean_squared_error(y_train, best_epoch_model.predict(df_train))
+            # Colapso topológico a 1D para la métrica
+            train_mse = mean_squared_error(y_train.ravel(), best_epoch_model.predict(df_train))
             self.history["train_loss"].append(train_mse)
             
             if X_val is not None and y_val is not None:
-                val_mse = mean_squared_error(y_val, best_epoch_model.predict(df_val))
+                val_mse = mean_squared_error(y_val.ravel(), best_epoch_model.predict(df_val))
                 self.history["val_loss"].append(val_mse)
             
         self.best_model = models[0]

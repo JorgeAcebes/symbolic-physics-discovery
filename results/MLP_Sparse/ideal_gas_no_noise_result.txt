@@ -1,0 +1,8 @@
+=== Model: MLP_Sparse | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+Red Neuronal (sparse)
+
+Metrics:
+Test MSE: 1.555385e+06
+Test MAE: 6.317600e+02

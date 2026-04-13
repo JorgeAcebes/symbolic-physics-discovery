@@ -1,5 +1,6 @@
-import pysindy as ps
 import numpy as np
+from pysindy.optimizers import STLSQ
+from pysindy.feature_library import PolynomialLibrary, CustomLibrary, GeneralizedLibrary
 from models.base import PhysicalModel
 
 class PySINDyWrapper(PhysicalModel):
@@ -8,32 +9,33 @@ class PySINDyWrapper(PhysicalModel):
         self.feature_names = feature_names
         self.degree = degree
         
-        lib_poly = ps.PolynomialLibrary(degree=self.degree, include_interaction=True)
-        lib_custom = ps.CustomLibrary(
+        lib_poly = PolynomialLibrary(degree=self.degree, include_interaction=True)
+        lib_custom = CustomLibrary(
             library_functions=[lambda x: 1.0 / (x + 1e-8), lambda x: 1.0 / (x**2 + 1e-8)],
             function_names=[lambda x: f"(1/{x})", lambda x: f"(1/{x}^2)"]
         )
         
-        try:
-            combined_lib = ps.TensoredLibrary([lib_poly, lib_custom])
-        except AttributeError:
-            combined_lib = ps.GeneralizedLibrary([lib_poly, lib_custom])
-            
-        optimizer = ps.STLSQ(threshold=0.01)
-        self.model = ps.SINDy(feature_library=combined_lib, optimizer=optimizer)
+        # Base funcional unificada
+        self.library = GeneralizedLibrary([lib_poly, lib_custom])
+        self.optimizer = STLSQ(threshold=0.01)
 
     def fit(self, X_train, y_train):
-        # A diferencia del dataloader en PyTorch, SINDy recibe la matriz completa
-        self.model.fit(X_train, t=1.0, x_dot=y_train, feature_names=self.feature_names)
+        # Proyección sobre el espacio de características
+        self.library.fit(X_train)
+        Theta = self.library.transform(X_train)
         
-        eqs = self.model.equations()
-        best_expr = eqs[0] if eqs else "0"
-        self.equation = best_expr
+        # Optimización dispersa L_0
+        self.optimizer.fit(Theta, y_train)
+        
+        # Recuperación de la ecuación física
+        coefs = self.optimizer.coef_[0]
+        feat_names = self.library.get_feature_names(self.feature_names)
+        
+        terms = [f"{c:.3e}*{n}" for c, n in zip(coefs, feat_names) if abs(c) > 0]
+        self.equation = " + ".join(terms) if terms else "0"
         return self
 
     def predict(self, X):
-        # Asegura la dimensionalidad del vector columna [N, 1]
-        y_pred = self.model.predict(X)
-        if y_pred.ndim == 1:
-            y_pred = y_pred.reshape(-1, 1)
-        return y_pred
+        Theta = self.library.transform(X)
+        y_pred = self.optimizer.predict(Theta)
+        return y_pred.reshape(-1, 1)

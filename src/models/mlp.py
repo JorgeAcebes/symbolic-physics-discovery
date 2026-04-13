@@ -34,14 +34,16 @@ class MCDropoutMLP(nn.Module):
         self.act = nn.ReLU()
     def forward(self, x):
         return self.fc3(self.drop2(self.act(self.fc2(self.drop1(self.act(self.fc1(x)))))))
-
+    
+    
 class MLPWrapper(PhysicalModel):
-    def __init__(self, input_dim, model_type='standard', epochs=50, lr=1e-3, l1_alpha=1e-3):
+    def __init__(self, input_dim, model_type='standard', epochs=50, lr=1e-3, l1_alpha=1e-3, mc_samples=100):
         super().__init__()
         self.model_type = model_type
         self.epochs = epochs
         self.lr = lr
         self.l1_alpha = l1_alpha
+        self.mc_samples = mc_samples
         
         if model_type == 'sparse': self.model = SparseMLP(input_dim).to(device)
         elif model_type == 'dropout': self.model = MCDropoutMLP(input_dim).to(device)
@@ -54,19 +56,25 @@ class MLPWrapper(PhysicalModel):
         for epoch in range(self.epochs):
             self.model.train()
             epoch_train_loss = 0.0
+            
             for x, y in train_loader:
                 x, y = x.to(device), y.to(device)
                 optimizer.zero_grad()
-                preds = self.model(x)
-                loss = loss_fn(preds, y)
                 
-                # Penalización L1 para forzar dispersión en pesos sinápticos
+                preds = self.model(x)
+                mse_loss = loss_fn(preds, y) # Métrica física estricta
+                loss = mse_loss
+                
+                # Regularización L_1 global (todas las matrices sinápticas)
                 if self.model_type == 'sparse':
-                    loss += self.l1_alpha * torch.sum(torch.abs(self.model.fc1.weight))
+                    l1_reg = sum(p.abs().sum() for p in self.model.parameters() if p.requires_grad)
+                    loss += self.l1_alpha * l1_reg
                     
                 loss.backward()
                 optimizer.step()
-                epoch_train_loss += loss.item() * x.size(0)
+                
+                # Registro libre de entropía topológica
+                epoch_train_loss += mse_loss.item() * x.size(0)
             
             self.history["train_loss"].append(epoch_train_loss / len(train_loader.dataset))
             
@@ -82,14 +90,14 @@ class MLPWrapper(PhysicalModel):
         self.equation = f"Red Neuronal ({self.model_type})" 
         return self
 
-    def predict(self, X, return_std=False, mc_samples=100):
+    def predict(self, X, return_std=False):
         if not isinstance(X, torch.Tensor): X = torch.tensor(X, dtype=torch.float32)
         X = X.to(device)
         
         if self.model_type == 'dropout':
-            self.model.train() # Mantenemos dropout activo para inferencia bayesiana
+            self.model.train() 
             with torch.no_grad():
-                preds = torch.stack([self.model(X) for _ in range(mc_samples)])
+                preds = torch.stack([self.model(X) for _ in range(self.mc_samples)])
             mean_pred = preds.mean(dim=0).cpu().numpy()
             if return_std: return mean_pred, preds.std(dim=0).cpu().numpy()
             return mean_pred

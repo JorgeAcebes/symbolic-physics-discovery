@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+plots = False
+
 np.random.seed(1) # Aseguramos reproducibilidad
 
 N_SAMPLES = 1000 # puntos para cada ley
@@ -187,18 +189,21 @@ if __name__ == "__main__":
     
     # Coulomb
     process_law(generate_coulomb, ["q1", "q2", "r", "F"], "coulomb")
-    # plot_law(generate_coulomb, ["q1", "q2", "r", "F"], "Coulomb (F vs r)", x_idx=2, y_idx=3)
 
     # Oscilador
     process_law(generate_oscillator, ["x", "F"], "oscillator")
-    # plot_law(generate_oscillator, ["x", "F"], "Oscillator (F vs x)", x_idx=0, y_idx=1)
 
     # Kepler
     process_law(generate_kepler, ["r", "T"], "kepler")
-    # plot_law(generate_kepler, ["r", "T"], "Kepler (T vs r)", x_idx=0, y_idx=1)
 
     # Gas ideal
     process_law(generate_ideal_gas, ["n", "T", "V", "P"], "ideal_gas")
-    # plot_law(generate_ideal_gas, ["n", "T", "V", "P"], "Ideal Gas (P vs V)", x_idx=2, y_idx=3)
+
+    if plots:
+        plot_law(generate_coulomb, ["q1", "q2", "r", "F"], "Coulomb (F vs r)", x_idx=2, y_idx=3)
+        plot_law(generate_oscillator, ["x", "F"], "Oscillator (F vs x)", x_idx=0, y_idx=1)
+        plot_law(generate_kepler, ["r", "T"], "Kepler (T vs r)", x_idx=0, y_idx=1)
+        plot_law(generate_ideal_gas, ["n", "T", "V", "P"], "Ideal Gas (P vs V)", x_idx=2, y_idx=3)
+
 
     print("Datasets y plots generados correctamente.")
