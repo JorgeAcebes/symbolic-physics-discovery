@@ -1,4 +1,5 @@
 # %% <-- Útil para correrlo en IPython
+# Done by Jorge Acebes, Andrés López and Lorenzo J
 
 # Imports del instrumental analítico + envoltorios de los modelos
 import pysr #<--- No tocar. Debe ser llamado lo primero de todo 

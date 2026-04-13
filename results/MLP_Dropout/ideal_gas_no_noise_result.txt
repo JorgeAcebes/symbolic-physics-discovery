@@ -1,8 +1,0 @@
-=== Model: MLP_Dropout | Dataset: ideal_gas_no_noise ===
-
-Equation / Structure:
-Red Neuronal (dropout)
-
-Metrics:
-Test MSE: 7.322968e+06
-Test MAE: 1.092111e+03
