@@ -76,6 +76,29 @@ Test MAE: 1.625361e+03
 
 
 ====================
+EXPERIMENT: kepler_no_noise
+====================
+
+=== Model: MLP_Sparse | Dataset: kepler_no_noise ===
+
+Equation / Structure:
+Red Neuronal (sparse)
+
+Metrics:
+Test MSE: 2.677294e-02
+Test MAE: 1.063532e-01
+
+=== Model: MLP_Standard | Dataset: kepler_no_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 2.426482e-03
+Test MAE: 3.589279e-02
+
+
+====================
 EXPERIMENT: oscillator_no_noise
 ====================
 
@@ -94,8 +117,8 @@ Equation / Structure:
 Red Neuronal (dropout)
 
 Metrics:
-Test MSE: 6.218672e-02
-Test MAE: 2.133805e-01
+Test MSE: 3.928123e-02
+Test MAE: 1.533365e-01
 
 === Model: MLP_Sparse | Dataset: oscillator_no_noise ===
 
@@ -103,8 +126,8 @@ Equation / Structure:
 Red Neuronal (sparse)
 
 Metrics:
-Test MSE: 6.724424e-03
-Test MAE: 4.958585e-02
+Test MSE: 5.183833e-03
+Test MAE: 4.629885e-02
 
 === Model: MLP_Standard | Dataset: oscillator_no_noise ===
 
@@ -112,8 +135,8 @@ Equation / Structure:
 Red Neuronal (standard)
 
 Metrics:
-Test MSE: 2.210178e-05
-Test MAE: 3.930058e-03
+Test MSE: 1.777928e-06
+Test MAE: 9.784399e-04
 
 === Model: Polynomial | Dataset: oscillator_no_noise ===
 

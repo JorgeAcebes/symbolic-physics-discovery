@@ -1,3 +1,4 @@
+#%%
 import os
 import re
 import numpy as np
@@ -87,9 +88,14 @@ def plot_residual_analysis(y_true, y_pred, model_name, dataset_name, results_dir
 
 
 
+
+
 def report_all_models():
-    results_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "results")))
-    output_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "results", "all_models")))
+    print('~'*50)
+    print(f'Iniciando reporte')
+    
+    results_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "results")))
+    output_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "results", "all_models")))
     output_dir.mkdir(parents=True, exist_ok=True)
 
     models = set()
@@ -173,6 +179,8 @@ def report_all_models():
     create_gallery(loss_imgs, "gallery_loss.png")
     create_gallery(res_imgs, "gallery_residuals.png")
 
+    print(f'Galerías Generadas en {output_dir}')
+
     # Generar el archivo de texto unificado
     with open(output_dir / 'combined_results.txt', 'w', encoding='utf-8') as outfile:
         for exp in experiments:
@@ -188,8 +196,8 @@ def report_all_models():
                         content = infile.read().strip()
                         outfile.write(content + "\n\n")
             outfile.write("\n")
-
-    print('~'*50)
-    print(f'Galería Común y Report Guardados Correctamente en {out_dir}')
-    print('~'*50)
     
+    print(f'Resumen de loss y fórmulas generadas en {output_dir}')
+    print('~'*50)
+
+
