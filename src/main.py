@@ -70,7 +70,7 @@ def run_all_experiments():
             "MLP_Standard": MLPWrapper(input_dim=X_train.shape[1], model_type='standard', epochs=100),
             "MLP_Sparse":   MLPWrapper(input_dim=X_train.shape[1], model_type='sparse', epochs=1000, l1_alpha=1e-3),
             "MLP_Dropout":  MLPWrapper(input_dim=X_train.shape[1], model_type='dropout', epochs=500, mc_samples=100),
-            "Polynomial":   PolynomialWrapper(degree=3, feature_names=dataset.feature_names, scaler_X=dataset.scaler_X, scaler_y=dataset.scaler_y),
+            "Polynomial":   PolynomialWrapper(feature_names=dataset.feature_names, scaler_X=dataset.scaler_X, scaler_y=dataset.scaler_y, degree=3),
             "PySR":         PySRWrapper(feature_names=dataset.feature_names),
             "GPLearn":      GPLearnWrapper(feature_names=dataset.feature_names, generations=30),
             "PySINDy":      PySINDyWrapper(feature_names=dataset.feature_names),
