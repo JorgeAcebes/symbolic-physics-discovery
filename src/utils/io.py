@@ -58,12 +58,14 @@ def plot_residual_analysis(y_true, y_pred, model_name, dataset_name, results_dir
     
     # Análisis de Error Absoluto
     ax1.scatter(y_true, abs_error, alpha=0.6, color='#003B5C', s=15, rasterized=True)
+    ax1.axhline(y=0, color='gray', linestyle='--', linewidth=1, alpha=0.5) # Baseline (LÍNEA DE ERROR ABSOLUTO NULO)
     ax1.set_title(r"\textbf{Error Absoluto vs Magnitud}" if target_name is None else rf"\textbf{{Error Absoluto vs ${target_name}$}}")
     ax1.set_xlabel(r"$y_{\text{real}}$" if target_name is None else rf"${target_name}$")
     ax1.set_ylabel(r"$|y_{\text{real}} - y_{\text{pred}}|$" if target_name is None else rf"$|{target_name} - \hat{{{target_name}}}|$")
     
     # Análisis de Error Relativo (Escala Logarítmica)
     ax2.scatter(y_true, rel_error, alpha=0.6, color='#C60C30', s=15)
+    ax2.axhline(y=1, color='gray', linestyle='--', linewidth=1, alpha=0.5) # Baseline (LÍNEA DE ERROR RELATIVO EN ESPACIO LOG NULO)
     ax2.set_title(r"\textbf{Error Relativo vs Magnitud}" if target_name is None else rf"\textbf{{Error Relativo vs ${target_name}$}}")
     ax2.set_xlabel(r"$y_{\text{real}}$" if target_name is None else rf"${target_name}$")
     ax2.set_ylabel(r"$\epsilon_{\text{rel}}$" if target_name is None else rf"$\epsilon_{{\text{{rel}}}} = \frac{{|{target_name} - \hat{{{target_name}}}|}}{{|{target_name}|}}$")
