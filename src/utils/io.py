@@ -190,6 +190,6 @@ def report_all_models():
             outfile.write("\n")
 
     print('~'*50)
-    print('Galería Común y Report Guardados Correctamente')
+    print(f'Galería Común y Report Guardados Correctamente en {out_dir}')
     print('~'*50)
     
