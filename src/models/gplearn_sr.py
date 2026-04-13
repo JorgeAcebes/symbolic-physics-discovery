@@ -17,8 +17,8 @@ class GPLearnWrapper(PhysicalModel):
             metric='mse', # Función de coste: mean square error
             p_crossover=0.7, # Probabilidad de mezclar dos fórmulas
             p_subtree_mutation=0.1, # Probabilidad de cambiar una parte de una fórmula por otro
-            p_hoist_mutation=0.2, # Probabilidad de simplificar una parte de la fórmula
-            p_point_mutation=0.1, # Probabilidad de cambiar nodos individuales (e.g. cambiar sin por cos)
+            p_hoist_mutation=0.15, # Probabilidad de simplificar una parte de la fórmula
+            p_point_mutation=0.05, # Probabilidad de cambiar nodos individuales (e.g. cambiar sin por cos)
             n_jobs=-1, # Usar todos los núcleos del procesador
             random_state=42, # Para reproducibilidad
             feature_names=feature_names # Nombre de las features
