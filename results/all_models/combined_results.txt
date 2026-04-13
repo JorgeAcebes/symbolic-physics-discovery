@@ -1,0 +1,154 @@
+====================
+EXPERIMENT: ideal_gas_no_noise
+====================
+
+=== Model: GPLearn | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+add(add(div(div(div(T, V), V), add(n, V)), mul(div(T, V), div(n, 0.548))), add(sub(sub(add(div(T, V), add(sub(sub(div(T, V), n), div(V, n)), sub(div(T, V), div(add(inv(T), add(sub(sub(mul(inv(V), inv(add(n, sin(mul(n, 0.548))))), inv(0.433)), V), div(div(inv(div(V, n)), sin(inv(T))), div(V, n)))), T)))), inv(0.433)), V), div(div(inv(div(V, add(n, sin(mul(n, 0.548))))), sin(inv(T))), inv(add(n, sin(mul(n, 0.548)))))))
+
+Metrics:
+Test MSE: 3.941009e+06
+Test MAE: 4.830276e+02
+
+=== Model: MLP_Dropout | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+Red Neuronal (dropout)
+
+Metrics:
+Test MSE: 7.527980e+06
+Test MAE: 9.005500e+02
+
+=== Model: MLP_Sparse | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+Red Neuronal (sparse)
+
+Metrics:
+Test MSE: 1.408934e+06
+Test MAE: 5.877096e+02
+
+=== Model: MLP_Standard | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 3.206254e+07
+Test MAE: 2.647528e+03
+
+=== Model: Polynomial | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+-0.0002067*T**3 + 0.008101*T**2*V - 0.007395*T**2*n + 0.1823*T**2 + 3.336*T*V**2 - 1.254*T*V*n - 40.48*T*V - 0.5581*T*n**2 + 21.39*T*n + 6.341*T - 285.8*V**3 + 141.2*V**2*n + 3369.0*V**2 + 59.73*V*n**2 - 2069.0*V*n - 5876.0*V - 16.59*n**3 + 28.29*n**2 + 2942.0*n - 1273.0
+
+Metrics:
+Test MSE: 4.465107e+07
+Test MAE: 4.840318e+03
+
+=== Model: PySINDy | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+1.143e-01*1 + -5.279e+01*n + -2.211e-01*T + 4.273e+01*V + -2.912e+02*n^2 + 1.516e+01*n T + -1.082e+02*n V + -1.191e+01*T V + 3.681e+02*V^2 + 2.954e+01*n^3 + -2.440e-01*n^2 T + -2.446e+01*n^2 V + -1.719e+00*n T V + 5.612e+01*n V^2 + 1.531e+00*T V^2 + -5.299e+01*V^3 + 1.253e+01*(1/n) + -8.425e-04*(1/T) + 1.985e+02*(1/V) + 7.538e+01*(1/n^2) + -1.897e-05*(1/T^2) + 1.778e+03*(1/V^2)
+
+Metrics:
+Test MSE: 1.333549e+08
+Test MAE: 2.826597e+03
+
+=== Model: PySR | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+T*n/((V*0.12027903))
+
+Metrics:
+Test MSE: 1.229214e-05
+Test MAE: 1.350155e-03
+
+=== Model: QLattice | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+-33840.0*(0.001025*T + 0.06378)*(-0.07323*n - 0.1068)/tanh(0.4276*V + 0.003771) - 3355.0
+
+Metrics:
+Test MSE: 5.563394e+06
+Test MAE: 1.625361e+03
+
+
+====================
+EXPERIMENT: oscillator_no_noise
+====================
+
+=== Model: GPLearn | Dataset: oscillator_no_noise ===
+
+Equation / Structure:
+sub(sub(x, x), x)
+
+Metrics:
+Test MSE: 0.000000e+00
+Test MAE: 0.000000e+00
+
+=== Model: MLP_Dropout | Dataset: oscillator_no_noise ===
+
+Equation / Structure:
+Red Neuronal (dropout)
+
+Metrics:
+Test MSE: 6.218672e-02
+Test MAE: 2.133805e-01
+
+=== Model: MLP_Sparse | Dataset: oscillator_no_noise ===
+
+Equation / Structure:
+Red Neuronal (sparse)
+
+Metrics:
+Test MSE: 5.329649e-03
+Test MAE: 5.034990e-02
+
+=== Model: MLP_Standard | Dataset: oscillator_no_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 3.643576e-06
+Test MAE: 1.540003e-03
+
+=== Model: Polynomial | Dataset: oscillator_no_noise ===
+
+Equation / Structure:
+2.862e-7 - 1.0*x
+
+Metrics:
+Test MSE: 3.304448e-13
+Test MAE: 4.697964e-07
+
+=== Model: PySINDy | Dataset: oscillator_no_noise ===
+
+Equation / Structure:
+-1.000e+00*x
+
+Metrics:
+Test MSE: 0.000000e+00
+Test MAE: 0.000000e+00
+
+=== Model: PySR | Dataset: oscillator_no_noise ===
+
+Equation / Structure:
+2.4102967e-21 - x
+
+Metrics:
+Test MSE: 0.000000e+00
+Test MAE: 0.000000e+00
+
+=== Model: QLattice | Dataset: oscillator_no_noise ===
+
+Equation / Structure:
+6.284e-5 - 1.0*x
+
+Metrics:
+Test MSE: 5.424362e-09
+Test MAE: 6.226118e-05
+
+

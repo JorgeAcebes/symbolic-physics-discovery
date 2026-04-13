@@ -1,8 +1,11 @@
 import os
+import re
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+from pathlib import Path
 from utils.utils import set_plot_style
 
 set_plot_style(for_paper=False) # To be set on 'True' when obtaining the graphs for paper or presentation
@@ -81,3 +84,112 @@ def plot_residual_analysis(y_true, y_pred, model_name, dataset_name, results_dir
     save_path = os.path.join(exp_dir, f"{dataset_name}_residuals.png")
     plt.savefig(save_path, bbox_inches="tight")
     plt.close()
+
+
+
+def report_all_models():
+    results_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "results")))
+    output_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "results", "all_models")))
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    models = set()
+    experiments = set()
+    
+    # Estructura: dict[model][experiment] = path
+    loss_imgs = {}
+    res_imgs = {}
+    
+    # Estructura: dict[experiment][model] = path
+    txt_files = {}
+
+    # Patrón para extraer el experimento, el tipo (loss/residuals/result) y la extensión
+    pattern = re.compile(r'^(.*)_(loss|residuals|result)\.(png|txt)$')
+
+    # Exploración recursiva y clasificación
+    for model_dir in [d for d in results_dir.iterdir() if d.is_dir()]:
+        model = model_dir.name
+        if model != 'all_models':
+            models.add(model)
+            
+            for file_path in model_dir.rglob('*.*'):
+                match = pattern.match(file_path.name)
+                if match:
+                    exp, ftype, ext = match.groups()
+                    experiments.add(exp)
+                    
+                    if ftype == 'loss' and ext == 'png':
+                        loss_imgs.setdefault(model, {})[exp] = file_path
+                    elif ftype == 'residuals' and ext == 'png':
+                        res_imgs.setdefault(model, {})[exp] = file_path
+                    elif ftype == 'result' and ext == 'txt':
+                        txt_files.setdefault(exp, {})[model] = file_path
+
+    models = sorted(list(models))
+    experiments = sorted(list(experiments))
+
+    def create_gallery(data_dict, out_filename):
+        n_rows = len(models)
+        n_cols = len(experiments)
+        if n_rows == 0 or n_cols == 0:
+            return
+        
+        # Dimensionado dinámico: 4 pulgadas por columna, 3 por fila
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 4, n_rows * 3))
+        
+        # Garantizar que axes sea un array 2D independientemente del tamaño
+        if n_rows == 1 and n_cols == 1:
+            axes = np.array([[axes]])
+        elif n_rows == 1:
+            axes = axes[np.newaxis, :]
+        elif n_cols == 1:
+            axes = axes[:, np.newaxis]
+
+        for i, model in enumerate(models):
+            for j, exp in enumerate(experiments):
+                ax = axes[i, j]
+                ax.axis('off')
+                
+                img_path = data_dict.get(model, {}).get(exp)
+                if img_path and img_path.exists():
+                    img = mpimg.imread(img_path)
+                    ax.imshow(img)
+                else:
+                    ax.text(0.5, 0.5, 'N/A', ha='center', va='center')
+                
+                # Encabezados de columna (Experimentos)
+                if i == 0:
+                    ax.set_title(exp, fontsize=12, fontweight='bold')
+                
+                # Encabezados de fila (Modelos)
+                if j == 0:
+                    ax.text(-0.1, 0.5, model, rotation=90, va='center', ha='right', 
+                            transform=ax.transAxes, fontsize=12, fontweight='bold')
+        
+        plt.tight_layout()
+        plt.savefig(output_dir / out_filename, dpi=300, bbox_inches='tight')
+        plt.close()
+
+    # Generar las galerías de imágenes
+    create_gallery(loss_imgs, "gallery_loss.png")
+    create_gallery(res_imgs, "gallery_residuals.png")
+
+    # Generar el archivo de texto unificado
+    with open(output_dir / 'combined_results.txt', 'w', encoding='utf-8') as outfile:
+        for exp in experiments:
+            outfile.write(f"{'='*20}\n")
+            outfile.write(f"EXPERIMENT: {exp}\n")
+            outfile.write(f"{'='*20}\n\n")
+            
+            for model in models:
+                txt_path = txt_files.get(exp, {}).get(model)
+                if txt_path and txt_path.exists():
+                    with open(txt_path, 'r', encoding='utf-8') as infile:
+                        # Si el archivo ya trae la cabecera '=== Model...', simplemente se adjunta.
+                        content = infile.read().strip()
+                        outfile.write(content + "\n\n")
+            outfile.write("\n")
+
+    print('~'*50)
+    print('Galería Común y Report Guardados Correctamente')
+    print('~'*50)
+    
