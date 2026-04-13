@@ -1,8 +1,0 @@
-=== Model: MLP_Sparse | Dataset: coulomb_no_noise ===
-
-Equation / Structure:
-Red Neuronal (sparse)
-
-Metrics:
-Test MSE: 2.886918e+10
-Test MAE: 5.217376e+04

@@ -1,8 +1,0 @@
-=== Model: GPLearn | Dataset: ideal_gas_no_noise ===
-
-Equation / Structure:
-add(add(sub(sub(sub(div(div(add(div(mul(div(X0, 0.415), X1), X2), div(mul(div(X0, 0.415), X1), X2)), 0.676), 0.862), div(mul(X2, 0.060), X2)), div(X2, X2)), div(div(X0, 0.391), X2)), div(X0, mul(X2, 0.060))), div(mul(sin(mul(X2, X1)), div(X0, 0.391)), X2))
-
-Metrics:
-Test MSE: 1.343278e+03
-Test MAE: 1.366814e+01

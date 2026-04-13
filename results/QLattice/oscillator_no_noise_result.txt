@@ -1,8 +1,0 @@
-=== Model: QLattice | Dataset: oscillator_no_noise ===
-
-Equation / Structure:
-40.41*(-0.2475*x - 1.203)*sqrt(0.03086*x - 0.5736) + 4.862
-
-Metrics:
-Test MSE: 1.682521e-13
-Test MAE: 3.427781e-07
