@@ -1,7 +1,7 @@
 # %% <-- Útil para correrlo en IPython
 
 # Imports del instrumental analítico + envoltorios de los modelos
-import pysr
+import pysr #<--- No tocar. Debe ser llamado lo primero de todo 
 import os
 from data.loader import PhysicalDataset
 from models.mlp import MLPWrapper
