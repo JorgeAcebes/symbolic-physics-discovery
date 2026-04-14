@@ -20,6 +20,7 @@ class PySRWrapper(PhysicalModel):
             populations=10, # Número de "poblaciones" (islas genéticas aisladas) que intercambian las ecuaciones
             maxsize=15, # Máxima longitud de nodos del árbol (nodos de la ecuación)
             model_selection="best", # Criterio de selección (explicado más abajo)
+            parsimony=0.0, #Factor multiplicativo para castigar complejidad
             random_state=42, # Reproducibilidad
             verbosity=0 # No queremos que esté printeando muchas cosas en la ventana de comandos
         )

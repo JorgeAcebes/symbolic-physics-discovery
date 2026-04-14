@@ -77,7 +77,7 @@ def plot_residual_analysis(y_true, y_pred, model_name, dataset_name, results_dir
     safe_model = model_name.replace('_', r'\_')
     safe_dataset = dataset_name.replace('_', r'\_')
 
-    # TODO: Hay que mejorar la salida del título. Actualmente es funcional pero poco profesional
+
     
     plt.suptitle(f"{safe_model} - Análisis de Residuos ({safe_dataset})", fontsize=14)    
     plt.tight_layout()

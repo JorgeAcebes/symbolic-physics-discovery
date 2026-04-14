@@ -5,7 +5,7 @@ from models.base import PhysicalModel
 import sympy as sp
 
 
-# TODO: If you want to play with the hyperparameters, the main ones to modify are:
+# If you want to play with the hyperparameters, the main ones to modify are:
 # generations, pop size, p_crossover, p_subtree, p_hoist, p_point
 
 class GPLearnWrapper(PhysicalModel):
