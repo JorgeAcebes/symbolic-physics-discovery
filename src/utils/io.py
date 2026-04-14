@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from pathlib import Path
 from utils.utils import set_plot_style
+import json
+import torch
 
 set_plot_style(for_paper=False) # To be set on 'True' when obtaining the graphs for paper or presentation
 
@@ -85,9 +87,6 @@ def plot_residual_analysis(y_true, y_pred, model_name, dataset_name, results_dir
     save_path = os.path.join(exp_dir, f"{dataset_name}_residuals.png")
     plt.savefig(save_path, bbox_inches="tight")
     plt.close()
-
-
-
 
 
 def report_all_models():
@@ -201,3 +200,34 @@ def report_all_models():
     print('~'*50)
 
 
+
+def save_model_weights(model_name: str, dataset_name: str, model):
+    """
+    Extrae y serializa los pesos/parámetros de cualquier wrapper del proyecto.
+    Delega en model.get_weights(), que cada wrapper debe implementar.
+    """
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "results", model_name))
+    os.makedirs(base_dir, exist_ok=True)
+    out_path = os.path.join(base_dir, f"{dataset_name}_{model_name}_weights.json")
+
+    try:
+        weights = model.get_weights()
+    except NotImplementedError:
+        print(f"[AVISO] {model_name} no implementa get_weights(); omitiendo.")
+        return
+
+    def _serialize(obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        if isinstance(obj, torch.Tensor):
+            return obj.cpu().numpy().tolist()
+        if isinstance(obj, dict):
+            return {k: _serialize(v) for k, v in obj.items()}
+        if isinstance(obj, list):
+            return [_serialize(i) for i in obj]
+        return obj
+
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(_serialize(weights), f, indent=2, ensure_ascii=False)
+
+    print(f"Pesos guardados en: {out_path}")

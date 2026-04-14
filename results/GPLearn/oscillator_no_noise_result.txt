@@ -1,7 +1,7 @@
 === Model: GPLearn | Dataset: oscillator_no_noise ===
 
 Equation / Structure:
-sub(sub(x, x), x)
+-x
 
 Metrics:
 Test MSE: 0.000000e+00

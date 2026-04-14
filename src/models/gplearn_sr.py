@@ -59,3 +59,9 @@ class GPLearnWrapper(PhysicalModel):
     def predict(self, X):
         # Llama al modelo entrenado y devuelve las predicciones para cada muestra de X
         return self.model.predict(X).reshape(-1, 1) 
+
+    def get_weights(self):
+        return {
+            "best_program": str(self.model._program),
+            "equation": str(self.equation)
+        }

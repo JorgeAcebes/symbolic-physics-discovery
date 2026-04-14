@@ -22,6 +22,8 @@ class PySRWrapper(PhysicalModel):
             model_selection="best", # Criterio de selección (explicado más abajo)
             parsimony=0.0, #Factor multiplicativo para castigar complejidad
             random_state=42, # Reproducibilidad
+            deterministic=True, # Reproducibilidad
+            parallelism='serial', # Reproducibilidad
             verbosity=0 # No queremos que esté printeando muchas cosas en la ventana de comandos
         )
 
@@ -61,3 +63,11 @@ class PySRWrapper(PhysicalModel):
     def predict(self, X):   
         y_pred = self.model.predict(X) # Predecimos el valor de y dado X empleando el mejor modelo de PySR
         return np.array(y_pred).reshape(-1, 1)
+    
+    def get_weights(self):
+    # PySR expone el DataFrame de ecuaciones en self.model.equations_
+        eqs = self.model.equations_
+        return {
+            "best_equation": str(self.equation),
+            "all_equations": eqs[["equation", "loss", "complexity"]].to_dict(orient="records")
+        }

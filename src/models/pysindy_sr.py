@@ -41,3 +41,10 @@ class PySINDyWrapper(PhysicalModel):
         Theta = self.library.transform(X) # Mapeamos al espacio de funciones
         y_pred = self.optimizer.predict(Theta) # Predecimos (ya tiene internamente la matriz de pesos por el fit)
         return y_pred.reshape(-1, 1) # Reshape para después poder calcular MSE
+    
+    def get_weights(self):
+        return {
+            "feature_names": self.library.get_feature_names(self.feature_names), # Recuperamos las etiquetas simbólicas que le corresponden a cada uno
+            "coefficients": self.optimizer.coef_[0] # Extraemos el vector Xi (subíndice cero porque y podría ser un vector en vez de un escalar, y Xi entonces sería una matriz)
+        }
+

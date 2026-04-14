@@ -12,7 +12,7 @@ from models.qlattice_sr import QLatticeWrapper
 from models.gplearn_sr import GPLearnWrapper
 from models.polynomial import PolynomialWrapper
 from utils.metrics import evaluate_physical_space
-from utils.io import save_experiment_results, plot_residual_analysis, report_all_models
+from utils.io import save_experiment_results, plot_residual_analysis, report_all_models, save_model_weights
 import numpy as np
 import random
 import torch
@@ -29,14 +29,14 @@ set_seed(42)
 # Conjunto de modelos con los que se correrá
 
 models_to_run = [
-    "MLP_Standard",
+    # "MLP_Standard",
     # "MLP_Sparse",
     # "MLP_Dropout",
     # "Polynomial",
     # "PySR",
     # "GPLearn",
-    # "PySINDy",
-    # "QLattice" 
+    "PySINDy",
+    "QLattice" 
     ]
 
 if len(models_to_run) == 0:
@@ -140,6 +140,8 @@ def run_all_experiments():
                 history = getattr(model, "history", None) # En caso de que el modelo tenga el atributo "history", la obtenemos. Esto nos permitirá graficar el loss.
                 save_experiment_results(model_name, dataset_name, metrics, model.equation, history) # Guardamos el mae y mse obtenido,
                 # expresión (si es posible) y ploteo de loss (si es posible)
+                save_model_weights(model_name, dataset_name, model)
+
                 
 if __name__ == "__main__":
     run_all_experiments()

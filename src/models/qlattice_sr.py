@@ -59,3 +59,10 @@ class QLatticeWrapper(PhysicalModel):
     def predict(self, X):
         df_test = self._to_dataframe(X) 
         return np.array(self.best_model.predict(df_test)).reshape(-1, 1) # Realizamos la evaluación del test con el mejor modelo
+    
+    def get_weights(self):
+        # feyn expone los parámetros del modelo como diccionario
+        return {
+            "equation": str(self.equation),
+            "parameters": self.model.parameters   # dict con valores numéricos
+        }

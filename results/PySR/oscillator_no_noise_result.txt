@@ -1,7 +1,7 @@
 === Model: PySR | Dataset: oscillator_no_noise ===
 
 Equation / Structure:
-2.4102967e-21 - x
+-x + 0.0
 
 Metrics:
 Test MSE: 0.000000e+00

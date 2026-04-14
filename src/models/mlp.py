@@ -127,3 +127,10 @@ class MLPWrapper(PhysicalModel):
             with torch.no_grad(): return self.model(X).cpu().numpy()
 
         # Siempre lo pasamos a la CPU y lo transformamos en un ndarray
+
+    def get_weights(self):
+        """Devuelve el state_dict serializable capa a capa."""
+        return {
+            name: tensor.cpu().numpy()
+            for name, tensor in self.model.state_dict().items()
+        }

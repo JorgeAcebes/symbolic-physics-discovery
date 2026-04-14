@@ -96,3 +96,10 @@ class PolynomialWrapper(PhysicalModel):
                 clean_expr += term  # Añadimos el término a la expresión siempre que no tenga coeficiente ~nulo
 
         self.equation = str(clean_expr.evalf(4)) # Convertimos a string con 4 cifras significativas
+
+    def get_weights(self):
+        return {
+            "feature_names_out": list(self.model[0].get_feature_names_out(self.feature_names)),
+            "coefficients": self.model[-1].coef_,   # sklearn LinearRegression / Ridge
+            "intercept": float(self.model[-1].intercept_)
+        }
