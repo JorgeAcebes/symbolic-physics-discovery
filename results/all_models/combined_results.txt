@@ -105,7 +105,7 @@ EXPERIMENT: oscillator_no_noise
 === Model: GPLearn | Dataset: oscillator_no_noise ===
 
 Equation / Structure:
-sub(sub(x, x), x)
+-x
 
 Metrics:
 Test MSE: 0.000000e+00
@@ -117,8 +117,8 @@ Equation / Structure:
 Red Neuronal (dropout)
 
 Metrics:
-Test MSE: 3.928123e-02
-Test MAE: 1.533365e-01
+Test MSE: 2.451602e-02
+Test MAE: 1.110420e-01
 
 === Model: MLP_Sparse | Dataset: oscillator_no_noise ===
 
@@ -126,8 +126,8 @@ Equation / Structure:
 Red Neuronal (sparse)
 
 Metrics:
-Test MSE: 5.183833e-03
-Test MAE: 4.629885e-02
+Test MSE: 3.440875e-02
+Test MAE: 1.583640e-01
 
 === Model: MLP_Standard | Dataset: oscillator_no_noise ===
 
@@ -135,8 +135,8 @@ Equation / Structure:
 Red Neuronal (standard)
 
 Metrics:
-Test MSE: 1.777928e-06
-Test MAE: 9.784399e-04
+Test MSE: 2.816080e-06
+Test MAE: 1.409960e-03
 
 === Model: Polynomial | Dataset: oscillator_no_noise ===
 
@@ -159,7 +159,7 @@ Test MAE: 0.000000e+00
 === Model: PySR | Dataset: oscillator_no_noise ===
 
 Equation / Structure:
-2.4102967e-21 - x
+-x + 0.0
 
 Metrics:
 Test MSE: 0.000000e+00
@@ -168,10 +168,10 @@ Test MAE: 0.000000e+00
 === Model: QLattice | Dataset: oscillator_no_noise ===
 
 Equation / Structure:
-6.284e-5 - 1.0*x
+-14.77*(0.1837*x + 0.1158)*exp(-tanh(9.046e-5*x + 3.54)) + 0.6307
 
 Metrics:
-Test MSE: 5.424362e-09
-Test MAE: 6.226118e-05
+Test MSE: 2.517162e-09
+Test MAE: 3.737792e-05
 
 
