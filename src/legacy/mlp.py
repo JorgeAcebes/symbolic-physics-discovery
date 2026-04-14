@@ -384,6 +384,90 @@ def run_polynomial_regression_experiment(X, y, degree=2, name="PolyReg", plot=Fa
     return model, {"train": train_metrics, "val": val_metrics, "test": test_metrics}
 
 # =========================
+# GUARDADO / CARGA DE MODELOS
+# =========================
+
+import json
+import joblib
+
+SAVE_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "saved_models"))
+os.makedirs(SAVE_DIR, exist_ok=True)
+
+
+def save_mlp_model(model, name):
+    path = os.path.join(SAVE_DIR, f"{name}_mlp.pt")
+    torch.save(model.state_dict(), path)
+    print(f"[SAVE] MLP guardado en {path}")
+
+
+def load_mlp_model(model, name):
+    path = os.path.join(SAVE_DIR, f"{name}_mlp.pt")
+    if os.path.exists(path):
+        model.load_state_dict(torch.load(path, map_location=device))
+        model.eval()
+        print(f"[LOAD] MLP cargado desde {path}")
+        return True
+    return False
+
+
+def save_poly_model(model, name):
+    path = os.path.join(SAVE_DIR, f"{name}_poly.joblib")
+    joblib.dump(model, path)
+    print(f"[SAVE] Polynomial guardado en {path}")
+
+
+def load_poly_model(name):
+    path = os.path.join(SAVE_DIR, f"{name}_poly.joblib")
+    if os.path.exists(path):
+        print(f"[LOAD] Polynomial cargado desde {path}")
+        return joblib.load(path)
+    return None
+
+def run_experiment_with_saving(filename, input_cols, target_col, name, load=False):
+
+    X, y = load_dataset(filename, input_cols, target_col)
+
+    train_loader, val_loader, test_loader, scaler_y = prepare_data(X, y)
+
+    model = MLP(input_dim=X.shape[1])
+
+    # =========================
+    # LOAD o TRAIN
+    # =========================
+    if load and load_mlp_model(model, name):
+        print(f"Modelo MLP cargado, no se entrena.")
+        history = None
+    else:
+        model, history = train_model(model, train_loader, val_loader, scaler_y=scaler_y)
+        save_mlp_model(model, name)
+
+    # evaluación
+    test_loss, test_mae = evaluate_model(model, test_loader, nn.MSELoss(), scaler_y=scaler_y)
+
+    print("\n==============================")
+    print(f"{name}")
+    print("==============================")
+    print(f"Test Loss: {test_loss:.10f}")
+    print(f"Test MAE: {test_mae:.10f}")
+
+    # =========================
+    # POLY
+    # =========================
+    poly_model = load_poly_model(name)
+
+    if poly_model is None or not load:
+        poly_model, _ = run_polynomial_regression_experiment(
+            X, y,
+            degree=3,
+            name=name + " PolyReg"
+        )
+        save_poly_model(poly_model, name)
+    else:
+        print("Modelo polinómico cargado, no se entrena.")
+
+    return model
+
+# =========================
 # MAIN
 # =========================
 
@@ -391,7 +475,14 @@ if __name__ == "__main__":
 
     set_seed(42)
 
-    run_experiment("oscillator_no_noise.csv", ["x"], "F", "Oscilador")
-    run_experiment("kepler_no_noise.csv", ["r"], "T", "Kepler")
-    run_experiment("coulomb_no_noise.csv", ["q1", "q2", "r"], "F", "Coulomb")
-    run_experiment("ideal_gas_no_noise.csv", ["n", "T", "V"], "P", "Gas Ideal")
+# # si el modelo está sin entrenar
+#     run_experiment_with_saving("oscillator_no_noise.csv", ["x"], "F", "Oscilador", load=False)  
+#     run_experiment_with_saving("kepler_no_noise.csv", ["r"], "T", "Kepler", load=False)
+#     run_experiment_with_saving("coulomb_no_noise.csv", ["q1", "q2", "r"], "F", "Coulomb", load=False)
+#     run_experiment_with_saving("ideal_gas_no_noise.csv", ["n", "T", "V"], "P", "Gas Ideal", load=False)
+
+# si ya tenemos los modelos entrenados
+    run_experiment_with_saving("oscillator_no_noise.csv", ["x"], "F", "Oscilador", load=True)
+    run_experiment_with_saving("kepler_no_noise.csv", ["r"], "T", "Kepler", load=True)
+    run_experiment_with_saving("coulomb_no_noise.csv", ["q1", "q2", "r"], "F", "Coulomb", load=True)
+    run_experiment_with_saving("ideal_gas_no_noise.csv", ["n", "T", "V"], "P", "Gas Ideal", load=True)
