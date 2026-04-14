@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symbolic Physics Discovery</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ── Header ──────────────────────────────────────────────────────────────── -->
+  <header class="site-header">
+    <p class="header-eyebrow">Symbolic Regression · Physics Discovery</p>
+    <h1>Descubre la <span>ley física</span><br>que hay en tus datos</h1>
+    <p class="header-sub">
+      Carga un dataset, elige los modelos y lanza el análisis. Los resultados son
+      totalmente aislados de tu código fuente.
+    </p>
+  </header>
+
+  <!-- ── Step 1: Dataset ────────────────────────────────────────────────────── -->
+  <section class="step" style="animation-delay:.05s">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-title">Datos</div>
+    </div>
+
+    <div class="panel">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="default">Datasets del proyecto</button>
+        <button class="tab-btn"        data-tab="upload">Subir archivo</button>
+      </div>
+
+      <!-- Default datasets -->
+      <div class="tab-pane active" id="tab-default">
+        <div id="dataset-grid" class="dataset-grid">
+          <p style="color:var(--text-muted);font-size:13px">Cargando…</p>
+        </div>
+        <div id="default-target-row"></div>
+      </div>
+
+      <!-- Upload -->
+      <div class="tab-pane" id="tab-upload">
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" id="file-input" accept=".csv,.json,.txt">
+          <div class="drop-icon"></div>
+          <p class="drop-text">Arrastra tu archivo aquí o <strong>haz clic para buscar</strong></p>
+          <p class="drop-hint">CSV · JSON · TXT — máx 50 MB</p>
+        </div>
+        <p id="upload-status" style="margin-top:12px;font-family:var(--font-mono);font-size:12px;color:var(--text-muted)"></p>
+
+        <!-- Column configurator (hidden until upload) -->
+        <div id="col-config" class="hidden" style="margin-top:20px">
+          <p class="col-config-label">
+            Renombra las columnas si lo necesitas y marca cuál es el <strong>target</strong> (▶).
+          </p>
+          <div class="col-rows"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Step 2: Models ─────────────────────────────────────────────────────── -->
+  <section class="step" style="animation-delay:.12s">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title">Modelos</div>
+    </div>
+    <div id="model-grid" class="model-grid"></div>
+  </section>
+
+  <!-- ── Step 3: Advanced options ───────────────────────────────────────────── -->
+  <section class="step" style="animation-delay:.18s">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-title">Opciones avanzadas</div>
+    </div>
+
+    <button id="adv-toggle" class="adv-toggle">
+      <span>Modificar hiperparámetros</span>
+      <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">
+        Solo aplican a esta ejecución · no modifican el código
+      </span>
+      <span class="toggle-arrow">▼</span>
+    </button>
+    <div id="adv-body" class="adv-body">
+      <p style="color:var(--text-muted);font-size:13px">Selecciona al menos un modelo primero.</p>
+    </div>
+  </section>
+
+  <!-- ── Run ────────────────────────────────────────────────────────────────── -->
+  <div class="run-row">
+    <button id="run-btn" class="btn btn-primary" disabled>
+      ▶ Lanzar experimento
+    </button>
+    <span id="run-status" class="run-status">Elige un dataset primero</span>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── Log terminal ───────────────────────────────────────────────────────── -->
+  <section id="log-section" style="display:none">
+    <div class="step-header" style="margin-bottom:12px">
+      <div class="step-num">→</div>
+      <div class="step-title">Log de ejecución</div>
+    </div>
+    <div class="terminal" id="terminal">
+      <span class="cursor"></span>
+    </div>
+  </section>
+
+  <!-- ── Results ────────────────────────────────────────────────────────────── -->
+  <section id="results-section">
+    <div class="results-header">
+      <h2 class="results-title">Resultados</h2>
+    </div>
+
+    <!-- Metric cards -->
+    <div id="metric-cards" class="metric-cards"></div>
+
+    <!-- Image gallery -->
+    <div id="gallery-section" class="gallery-section" style="display:none">
+      <h3>Gráficas</h3>
+      <div id="gallery-grid" class="gallery-grid"></div>
+    </div>
+
+    <!-- Downloads -->
+    <div class="downloads-section" style="margin-top:28px">
+      <h3>Descargar archivos</h3>
+      <div id="download-list" class="download-list"></div>
+    </div>
+  </section>
+
+</div><!-- /app-shell -->
+
+<!-- ── Lightbox ────────────────────────────────────────────────────────────── -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close">✕</button>
+  <img id="lightbox-img" src="" alt="Plot">
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
