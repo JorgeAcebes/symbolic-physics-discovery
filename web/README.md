@@ -25,7 +25,9 @@ cd symbolic-physics-discovery/web
 python app.py
 ```
 
-Abre http://localhost:5050 en el navegador.
+Abre http://localhost:5050 en el navegador. 
+
+Si obtienes error, debes esperar a que se muestren mensajes en la terminal. Recarga la página y vuelve a intentarlo.
 
 ## Flujo de uso
 
@@ -49,7 +51,7 @@ Abre http://localhost:5050 en el navegador.
 ## Aislamiento de outputs
 
 Todos los archivos generados van a `web/outputs/<job_id>/`. Nunca se escribe
-en `results/`, `data/` ni ninguna otra carpeta del proyecto.
+en `results/`, `data/` ni ninguna otra carpeta del proyecto. No se suben a GitHub.
 
 Cada ejecución tiene su propio subdirectorio con UUID, por lo que los resultados
 de distintas corridas no se machan entre sí.
