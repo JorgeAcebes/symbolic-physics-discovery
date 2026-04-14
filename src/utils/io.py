@@ -93,8 +93,8 @@ def report_all_models():
     print('~'*50)
     print(f'Iniciando reporte')
     
-    results_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "results")))
-    output_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "results", "all_models")))
+    results_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "results")))
+    output_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "results", "all_models")))
     output_dir.mkdir(parents=True, exist_ok=True)
 
     models = set()
