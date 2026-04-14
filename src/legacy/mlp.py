@@ -280,7 +280,7 @@ def run_experiment(filename, input_cols, target_col, name):
     # plt.show()
 
 #Función que hace un ajuste polinómico de los datos, para comparar con MLP
-def run_polynomial_regression_experiment(X, y, degree=2, name="PolyReg", plot=False):
+def run_polynomial_regression_experiment(X, y, degree=3, name="PolyReg", plot=False):
     y = y.flatten()
 
     # =========================
@@ -455,17 +455,138 @@ def run_experiment_with_saving(filename, input_cols, target_col, name, load=Fals
     # =========================
     poly_model = load_poly_model(name)
 
-    if poly_model is None or not load:
-        poly_model, _ = run_polynomial_regression_experiment(
-            X, y,
-            degree=3,
-            name=name + " PolyReg"
-        )
-        save_poly_model(poly_model, name)
+    exp_dir = os.path.join(SAVE_DIR, name)
+    poly_path = os.path.join(exp_dir, "poly_model.joblib")
+
+    if load and os.path.exists(poly_path):
+        print("Polynomial ya existe, cargado.")
+        poly_model = joblib.load(poly_path)
+        load_poly_results(name)
     else:
-        print("Modelo polinómico cargado, no se entrena.")
+        poly_model, best_degree, equation, results = find_best_polynomial(X, y, max_degree=3, name=name)
+
+        save_poly_full(name, poly_model, best_degree, equation, results)
 
     return model
+
+def find_best_polynomial(
+    X, y,
+    max_degree=3,
+    name="PolySearch"):
+
+    y = y.flatten()
+
+    # SPLIT reproducible
+    X_temp, X_test, y_temp, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
+    X_train, X_val, y_train, y_val = train_test_split(X_temp, y_temp, test_size=0.25, random_state=1)
+
+    best_model = None
+    best_degree = None
+    best_val_error = float("inf")
+    best_equation = None
+
+    results = []
+
+    for degree in range(1, max_degree + 1):
+
+        scaler_y = StandardScaler()
+        y_train_s = scaler_y.fit_transform(y_train.reshape(-1, 1)).flatten()
+
+        model = Pipeline([
+            ("poly", PolynomialFeatures(degree=degree, include_bias=False)),
+            ("scaler_X", StandardScaler()),
+            ("reg", LinearRegression())
+        ])
+
+        model.fit(X_train, y_train_s)
+
+        # VALIDACIÓN
+        y_pred_s = model.predict(X_val)
+        y_pred = scaler_y.inverse_transform(y_pred_s.reshape(-1, 1)).flatten()
+
+        val_mae = mean_absolute_error(y_val, y_pred)
+
+        results.append((degree, val_mae))
+
+        print(f"[Poly] grado={degree} val_MAE={val_mae:.3e}")
+
+        if val_mae < best_val_error:
+            best_val_error = val_mae
+            best_model = model
+            best_degree = degree
+
+            # guardamos también ecuación
+            best_equation = extract_equation(model, scaler_y)
+
+    print("\n Mejor grado:", best_degree)
+    print("MAE val:", best_val_error)
+    print("Ecuación:", best_equation)
+
+    return best_model, best_degree, best_equation, results
+
+def extract_equation(model, scaler_y):
+
+    poly = model.named_steps["poly"]
+    scaler_X = model.named_steps["scaler_X"]
+    reg = model.named_steps["reg"]
+
+    feature_names = poly.get_feature_names_out()
+
+    sigma_y = scaler_y.scale_[0]
+    mu_y = scaler_y.mean_[0]
+    sigma_P = scaler_X.scale_
+    mu_P = scaler_X.mean_
+
+    beta = reg.coef_
+    beta_0 = reg.intercept_
+
+    c = (sigma_y * beta) / sigma_P
+    c_0 = sigma_y * beta_0 + mu_y - np.sum(c * mu_P)
+
+    terms = []
+    for coef, name_feat in zip(c, feature_names):
+        if abs(coef) > 1e-10:
+            terms.append(f"{coef:.3e}*{name_feat}")
+
+    equation = " + ".join(terms)
+    equation += f" {'+' if c_0 >= 0 else '-'} {abs(c_0):.3e}"
+
+    return equation
+
+def save_poly_full(name, model, degree, equation, results):
+
+    exp_dir = os.path.join(SAVE_DIR, name)
+    os.makedirs(exp_dir, exist_ok=True)
+
+    joblib.dump(model, os.path.join(exp_dir, "poly_model.joblib"))
+
+    with open(os.path.join(exp_dir, "poly_results.json"), "w") as f:
+        json.dump({
+            "best_degree": degree,
+            "equation": equation,
+            "search_results": results
+        }, f, indent=4)
+
+    print(f"[SAVE] Polynomial completo guardado en {exp_dir}")
+
+def load_poly_results(name):
+    exp_dir = os.path.join(SAVE_DIR, name)
+    path = os.path.join(exp_dir, "poly_results.json")
+
+    if os.path.exists(path):
+        with open(path, "r") as f:
+            data = json.load(f)
+
+        print("\n==============================")
+        print(f"{name} Polynomial")
+        print("==============================")
+        print(f"Mejor grado: {data['best_degree']}")
+        print(f"Ecuación: {data['equation']}")
+
+        return data
+    else:
+        print("No hay resultados guardados del polinomio.")
+        return None
 
 # =========================
 # MAIN
@@ -475,14 +596,14 @@ if __name__ == "__main__":
 
     set_seed(42)
 
-# # si el modelo está sin entrenar
-#     run_experiment_with_saving("oscillator_no_noise.csv", ["x"], "F", "Oscilador", load=False)  
-#     run_experiment_with_saving("kepler_no_noise.csv", ["r"], "T", "Kepler", load=False)
-#     run_experiment_with_saving("coulomb_no_noise.csv", ["q1", "q2", "r"], "F", "Coulomb", load=False)
-#     run_experiment_with_saving("ideal_gas_no_noise.csv", ["n", "T", "V"], "P", "Gas Ideal", load=False)
+# si el modelo está sin entrenar
+    run_experiment_with_saving("oscillator_no_noise.csv", ["x"], "F", "Oscilador", load=False)  
+    run_experiment_with_saving("kepler_no_noise.csv", ["r"], "T", "Kepler", load=False)
+    run_experiment_with_saving("coulomb_no_noise.csv", ["q1", "q2", "r"], "F", "Coulomb", load=False)
+    run_experiment_with_saving("ideal_gas_no_noise.csv", ["n", "T", "V"], "P", "Gas Ideal", load=False)
 
-# si ya tenemos los modelos entrenados
-    run_experiment_with_saving("oscillator_no_noise.csv", ["x"], "F", "Oscilador", load=True)
-    run_experiment_with_saving("kepler_no_noise.csv", ["r"], "T", "Kepler", load=True)
-    run_experiment_with_saving("coulomb_no_noise.csv", ["q1", "q2", "r"], "F", "Coulomb", load=True)
-    run_experiment_with_saving("ideal_gas_no_noise.csv", ["n", "T", "V"], "P", "Gas Ideal", load=True)
+# # si ya tenemos los modelos entrenados
+#     run_experiment_with_saving("oscillator_no_noise.csv", ["x"], "F", "Oscilador", load=True)
+#     run_experiment_with_saving("kepler_no_noise.csv", ["r"], "T", "Kepler", load=True)
+#     run_experiment_with_saving("coulomb_no_noise.csv", ["q1", "q2", "r"], "F", "Coulomb", load=True)
+#     run_experiment_with_saving("ideal_gas_no_noise.csv", ["n", "T", "V"], "P", "Gas Ideal", load=True)
