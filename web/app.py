@@ -214,4 +214,5 @@ if __name__ == "__main__":
     print(f"  Data dir     : {DATA_DIR}")
     print(f"  Outputs dir  : {OUTPUTS}")
     print()
-    app.run(debug=True, port=5050, threaded=True)
+    app.run(debug=True, use_reloader=False, port=5050, threaded=True)
+

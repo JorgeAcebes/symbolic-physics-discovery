@@ -1,0 +1,8 @@
+[
+  {
+    "model": "MLP_Sparse",
+    "mse": 2143210.25,
+    "mae": 693.693603515625,
+    "equation": "Red Neuronal (sparse)"
+  }
+]
