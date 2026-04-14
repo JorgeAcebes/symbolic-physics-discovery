@@ -19,7 +19,8 @@ class PySRWrapper(PhysicalModel):
             elementwise_loss="loss(prediction, target) = (prediction - target)^2", # Imponemos norma L2 para evaluar el fitness 
             populations=10, # Número de "poblaciones" (islas genéticas aisladas) que intercambian las ecuaciones
             maxsize=15, # Máxima longitud de nodos del árbol (nodos de la ecuación)
-            model_selection="best", # Criterio de selección: 
+            model_selection="best", # Criterio de selección (explicado más abajo)
+            random_state=42, # Reproducibilidad
             verbosity=0 # No queremos que esté printeando muchas cosas en la ventana de comandos
         )
 

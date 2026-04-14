@@ -77,8 +77,14 @@ class PhysicalDataset:
             ds = torch.utils.data.TensorDataset(torch.tensor(X, dtype=torch.float32), # Convierte X a PyTorch
                                                 torch.tensor(y, dtype=torch.float32)) # Convierte y a PyTorch
             
-            return torch.utils.data.DataLoader(ds, batch_size=batch_size, shuffle=shuffle)
+            # Reproducibilidad
+            g = torch.Generator()
+            g.manual_seed(42)
+
+            return torch.utils.data.DataLoader(ds, batch_size=batch_size, shuffle=shuffle,
+                                        generator=g if shuffle else None)
             
         return to_loader(self.X_train, self.y_train, True), \
                to_loader(self.X_val, self.y_val, False), \
                to_loader(self.X_test, self.y_test, False)
+

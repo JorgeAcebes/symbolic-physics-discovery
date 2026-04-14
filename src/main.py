@@ -13,6 +13,18 @@ from models.gplearn_sr import GPLearnWrapper
 from models.polynomial import PolynomialWrapper
 from utils.metrics import evaluate_physical_space
 from utils.io import save_experiment_results, plot_residual_analysis, report_all_models
+import numpy as np
+import random
+import torch
+
+# Reproducibilidad:
+def set_seed(seed=42):
+    random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
+    if torch.cuda.is_available(): torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    
+set_seed(42)
+
 
 # Conjunto de modelos con los que se correrá
 
