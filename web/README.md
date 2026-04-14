@@ -27,7 +27,7 @@ python app.py
 
 Abre http://localhost:5050 en el navegador. 
 
-Si obtienes error, debes esperar a que se muestren mensajes en la terminal. Recarga la página y vuelve a intentarlo
+Si obtienes error, debes esperar a que se muestren mensajes en la terminal. Recarga la página y vuelve a intentarlo.
 
 ## Flujo de uso
 
