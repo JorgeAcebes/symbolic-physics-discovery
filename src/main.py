@@ -35,7 +35,7 @@ models_to_run = [
     # "Polynomial",
     # "PySR",
     # "GPLearn",
-    "PySINDy",
+    # "PySINDy",
     "QLattice" 
     ]
 

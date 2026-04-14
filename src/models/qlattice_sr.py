@@ -63,6 +63,5 @@ class QLatticeWrapper(PhysicalModel):
     def get_weights(self):
         # feyn expone los parámetros del modelo como diccionario
         return {
-            "equation": str(self.equation),
-            "parameters": self.model.parameters   # dict con valores numéricos
+            "equation":  str(self.best_model.sympify(signif=4)),
         }
