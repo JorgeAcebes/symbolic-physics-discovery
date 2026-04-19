@@ -16,7 +16,7 @@ class PySRWrapper(PhysicalModel):
             constraints={'^': (-1, 1)},
             nested_constraints={'^': {'^': 0}},
             # Definimos la base del espacio funcional, con ciertas restricciones en la operación exponencial y anidación de potencias
-            elementwise_loss="loss(prediction, target) = (prediction - target)^2", # Imponemos norma L2 para evaluar el fitness 
+            elementwise_loss="loss(prediction, target) = (prediction - target)^2", # Imponemos square error como LOSS (topológicamente idéntico a MSE)
             populations=10, # Número de "poblaciones" (islas genéticas aisladas) que intercambian las ecuaciones
             maxsize=15, # Máxima longitud de nodos del árbol (nodos de la ecuación)
             model_selection="best", # Criterio de selección (explicado más abajo)
