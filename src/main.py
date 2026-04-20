@@ -111,7 +111,7 @@ def run_all_experiments():
                     
                 else:
                     # Regresión Simbólica: Ajuste y evaluación estricta en el hiperespacio físico original
-                    if model_name in ["PySR", "QLattice"]:
+                    if model_name in ["PySR", "QLattice", "GPLearn"]:
                         # PySR y QLattice están preparados para tomar X_val
                         model.fit(X_train_phys, y_train_phys, X_val=X_val_phys, y_val=y_val_phys)
                     else:

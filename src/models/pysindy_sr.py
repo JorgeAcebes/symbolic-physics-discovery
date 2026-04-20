@@ -4,6 +4,7 @@ from pysindy.optimizers import STLSQ # Importamos Sequential Threshold Least Squ
 from pysindy.feature_library import PolynomialLibrary, CustomLibrary, GeneralizedLibrary
 from models.base import PhysicalModel
 
+# Este modelo no cuenta con épocas por lo que no procede graficar el loss para el train y el validation
 class PySINDyWrapper(PhysicalModel):
     def __init__(self, feature_names=None, degree=3):
         super().__init__()

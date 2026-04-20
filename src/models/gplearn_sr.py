@@ -27,34 +27,36 @@ class GPLearnWrapper(PhysicalModel):
             feature_names=feature_names # Nombre de las features
         )
 
+
+
     def fit(self, X_train, y_train, X_val=None, y_val=None):
-        self.model.fit(X_train, y_train.ravel()) # Ravel: similar a flatten pero más eficiente. 
-        # Realizamos el fit que tiene implementado el modelo de GPLearn
+            total_generations = self.model.generations
+            
+            for gen in range(1, total_generations + 1): 
+                self.model.set_params(generations=gen) # Esto me permite modificar parámetros de un modelo sin instanciarlo de nuevo;
+                # en particular, estoy modificando el número de generaciones del modelo. 
 
-        raw_equation = str(self.model._program) # Obtenemos la función ganadora y la proyectamos en una cadena de texto
+                self.model.fit(X_train, y_train.ravel())  # Ravel: similar a flatten pero más eficiente. Aquí ya es cuando fiteamos el modelo.
+                
+                # Calculamos nostros de manera explícita el MAE del train y del validation.
 
-        # Diccionario de transformaciones para SymPy
-        locals_dict = {
-            'add': lambda x, y: x + y,
-            'sub': lambda x, y: x - y,
-            'mul': lambda x, y: x * y,
-            'div': lambda x, y: x / y,
-            'inv': lambda x: 1/x,
-            'sin': sp.sin,
-            'cos': sp.cos
-        }
+                self.history["train_loss"].append(mean_squared_error(y_train, self.predict(X_train)))
+                if X_val is not None and y_val is not None:
+                    self.history["val_loss"].append(mean_squared_error(y_val, self.predict(X_val)))
 
-        try: 
-            expr = sp.sympify(raw_equation, locals=locals_dict) # De GPLearn a Sympy
-            self.equation = sp.simplify(expr) # Simplificación algebraica
-        except:
-            self.equation = raw_equation # Por si las cosas fallan
+            raw_equation = str(self.model._program)
 
-        # Recuperación de la dinámica de convergencia.
-        if hasattr(self.model, 'run_details_') and 'best_fitness' in self.model.run_details_:
-            self.history["train_loss"] = self.model.run_details_['best_fitness']
-                        
-        return self
+            # Diccionario de transformaciones para SymPy:
+            locals_dict = {'add': lambda x, y: x + y, 'sub': lambda x, y: x - y,
+                        'mul': lambda x, y: x * y, 'div': lambda x, y: x / y,
+                        'inv': lambda x: 1/x, 'sin': sp.sin, 'cos': sp.cos}
+            try: 
+                self.equation = sp.simplify(sp.sympify(raw_equation, locals=locals_dict)) # Convertimos de GPLearn a Sympy y SIMPLIFICAMOS
+            except:
+                self.equation = raw_equation  # Si no conseguimos convertir a sympy, que nos dé la ecuación que obtiene GPLearn
+
+            return self
+
 
     def predict(self, X):
         # Llama al modelo entrenado y devuelve las predicciones para cada muestra de X
