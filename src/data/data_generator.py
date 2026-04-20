@@ -3,11 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-plots = False
+plots = True
 
 np.random.seed(1) # Aseguramos reproducibilidad
 
-N_SAMPLES = 1000 # puntos para cada ley
+N_SAMPLES = 100000 # puntos para cada ley
 
 NOISE_LEVELS = {
     "no_noise": 0.0,
