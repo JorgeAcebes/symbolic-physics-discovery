@@ -34,7 +34,7 @@ models_to_run = [
     # "MLP_Dropout",
     # "Polynomial",
     # "PySR",
-    # "GPLearn",
+    "GPLearn",
     # "PySINDy",
     "QLattice" 
     ]
@@ -44,10 +44,10 @@ if len(models_to_run) == 0:
 # Conjunto de archivos que se procesarán. Deben estar ubicados en la carpeta data 
 def run_all_experiments():
     datasets_info = [
-        {"file": "oscillator_no_noise.csv", "target": "F"},
+        # {"file": "oscillator_no_noise.csv", "target": "F"},
         # {"file": "kepler_no_noise.csv", "target": "T"},
-        # {"file": "coulomb_no_noise.csv", "target": "F"},
-        # {"file": "ideal_gas_no_noise.csv", "target": "P"}
+        {"file": "coulomb_no_noise.csv", "target": "F"},
+        {"file": "ideal_gas_no_noise.csv", "target": "P"}
     ]
 
 
