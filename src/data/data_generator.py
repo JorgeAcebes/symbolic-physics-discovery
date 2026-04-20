@@ -264,7 +264,8 @@ if __name__ == "__main__":
     process_law(generate_boltzmann_entropy, ["omega", "S"],                    "boltzmann_entropy")
 
     if plots:
-        plot_law(generate_projectile_range, ["v0", "theta", "R"], "Projectile Range (R vs theta)", x_idx=1, y_idx=2)        plot_law(generate_time_dilation, ["t", "v", "t_prime"], "Time Dilatation (t' vs v)",       x_idx=1, y_idx=2)
+        plot_law(generate_projectile_range, ["v0", "theta", "R"], "Projectile Range (R vs theta)", x_idx=1, y_idx=2)        
+        plot_law(generate_time_dilation, ["t", "v", "t_prime"], "Time Dilatation (t' vs v)",       x_idx=1, y_idx=2)
         plot_law(generate_radioactive_decay, ["lambda", "t", "N"], "Radioactive Decay (N vs t)",    x_idx=1, y_idx=2)
         plot_law(generate_newton_cooling, ["k", "t", "T"], "Newton Cooling (T vs t)",       x_idx=1, y_idx=2)
         plot_law(generate_boltzmann_entropy, ["omega", "S"], "Boltzmann Entropy (S vs Omega)", x_idx=0, y_idx=1)
