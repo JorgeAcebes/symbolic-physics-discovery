@@ -38,6 +38,25 @@ def ideal_gas_law(n, T, V):
     R = 8.314
     return (n * R * T) / V
 
+def snell_law(n1, n2, theta1):
+    return np.arcsin((n1 / n2) * np.sin(theta1))
+
+def time_dilation(t, v):
+    c = 3e8
+    return t / np.sqrt(1 - (v / c)**2)
+
+def radioactive_decay(lam, t):
+    N0    = 1e6       # átomos iniciales (desintegración)
+    return N0 * np.exp(-lam * t)
+
+def newton_cooling(k, t):
+    T0    = 373.15    # temperatura inicial en K (Newton)
+    T_AMB = 293.15    # temperatura ambiente en K (Newton)
+    return T_AMB + (T0 - T_AMB) * np.exp(-k * t)
+
+def boltzmann_entropy(omega):
+    k_B = 1.380649e-23
+    return k_B * np.log(omega)
 
 # Función que añade ruido gaussiano proporcional a la desviación estándar de y
 def add_noise(y, noise_level):
@@ -103,6 +122,38 @@ def generate_ideal_gas():
     P = ideal_gas_law(n, T, V)
     return np.column_stack((n, T, V, P))
 
+def generate_snell():
+    n1     = np.random.uniform(1.0, 2.5, 2 * N_SAMPLES)
+    n2     = np.random.uniform(1.0, 2.5, 2 * N_SAMPLES)
+    theta1 = np.random.uniform(0.0, np.pi / 2, 2 * N_SAMPLES)
+    valid  = (n1 * np.sin(theta1)) <= n2 # filtra los casos de ref
+    n1, n2, theta1 = n1[valid][:N_SAMPLES], n2[valid][:N_SAMPLES], theta1[valid][:N_SAMPLES]
+    theta2 = snell_law(n1, n2, theta1)
+    return np.column_stack((n1, n2, theta1, theta2))
+
+def generate_time_dilation():
+    c      = 3e8
+    t      = np.random.uniform(1.0, 100.0, N_SAMPLES)
+    v      = np.random.uniform(0.0, 0.99 * c, N_SAMPLES)
+    t_prime = time_dilation(t, v)
+    return np.column_stack((t, v, t_prime))
+
+def generate_radioactive_decay():
+    lam = np.random.uniform(0.01, 1.0, N_SAMPLES)
+    t   = np.random.uniform(0.0, 10.0, N_SAMPLES)
+    N   = radioactive_decay(lam, t)
+    return np.column_stack((lam, t, N))
+
+def generate_newton_cooling():
+    k = np.random.uniform(0.01, 1.0, N_SAMPLES)
+    t = np.random.uniform(0.0, 1.0, N_SAMPLES) * 5 / k
+    T = newton_cooling(k, t)
+    return np.column_stack((k, t, T))
+
+def generate_boltzmann_entropy():
+    omega = 10 ** np.random.uniform(0, 20, N_SAMPLES)
+    S     = boltzmann_entropy(omega)
+    return np.column_stack((omega, S))
 
 # Guarda los datos en un .csv con el título que se desee, los encabezados deseados
 # y para los datasets en matrices 2D como se han generado con los generate_*
@@ -199,7 +250,27 @@ if __name__ == "__main__":
     # Gas ideal
     process_law(generate_ideal_gas, ["n", "T", "V", "P"], "ideal_gas")
 
+    # Snell
+    process_law(generate_snell,             ["n1", "n2", "theta1", "theta2"],  "snell")
+
+    # Dilatación temporal
+    process_law(generate_time_dilation,     ["t", "v", "t_prime"],             "time_dilation")
+
+    # Desintegración radiactiva
+    process_law(generate_radioactive_decay, ["lambda", "t", "N"],              "radioactive_decay")
+
+    # Enfriamiento de Newton
+    process_law(generate_newton_cooling,    ["k", "t", "T"],                   "newton_cooling")
+
+    # Entropía de Boltzmann
+    process_law(generate_boltzmann_entropy, ["omega", "S"],                    "boltzmann_entropy")
+
     if plots:
+        plot_law(generate_snell, ["n1", "n2", "theta1", "theta2"], "Snell (theta2 vs theta1)",      x_idx=2, y_idx=3)
+        plot_law(generate_time_dilation, ["t", "v", "t_prime"], "Time Dilatation (t' vs v)",       x_idx=1, y_idx=2)
+        plot_law(generate_radioactive_decay, ["lambda", "t", "N"], "Radioactive Decay (N vs t)",    x_idx=1, y_idx=2)
+        plot_law(generate_newton_cooling, ["k", "t", "T"], "Newton Cooling (T vs t)",       x_idx=1, y_idx=2)
+        plot_law(generate_boltzmann_entropy, ["omega", "S"], "Boltzmann Entropy (S vs Omega)", x_idx=0, y_idx=1)
         plot_law(generate_coulomb, ["q1", "q2", "r", "F"], "Coulomb (F vs r)", x_idx=2, y_idx=3)
         plot_law(generate_oscillator, ["x", "F"], "Oscillator (F vs x)", x_idx=0, y_idx=1)
         plot_law(generate_kepler, ["r", "T"], "Kepler (T vs r)", x_idx=0, y_idx=1)
