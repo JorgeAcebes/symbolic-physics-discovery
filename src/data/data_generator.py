@@ -38,8 +38,9 @@ def ideal_gas_law(n, T, V):
     R = 8.314
     return (n * R * T) / V
 
-def snell_law(n1, n2, theta1):
-    return np.arcsin((n1 / n2) * np.sin(theta1))
+def projectile_range(v0, theta):
+    g = 9.81
+    return (v0**2 * np.sin(2 * theta)) / g
 
 def time_dilation(t, v):
     c = 3e8
@@ -122,14 +123,11 @@ def generate_ideal_gas():
     P = ideal_gas_law(n, T, V)
     return np.column_stack((n, T, V, P))
 
-def generate_snell():
-    n1     = np.random.uniform(1.0, 2.5, 2 * N_SAMPLES)
-    n2     = np.random.uniform(1.0, 2.5, 2 * N_SAMPLES)
-    theta1 = np.random.uniform(0.0, np.pi / 2, 2 * N_SAMPLES)
-    valid  = (n1 * np.sin(theta1)) <= n2 # filtra los casos de ref
-    n1, n2, theta1 = n1[valid][:N_SAMPLES], n2[valid][:N_SAMPLES], theta1[valid][:N_SAMPLES]
-    theta2 = snell_law(n1, n2, theta1)
-    return np.column_stack((n1, n2, theta1, theta2))
+def generate_projectile_range():
+    v0    = np.random.uniform(1.0, 100.0, N_SAMPLES)          # m/s
+    theta = np.random.uniform(0.0, np.pi / 2, N_SAMPLES)      # 0 a 90 grados
+    R     = projectile_range(v0, theta)
+    return np.column_stack((v0, theta, R))
 
 def generate_time_dilation():
     c      = 3e8
@@ -250,8 +248,8 @@ if __name__ == "__main__":
     # Gas ideal
     process_law(generate_ideal_gas, ["n", "T", "V", "P"], "ideal_gas")
 
-    # Snell
-    process_law(generate_snell,             ["n1", "n2", "theta1", "theta2"],  "snell")
+    # Alcance de proyectil
+    process_law(generate_projectile_range, ["v0", "theta", "R"], "projectile_range")
 
     # Dilatación temporal
     process_law(generate_time_dilation,     ["t", "v", "t_prime"],             "time_dilation")
@@ -266,8 +264,7 @@ if __name__ == "__main__":
     process_law(generate_boltzmann_entropy, ["omega", "S"],                    "boltzmann_entropy")
 
     if plots:
-        plot_law(generate_snell, ["n1", "n2", "theta1", "theta2"], "Snell (theta2 vs theta1)",      x_idx=2, y_idx=3)
-        plot_law(generate_time_dilation, ["t", "v", "t_prime"], "Time Dilatation (t' vs v)",       x_idx=1, y_idx=2)
+        plot_law(generate_projectile_range, ["v0", "theta", "R"], "Projectile Range (R vs theta)", x_idx=1, y_idx=2)        plot_law(generate_time_dilation, ["t", "v", "t_prime"], "Time Dilatation (t' vs v)",       x_idx=1, y_idx=2)
         plot_law(generate_radioactive_decay, ["lambda", "t", "N"], "Radioactive Decay (N vs t)",    x_idx=1, y_idx=2)
         plot_law(generate_newton_cooling, ["k", "t", "T"], "Newton Cooling (T vs t)",       x_idx=1, y_idx=2)
         plot_law(generate_boltzmann_entropy, ["omega", "S"], "Boltzmann Entropy (S vs Omega)", x_idx=0, y_idx=1)
