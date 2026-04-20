@@ -31,7 +31,11 @@ class GPLearnWrapper(PhysicalModel):
 
     def fit(self, X_train, y_train, X_val=None, y_val=None):
             total_generations = self.model.generations
-            
+
+            # Inicialización de la memoria del sistema
+            if not hasattr(self, 'history'):
+                self.history = {"train_loss": [], "val_loss": []}            
+
             for gen in range(1, total_generations + 1): 
                 self.model.set_params(generations=gen) # Esto me permite modificar parámetros de un modelo sin instanciarlo de nuevo;
                 # en particular, estoy modificando el número de generaciones del modelo. 

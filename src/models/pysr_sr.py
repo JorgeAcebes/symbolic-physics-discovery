@@ -8,9 +8,9 @@ class PySRWrapper(PhysicalModel):
     def __init__(self, feature_names=None, niterations=50): # Constructor. Definimos el número de iteraciones del algoritmo genético
         super().__init__()
         self.feature_names = feature_names
+        self.total_iterations = niterations
         
         self.model = PySRRegressor(
-            niterations=niterations,
             binary_operators=["+", "-", "*", "/", "^"],
             unary_operators=["inv", "square"],
             constraints={'^': (-1, 1)},
@@ -24,6 +24,7 @@ class PySRWrapper(PhysicalModel):
             random_state=42, # Reproducibilidad
             deterministic=True, # Reproducibilidad
             parallelism='serial', # Reproducibilidad
+            warm_start=True, # Tells fit to continue from where the last call to fit finished
             verbosity=0 # No queremos que esté printeando muchas cosas en la ventana de comandos
         )
 
@@ -39,27 +40,36 @@ class PySRWrapper(PhysicalModel):
         # among expressions with a loss better than at least 1.5x the
         # most accurate model.
 
+    
     def fit(self, X_train, y_train, X_val=None, y_val=None):
-        self.model.fit(X_train, y_train, variable_names=self.feature_names)
-        # Fit interno en Julia y colapsa hacia la frontera de Pareto (balanceo entre precisión y simplicidad)   
+        # Discretización del tiempo evolutivo
+        delta_n = 5
+        epochs = self.total_iterations // delta_n
 
-        # Extracción rigurosa del mapeo funcional en forma analítica con Sympy
-        self.equation = str(self.model.sympy()) 
+        # A diferencia de lo que hacíamos en GPLearn, no cojo el resultado del modelo en cada iteración,
+        # pues comunicarse con Julia es lento. Nos comunicamos cada 5 iteraciones (a lo que denominamos epoch)
 
+        # Inicialización del registro del observable macroscópico
+        self.history = {"train_loss": [], "val_loss": []}
 
-        # TODO: ESTO NO FUNCIONA. Revisar si PySR tiene internamente para obtener los loss en cada momento o no. Si no lo tiene: lo omitimos
+        # Fijamos rígidamente el paso de integración evolutiva
+        self.model.set_params(niterations=delta_n)
 
-        # # Evaluación determinista del modelo convergido
-        # train_loss = mean_squared_error(y_train, self.predict(X_train))
-        # self.history["train_loss"] = [train_loss]
-        
-        # # Proyección sobre el subespacio de validación
-        # if X_val is not None and y_val is not None:
-        #     val_loss = mean_squared_error(y_val, self.predict(X_val))
-        #     self.history["val_loss"] = [val_loss]
+        for epoch in range(epochs):
+            
+            # Fit interno en Julia y colapsa hacia la frontera de Pareto (balanceo entre precisión y simplicidad)   
+            self.model.fit(X_train, y_train, variable_names=self.feature_names) 
+            
+            self.history["train_loss"].append(mean_squared_error(y_train, self.predict(X_train)))
+            
+            if X_val is not None and y_val is not None:
+                self.history["val_loss"].append(mean_squared_error(y_val, self.predict(X_val)))
+
+        self.equation = str(self.model.sympy()) # Extracción rigurosa del mapeo funcional en forma analítica con Sympy
+
             
         return self
-
+    
     def predict(self, X):   
         y_pred = self.model.predict(X) # Predecimos el valor de y dado X empleando el mejor modelo de PySR
         return np.array(y_pred).reshape(-1, 1)
