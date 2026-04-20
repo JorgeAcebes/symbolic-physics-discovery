@@ -45,7 +45,7 @@ with open(output_log_path, "w", encoding="utf-8") as log_file:
             population_size = trial.suggest_int("population_size", 20, 100)
             parsimony = trial.suggest_float("parsimony", 1e-5, 1e-1, log=True)
             
-            num_seeds = 10
+            num_seeds = 7
             losses = []
             start_sim_time = time.time()
 
@@ -107,7 +107,7 @@ with open(output_log_path, "w", encoding="utf-8") as log_file:
         study = optuna.create_study(directions=["minimize", "minimize"], sampler=my_sampler)
         
         start_optuna_time = time.time()
-        study.optimize(objective, n_trials=40) # Remember to increase n_trials!
+        study.optimize(objective, n_trials=10) # Remember to increase n_trials!
         end_optuna_time = time.time()
         
         # --- Record Results to File ---
@@ -138,9 +138,15 @@ with open(output_log_path, "w", encoding="utf-8") as log_file:
 
         # --- Record Importances to File ---
         print("\n--- Hyperparameter Importances for MEAN LOSS ---", file=log_file)
-        importances_mean = imp.get_param_importances(study, target=lambda t: t.values[0])
-        for param, importance_value in importances_mean.items():
-            print(f"  {param}: {importance_value * 100:.2f}%", file=log_file)
+        try:
+            importances_mean = imp.get_param_importances(study, target=lambda t: t.values[0])
+            for param, importance_value in importances_mean.items():
+                print(f"  {param}: {importance_value * 100:.2f}%", file=log_file)
+        except RuntimeError as e:
+            if "zero total variance" in str(e):
+                print("  Could not calculate importances: Mean loss was identical across all trials.", file=log_file)
+            else:
+                raise e
 
         print("\n--- Hyperparameter Importances for STANDARD DEVIATION ---", file=log_file)
         try:
