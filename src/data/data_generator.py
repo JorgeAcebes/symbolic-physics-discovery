@@ -2,6 +2,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) # Para poder llamar a utils.utils
 from utils.utils import set_plot_style
 
 set_plot_style(for_paper=True)
@@ -15,6 +17,7 @@ plt.rcParams.update({
 })
 
 plots = True
+
 np.random.seed(1) # Aseguramos reproducibilidad
 
 N_SAMPLES = 100000  # nº puntos para cada ley
