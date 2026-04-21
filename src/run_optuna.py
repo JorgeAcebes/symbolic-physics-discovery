@@ -7,11 +7,13 @@ import time
 import optuna
 import numpy as np
 from sklearn.metrics import mean_squared_error
+import torch
 
-# Importamos tu inyector de datos
+# Importamos el inyector de datos
 from data.loader import PhysicalDataset
+from torch.utils.data import TensorDataset, DataLoader
 
-# Importamos todos tus Wrappers
+# Importamos todos los Wrappers
 from models.mlp import MLPWrapper
 from models.pysr_sr import PySRWrapper
 from models.pysindy_sr import PySINDyWrapper
@@ -26,9 +28,9 @@ datasets_manuales = 0 # En caso de que solo quieras probar con ciertos datasets
 # CONFIGURACIÓN DE LA BÚSQUEDA
 # ==========================================
 models_to_run = [
-    "MLP_Standard",
-    "MLP_Sparse",
-    "MLP_Dropout",
+    # "MLP_Standard",
+    # "MLP_Sparse",
+    # "MLP_Dropout",
     "Polynomial",
     "PySR",
     "GPLearn",
@@ -81,11 +83,27 @@ def run_hyperparameter_search():
         
         # Espacio latente (MLP, Polynomial)
         X_train, X_val, _, y_train, y_val, _ = dataset.get_latent_arrays()
+        
+        # Filtro los datos del espacio latente a 1000 aquí (para el resto lo hago más abajo)
+        X_train, y_train = X_train[:1000], y_train[:1000]
+        X_val, y_val = X_val[:1000], y_val[:1000]       
+        
         # Espacio físico (PySR, GPLearn, etc)
         X_train_phys, X_val_phys, _, y_train_phys, y_val_phys, _ = dataset.get_physical_arrays()
+
         # DataLoaders para MLPs
-        train_loader, val_loader, _ = dataset.get_dataloaders()
-        
+        dummy_loader, _, _ = dataset.get_dataloaders()
+        b_size = dummy_loader.batch_size # Extraemos el batch_size original
+
+        train_ds = TensorDataset(torch.tensor(X_train, dtype=torch.float32), 
+                                torch.tensor(y_train, dtype=torch.float32))
+        val_ds = TensorDataset(torch.tensor(X_val, dtype=torch.float32), 
+                            torch.tensor(y_val, dtype=torch.float32))
+
+        train_loader = DataLoader(train_ds, batch_size=b_size, shuffle=True)
+        val_loader = DataLoader(val_ds, batch_size=b_size, shuffle=False)
+
+    
         # Array objetivo de validación en espacio físico para comparar de forma justa
         y_val_true_phys = y_val_phys.flatten()
 
@@ -207,17 +225,17 @@ def run_hyperparameter_search():
                     # Filtramos para tener solo 1000 datos.
 
                     elif model_name == "Polynomial":
-                        model.fit(X_train[:1000], y_train[:1000])
-                        y_pred_lat = model.predict(X_val[1000])
+                        model.fit(X_train, y_train)
+                        y_pred_lat = model.predict(X_val)
                         y_pred_phys = dataset.scaler_y.inverse_transform(y_pred_lat).flatten()
                         
                     else: # Regresadores Simbólicos (espacio físico)
                         
                         model.fit(X_train_phys[:1000], y_train_phys[:1000])  
-                        y_pred_phys = model.predict(X_val_phys[1000]).flatten()
+                        y_pred_phys = model.predict(X_val_phys[:1000]).flatten()
 
                     # Cálculo del Error en espacio real FÍSICO
-                    mse_val = mean_squared_error(y_val_true_phys, y_pred_phys)
+                    mse_val = mean_squared_error(y_val_true_phys[:1000], y_pred_phys)
                     losses.append(mse_val)
 
                 # Optuna optimiza el MSE medio de los distintos seeds
