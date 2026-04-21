@@ -26,10 +26,10 @@ datasets_manuales = 0 # En caso de que solo quieras probar con ciertos datasets
 # CONFIGURACIÓN DE LA BÚSQUEDA
 # ==========================================
 models_to_run = [
-    # "MLP_Standard",
-    # "MLP_Sparse",
-    # "MLP_Dropout",
-    # "Polynomial",
+    "MLP_Standard",
+    "MLP_Sparse",
+    "MLP_Dropout",
+    "Polynomial",
     "PySR",
     "GPLearn",
     "PySINDy",
@@ -53,8 +53,6 @@ for file in os.listdir(data_dir):
             
         datasets_info.append({"file": file, "target": target})
 
-# Opcional: Imprimir para verificar el mapeo correcto antes de optimizar
-print(f"Datasets detectados: {datasets_info}")
 
 
 if datasets_manuales:
@@ -199,21 +197,24 @@ def run_hyperparameter_search():
                     # ::::::::::::::::::::::::::::::::::::::::::::::::::::::
                     # C) Entrenamiento y Predicción (Bifurcación latente/físico)
                     # ::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
                     if "MLP" in model_name:
                         model.fit(train_loader, val_loader)
                         # Predecir en espacio latente y des-escalar a físico
                         y_pred_lat = model.predict(X_val)
                         y_pred_phys = dataset.scaler_y.inverse_transform(y_pred_lat).flatten()
                         
+                    # Filtramos para tener solo 1000 datos.
+
                     elif model_name == "Polynomial":
-                        model.fit(X_train, y_train)
-                        y_pred_lat = model.predict(X_val)
+                        model.fit(X_train[:1000], y_train[:1000])
+                        y_pred_lat = model.predict(X_val[1000])
                         y_pred_phys = dataset.scaler_y.inverse_transform(y_pred_lat).flatten()
                         
                     else: # Regresadores Simbólicos (espacio físico)
                         
-                        model.fit(X_train_phys[:1000], y_train_phys[:1000])  # Filtramos para tener solo 1000 datos.
-                        y_pred_phys = model.predict(X_val_phys).flatten()
+                        model.fit(X_train_phys[:1000], y_train_phys[:1000])  
+                        y_pred_phys = model.predict(X_val_phys[1000]).flatten()
 
                     # Cálculo del Error en espacio real FÍSICO
                     mse_val = mean_squared_error(y_val_true_phys, y_pred_phys)
@@ -265,3 +266,4 @@ def run_hyperparameter_search():
 
 if __name__ == "__main__":
     run_hyperparameter_search()
+

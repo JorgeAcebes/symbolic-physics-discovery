@@ -69,7 +69,7 @@ class PhysicalDataset:
     def get_dataloaders(self, batch_size=32):
         '''
         Creación de generadores de batches para PyTorch.
-        Para train desordenamso los datos para mayor generalización.
+        Para train desordenamos los datos para mayor generalización.
         Para validation y test no barajamos para evaluación reproducible.
         '''
         def to_loader(X, y, shuffle):
