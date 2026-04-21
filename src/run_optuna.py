@@ -248,6 +248,18 @@ def run_hyperparameter_search():
                 f.write("Mejores Hiperparámetros:\n")
                 for key, value in study.best_trial.params.items():
                     f.write(f"  - {key}: {value}\n")
+                
+                f.write("\n=================================\n")
+                f.write("IMPORTANCIA DE HIPERPARÁMETROS\n")
+                f.write("=================================\n")
+                try:
+                    # Al ser mono-objetivo, no requiere el argumento target
+                    importances = optuna.importance.get_param_importances(study)
+                    for param, imp_val in importances.items():
+                        # Usamos '>' y '%' para evadir la regex del script aggregate_hyperparams
+                        f.write(f"  > {param}: {imp_val * 100:.2f}%\n")
+                except Exception as e:
+                    f.write(f"  No se pudo calcular la importancia (se requieren más trials o mayor varianza): {e}\n")
 
             print(f"[{model_name}] Optimizado. Resultados guardados en: {log_file_path}")
 
