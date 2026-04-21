@@ -148,7 +148,7 @@ def run_hyperparameter_search():
                 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::
                 # B) Simulación Monte Carlo (Varios seeds para robustez)
                 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::
-                num_seeds = 3 if "MLP" in model_name else 1 # 3 seeds en MLPs, 1 en el resto (ya implementan competiciones internas)
+                num_seeds = 4 if "MLP" in model_name else 2 # 
                 losses = []
 
                 for seed in range(num_seeds):

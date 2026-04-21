@@ -5,7 +5,7 @@ from models.base import PhysicalModel
 from sklearn.metrics import mean_squared_error
 
 class PySRWrapper(PhysicalModel):
-    def __init__(self, feature_names=None, niterations=50, **kwargs): # Constructor. Definimos el número de iteraciones del algoritmo genético
+    def __init__(self, feature_names=None, niterations=50, populations=10, population_size=33, maxsize=15, parsimony=0.0, **kwargs):  # Constructor. Definimos el número de iteraciones del algoritmo genético
         super().__init__()
         self.feature_names = feature_names
         self.total_iterations = niterations
@@ -17,10 +17,11 @@ class PySRWrapper(PhysicalModel):
             nested_constraints={'^': {'^': 0}},
             # Definimos la base del espacio funcional, con ciertas restricciones en la operación exponencial y anidación de potencias
             elementwise_loss="loss(prediction, target) = (prediction - target)^2", # Imponemos square error como LOSS (topológicamente idéntico a MSE)
-            populations=10, # Número de "poblaciones" (islas genéticas aisladas) que intercambian las ecuaciones
-            maxsize=15, # Máxima longitud de nodos del árbol (nodos de la ecuación)
+            populations=populations, # Número de "poblaciones" (islas genéticas aisladas) que intercambian las ecuaciones
+            population_size=population_size, # Número de ecuaciones en la población
+            maxsize=maxsize, # Máxima longitud de nodos del árbol (nodos de la ecuación)
             model_selection="best", # Criterio de selección (explicado más abajo)
-            parsimony=0.0, #Factor multiplicativo para castigar complejidad
+            parsimony=parsimony, #Factor multiplicativo para castigar complejidad
             random_state=42, # Reproducibilidad
             deterministic=True, # Reproducibilidad
             parallelism='serial', # Reproducibilidad
