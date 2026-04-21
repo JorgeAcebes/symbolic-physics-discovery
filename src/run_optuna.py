@@ -1,6 +1,7 @@
 # Importamos la clase Physical Dataset que nos permite tener el mismo split train-validation-test
 # que tenemos en main, de tal manera que la optimización mediante optuna no produce data leakage.
 
+import pysr #<--- No tocar. Debe ser llamado lo primero de todo 
 import os
 import time
 import optuna
@@ -34,7 +35,7 @@ models_to_run = [
 
 datasets_info = [
     {"file": "oscillator_no_noise.csv", "target": "F"},
-    # {"file": "kepler_no_noise.csv", "target": "T"},
+    {"file": "kepler_no_noise.csv", "target": "T"},
 ]
 
 def run_hyperparameter_search():
