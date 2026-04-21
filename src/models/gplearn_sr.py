@@ -10,7 +10,7 @@ import sympy as sp
 
 class GPLearnWrapper(PhysicalModel):
     # Definimos las condiciones de contorno del algoritmo genético, por Default: 2000 ecuaciones "compitiendo" durante 30 ciclos
-    def __init__(self, feature_names=None, generations=30, population_size=2000): 
+    def __init__(self, feature_names=None, generations=30, population_size=2000, **kwargs): 
         super().__init__()
         self.model = SymbolicRegressor(
             population_size=population_size, generations=generations,
@@ -24,7 +24,8 @@ class GPLearnWrapper(PhysicalModel):
             n_jobs=-1, # Usar todos los núcleos del procesador
             random_state=42, # Para reproducibilidad
             parsimony_coefficient=0.1, # Para reducir complejidad
-            feature_names=feature_names # Nombre de las features
+            feature_names=feature_names, # Nombre de las features
+            **kwargs
         )
 
 
