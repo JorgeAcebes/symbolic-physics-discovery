@@ -26,6 +26,8 @@ def set_seed(seed=42):
 set_seed(42)
 
 
+datasets_manuales = 0 # En caso de que solo quieras probar con ciertos datasets
+
 # Conjunto de modelos con los que se correrá
 
 models_to_run = [
@@ -41,6 +43,32 @@ models_to_run = [
 
 if len(models_to_run) == 0:
     raise ValueError("Debes escoger al menos 1 modelo en 'models_to_run'")
+
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+data_dir = os.path.join(base_dir, "data")
+
+
+datasets_info = []
+for file in os.listdir(data_dir):
+    if file.endswith(".csv"):
+        filepath = os.path.join(data_dir, file)
+        
+        # Apertura de lectura eficiente: O(1) en memoria
+        with open(filepath, 'r', encoding='utf-8') as f:
+            header = f.readline().strip() # Lee solo la cabecera
+            target = header.split(',')[-1].strip() # Aísla la última columna
+            
+        datasets_info.append({"file": file, "target": target})
+
+print(f"Datasets detectados: {datasets_info}")
+
+
+if datasets_manuales:
+    datasets_info = [
+        {"file": "oscillator_no_noise.csv", "target": "F"},
+        {"file": "kepler_no_noise.csv", "target": "T"},
+    ]
+
 # Conjunto de archivos que se procesarán. Deben estar ubicados en la carpeta data 
 def run_all_experiments():
     datasets_info = [

@@ -19,24 +19,49 @@ from models.qlattice_sr import QLatticeWrapper
 from models.gplearn_sr import GPLearnWrapper
 from models.polynomial import PolynomialWrapper
 
+
+datasets_manuales = 0 # En caso de que solo quieras probar con ciertos datasets
+
 # ==========================================
 # CONFIGURACIÓN DE LA BÚSQUEDA
 # ==========================================
 models_to_run = [
-    "MLP_Standard",
-    "MLP_Sparse",
-    "MLP_Dropout",
-    "Polynomial",
+    # "MLP_Standard",
+    # "MLP_Sparse",
+    # "MLP_Dropout",
+    # "Polynomial",
     "PySR",
     "GPLearn",
     "PySINDy",
     "QLattice"
 ]
 
-datasets_info = [
-    {"file": "oscillator_no_noise.csv", "target": "F"},
-    {"file": "kepler_no_noise.csv", "target": "T"},
-]
+
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+data_dir = os.path.join(base_dir, "data")
+
+
+datasets_info = []
+for file in os.listdir(data_dir):
+    if file.endswith(".csv"):
+        filepath = os.path.join(data_dir, file)
+        
+        # Apertura de lectura eficiente: O(1) en memoria
+        with open(filepath, 'r', encoding='utf-8') as f:
+            header = f.readline().strip() # Lee solo la cabecera
+            target = header.split(',')[-1].strip() # Aísla la última columna
+            
+        datasets_info.append({"file": file, "target": target})
+
+# Opcional: Imprimir para verificar el mapeo correcto antes de optimizar
+print(f"Datasets detectados: {datasets_info}")
+
+
+if datasets_manuales:
+    datasets_info = [
+        {"file": "oscillator_no_noise.csv", "target": "F"},
+        {"file": "kepler_no_noise.csv", "target": "T"},
+    ]
 
 def run_hyperparameter_search():
     # Rutas dinámicas
@@ -186,11 +211,8 @@ def run_hyperparameter_search():
                         y_pred_phys = dataset.scaler_y.inverse_transform(y_pred_lat).flatten()
                         
                     else: # Regresadores Simbólicos (espacio físico)
-                        if model_name in ["PySR", "QLattice"]:
-                            model.fit(X_train_phys, y_train_phys, X_val=X_val_phys, y_val=y_val_phys)
-                        else:
-                            model.fit(X_train_phys, y_train_phys)
-                            
+                        
+                        model.fit(X_train_phys[:1000], y_train_phys[:1000])  # Filtramos para tener solo 1000 datos.
                         y_pred_phys = model.predict(X_val_phys).flatten()
 
                     # Cálculo del Error en espacio real FÍSICO
