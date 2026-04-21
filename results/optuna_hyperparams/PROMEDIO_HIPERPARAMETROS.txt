@@ -1,0 +1,45 @@
+=== PROMEDIOS DE HIPERPARÁMETROS POR MODELO ===
+
+
+Modelo: GPLearn
+  - generations: 20 (basado en 1 datasets)
+  - population_size: 3000 (basado en 1 datasets)
+  - parsimony_coefficient: 2.9106e-02 (basado en 1 datasets)
+  - w_crossover: 7.5920e-01 (basado en 1 datasets)
+  - w_subtree: 5.5245e-02 (basado en 1 datasets)
+  - w_hoist: 5.5238e-02 (basado en 1 datasets)
+  - w_point: 2.6844e-02 (basado en 1 datasets)
+  - w_repro: 1.7457e-01 (basado en 1 datasets)
+
+Modelo: MLP_Dropout
+  - lr: 5.6115e-04 (basado en 1 datasets)
+  - epochs: 300 (basado en 1 datasets)
+  - mc_samples: 150 (basado en 1 datasets)
+
+Modelo: MLP_Sparse
+  - lr: 1.0677e-03 (basado en 1 datasets)
+  - epochs: 200 (basado en 1 datasets)
+  - l1_alpha: 1.3783e-05 (basado en 1 datasets)
+
+Modelo: MLP_Standard
+  - lr: 5.6115e-04 (basado en 1 datasets)
+  - epochs: 300 (basado en 1 datasets)
+
+Modelo: Polynomial
+  - degree: 3 (basado en 1 datasets)
+
+Modelo: PySINDy
+  - degree: 3 (basado en 1 datasets)
+  - threshold: 3.6809e-01 (basado en 1 datasets)
+  - alpha: 8.4718e-02 (basado en 1 datasets)
+
+Modelo: PySR
+  - niterations: 32 (basado en 2 datasets)
+  - populations: 48 (basado en 2 datasets)
+  - population_size: 83 (basado en 2 datasets)
+  - parsimony: 1.2759e-03 (basado en 2 datasets)
+  - maxsize: 12 (basado en 2 datasets)
+
+Modelo: QLattice
+  - epochs: 6 (basado en 1 datasets)
+  - max_complexity: 10 (basado en 1 datasets)

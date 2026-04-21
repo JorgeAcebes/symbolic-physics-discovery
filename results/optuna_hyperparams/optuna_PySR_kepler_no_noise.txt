@@ -1,0 +1,12 @@
+=== RESULTADOS OPTIMIZACIÓN: PySR en kepler_no_noise ===
+
+Mejor Trial: #2
+MSE Medio (Espacio Físico): 6.1397e-12
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - niterations: 21
+  - populations: 49
+  - population_size: 87
+  - parsimony: 7.068974950624602e-05
+  - maxsize: 12
