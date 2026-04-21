@@ -31,13 +31,13 @@ datasets_manuales = 0 # En caso de que solo quieras probar con ciertos datasets
 # Conjunto de modelos con los que se correrá
 
 models_to_run = [
-    # "MLP_Standard",
-    # "MLP_Sparse",
-    # "MLP_Dropout",
-    # "Polynomial",
-    # "PySR",
+    "MLP_Standard",
+    "MLP_Sparse",
+    "MLP_Dropout",
+    "Polynomial",
+    "PySR",
     "GPLearn",
-    # "PySINDy",
+    "PySINDy",
     "QLattice" 
     ]
 
