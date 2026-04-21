@@ -31,11 +31,12 @@ NOISE_LEVELS = {
 # --- GESTIÓN DE RUTAS ---
 # Ubicación del script: symbolic-physics-discovery/src/data/generate_data.py
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_OUT_DIR = os.path.join(BASE_DIR, "../../data")
+
 
 # Carpeta destino: symbolic-physics-discovery/results/
 # Subimos dos niveles desde src/data para llegar a la raíz y entrar en results
 RESULTS_DIR = os.path.abspath(os.path.join(BASE_DIR, "../../results"))
-DATA_OUT_DIR = os.path.join(RESULTS_DIR, "datasets")
 PLOTS_OUT_DIR = os.path.join(RESULTS_DIR, "plots")
 
 os.makedirs(DATA_OUT_DIR, exist_ok=True)
