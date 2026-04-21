@@ -1,0 +1,8 @@
+=== RESULTADOS OPTIMIZACIÓN: Polynomial en oscillator_no_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 3.4892e-13
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - degree: 3
