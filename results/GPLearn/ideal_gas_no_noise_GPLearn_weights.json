@@ -1,0 +1,4 @@
+{
+  "best_program": "add(add(div(div(div(inv(div(inv(add(n, div(sin(inv(n)), V))), n)), sin(inv(T))), V), sub(sub(sub(n, div(n, n)), sin(V)), sin(sub(mul(cos(n), sub(sub(n, div(n, n)), sin(sub(mul(cos(n), add(sin(V), inv(add(n, n)))), n)))), n)))), V), div(div(inv(div(V, n)), sin(inv(T))), inv(add(n, cos(sub(n, -0.463))))))",
+  "equation": "V + n*(n + sin(1/n)/V)/(V*(n - sin(V) + sin(n - (n + sin(n - (sin(V) + 1/(2*n))*cos(n)) - 1)*cos(n)) - 1)*sin(1/T)) + n*(n + cos(n + 0.463))/(V*sin(1/T))"
+}
