@@ -12,18 +12,26 @@ class GPLearnWrapper(PhysicalModel):
     # Definimos las condiciones de contorno del algoritmo genético, por Default: 2000 ecuaciones "compitiendo" durante 30 ciclos
     def __init__(self, feature_names=None, generations=30, population_size=2000, **kwargs): 
         super().__init__()
+
+        # Extraemos los valores de kwargs de forma segura. Si no están, usan los default.
+        p_cross = kwargs.pop('p_crossover', 0.65)
+        p_sub = kwargs.pop('p_subtree_mutation', 0.1)
+        p_hoist = kwargs.pop('p_hoist_mutation', 0.15)
+        p_point = kwargs.pop('p_point_mutation', 0.05)
+        parsimony = kwargs.pop('parsimony_coefficient', 0.1)
+
         self.model = SymbolicRegressor(
             population_size=population_size, generations=generations,
             warm_start=True, function_set=('add', 'sub', 'mul', 'div', 'sin', 'cos', 'inv'), # Base del espacio de funciones
             metric='mse', # Función de coste: mean square error
-            p_crossover=0.65, # Probabilidad de mezclar dos fórmulas
-            p_subtree_mutation=0.1, # Probabilidad de cambiar una parte de una fórmula por otro
-            p_hoist_mutation=0.15, # Probabilidad de simplificar una parte de la fórmula
-            p_point_mutation=0.05, # Probabilidad de cambiar nodos individuales (e.g. cambiar sin por cos)
+            p_crossover=p_cross, # Probabilidad de mezclar dos fórmulas
+            p_subtree_mutation=p_sub, # Probabilidad de cambiar una parte de una fórmula por otro
+            p_hoist_mutation=p_hoist, # Probabilidad de simplificar una parte de la fórmula
+            p_point_mutation=p_point, # Probabilidad de cambiar nodos individuales (e.g. cambiar sin por cos)
             # La suma de las probabilidades debe ser inferior a 1
             n_jobs=-1, # Usar todos los núcleos del procesador
             random_state=42, # Para reproducibilidad
-            parsimony_coefficient=0.1, # Para reducir complejidad
+            parsimony_coefficient=parsimony, # Para reducir complejidad
             feature_names=feature_names, # Nombre de las features
             **kwargs
         )
