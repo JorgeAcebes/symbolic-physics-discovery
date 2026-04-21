@@ -12,7 +12,7 @@ class PySRWrapper(PhysicalModel):
         
         self.model = PySRRegressor(
             binary_operators=["+", "-", "*", "/", "^"],
-            unary_operators=["inv", "square"],
+            unary_operators=["inv", "square", "cos", "sin", "exp", "log", "square"],
             constraints={'^': (-1, 1)},
             nested_constraints={'^': {'^': 0}},
             # Definimos la base del espacio funcional, con ciertas restricciones en la operación exponencial y anidación de potencias

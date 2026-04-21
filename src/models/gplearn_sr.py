@@ -22,7 +22,8 @@ class GPLearnWrapper(PhysicalModel):
 
         self.model = SymbolicRegressor(
             population_size=population_size, generations=generations,
-            warm_start=True, function_set=('add', 'sub', 'mul', 'div', 'sin', 'cos', 'inv'), # Base del espacio de funciones
+            warm_start=True, function_set=('add', 'sub', 'mul', 'div', 'sin', 'cos', 'inv', 'sqrt', 'log'), # Base del espacio de funciones
+            # permite la creación de funciones propias, pero se decide emplear como máximo aquellas que provee el modelo
             metric='mse', # Función de coste: mean square error
             p_crossover=p_cross, # Probabilidad de mezclar dos fórmulas
             p_subtree_mutation=p_sub, # Probabilidad de cambiar una parte de una fórmula por otro
