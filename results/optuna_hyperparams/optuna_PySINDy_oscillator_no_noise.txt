@@ -1,0 +1,10 @@
+=== RESULTADOS OPTIMIZACIÓN: PySINDy en oscillator_no_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 1.0660e-12
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - degree: 3
+  - threshold: 0.36808608148776095
+  - alpha: 0.08471801418819976

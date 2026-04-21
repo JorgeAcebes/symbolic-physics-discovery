@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: GPLearn en oscillator_no_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 0.0000e+00
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - generations: 20
+  - population_size: 3000
+  - parsimony_coefficient: 0.029106359131330698
+  - w_crossover: 0.759195090518222
+  - w_subtree: 0.055245405728306586
+  - w_hoist: 0.055238410897498764
+  - w_point: 0.026844247528777843
+  - w_repro: 0.1745734676972377

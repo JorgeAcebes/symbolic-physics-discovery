@@ -1,0 +1,12 @@
+=== RESULTADOS OPTIMIZACIÓN: PySR en oscillator_no_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 0.0000e+00
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - niterations: 42
+  - populations: 48
+  - population_size: 79
+  - parsimony: 0.0024810409748678114
+  - maxsize: 12
