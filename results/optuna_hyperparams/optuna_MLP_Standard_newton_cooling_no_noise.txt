@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Standard en newton_cooling_no_noise ===
+
+Mejor Trial: #4
+MSE Medio (Espacio Físico): 5.5791e-06
+Desviación Estándar (MSE):  1.4157e-06
+
+Mejores Hiperparámetros:
+  - lr: 0.0015930522616241021
+  - epochs: 250
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > epochs: 73.48%
+  > lr: 26.52%

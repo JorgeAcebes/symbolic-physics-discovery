@@ -1,0 +1,27 @@
+=== RESULTADOS OPTIMIZACIÓN: GPLearn en newton_cooling_low_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 5.3520e-03
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - generations: 40
+  - population_size: 2500
+  - parsimony_coefficient: 0.0010994335574766201
+  - w_crossover: 0.9819459112971965
+  - w_subtree: 0.2514083658321223
+  - w_hoist: 0.07157834209670008
+  - w_point: 0.06272924049005918
+  - w_repro: 0.044846856872152424
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > parsimony_coefficient: 20.24%
+  > population_size: 17.90%
+  > w_subtree: 17.18%
+  > w_repro: 14.48%
+  > w_point: 12.21%
+  > generations: 8.28%
+  > w_crossover: 4.96%
+  > w_hoist: 4.75%

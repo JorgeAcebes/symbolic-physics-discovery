@@ -20,7 +20,7 @@ plots = True
 
 np.random.seed(1) # Aseguramos reproducibilidad
 
-N_SAMPLES = 100000  # nº puntos para cada ley
+N_SAMPLES = 10000  # nº puntos para cada ley
 
 NOISE_LEVELS = {
     "no_noise": 0.0,

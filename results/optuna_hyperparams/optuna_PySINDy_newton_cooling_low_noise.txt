@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: PySINDy en newton_cooling_low_noise ===
+
+Mejor Trial: #4
+MSE Medio (Espacio Físico): 6.6520e-05
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - degree: 4
+  - threshold: 0.003741940611118496
+  - alpha: 0.000533703276260396
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > threshold: 65.55%
+  > alpha: 18.69%
+  > degree: 15.76%
