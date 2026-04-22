@@ -1,0 +1,21 @@
+=== RESULTADOS OPTIMIZACIÓN: PySR en kepler_high_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 2.4200e-02
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - niterations: 42
+  - populations: 48
+  - population_size: 79
+  - parsimony: 0.0024810409748678114
+  - maxsize: 12
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > niterations: 60.35%
+  > population_size: 19.89%
+  > maxsize: 9.40%
+  > populations: 5.51%
+  > parsimony: 4.84%

@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Dropout en ideal_gas_no_noise ===
+
+Mejor Trial: #9
+MSE Medio (Espacio Físico): 4.5159e-03
+Desviación Estándar (MSE):  2.8290e-04
+
+Mejores Hiperparámetros:
+  - lr: 0.0010677482709481358
+  - epochs: 200
+  - mc_samples: 50
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > lr: 45.80%
+  > epochs: 41.16%
+  > mc_samples: 13.04%

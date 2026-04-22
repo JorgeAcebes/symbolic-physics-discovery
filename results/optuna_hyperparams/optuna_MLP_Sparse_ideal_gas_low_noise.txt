@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Sparse en ideal_gas_low_noise ===
+
+Mejor Trial: #9
+MSE Medio (Espacio Físico): 3.7463e-04
+Desviación Estándar (MSE):  3.1753e-05
+
+Mejores Hiperparámetros:
+  - lr: 0.0010677482709481358
+  - epochs: 200
+  - l1_alpha: 1.3783237455007187e-05
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > l1_alpha: 36.43%
+  > lr: 35.36%
+  > epochs: 28.22%

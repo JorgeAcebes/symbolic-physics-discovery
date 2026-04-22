@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Sparse en coulomb_high_noise ===
+
+Mejor Trial: #9
+MSE Medio (Espacio Físico): 1.9765e-02
+Desviación Estándar (MSE):  6.1495e-04
+
+Mejores Hiperparámetros:
+  - lr: 0.0010677482709481358
+  - epochs: 200
+  - l1_alpha: 1.3783237455007187e-05
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > lr: 45.59%
+  > l1_alpha: 34.07%
+  > epochs: 20.35%

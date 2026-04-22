@@ -1,0 +1,21 @@
+=== RESULTADOS OPTIMIZACIÓN: PySR en coulomb_high_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 1.5130e-02
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - niterations: 29
+  - populations: 12
+  - population_size: 90
+  - parsimony: 0.002537815508265664
+  - maxsize: 21
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > parsimony: 28.57%
+  > populations: 17.86%
+  > population_size: 17.86%
+  > niterations: 17.86%
+  > maxsize: 17.86%

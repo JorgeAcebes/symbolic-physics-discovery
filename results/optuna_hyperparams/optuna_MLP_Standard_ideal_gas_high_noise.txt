@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Standard en ideal_gas_high_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 9.8761e-03
+Desviación Estándar (MSE):  8.0209e-05
+
+Mejores Hiperparámetros:
+  - lr: 0.0005611516415334506
+  - epochs: 300
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > epochs: 85.05%
+  > lr: 14.95%

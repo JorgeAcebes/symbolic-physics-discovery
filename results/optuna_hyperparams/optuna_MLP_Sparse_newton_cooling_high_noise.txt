@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Sparse en newton_cooling_high_noise ===
+
+Mejor Trial: #9
+MSE Medio (Espacio Físico): 9.4762e-04
+Desviación Estándar (MSE):  2.2375e-05
+
+Mejores Hiperparámetros:
+  - lr: 0.0010677482709481358
+  - epochs: 200
+  - l1_alpha: 1.3783237455007187e-05
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > lr: 50.01%
+  > l1_alpha: 42.80%
+  > epochs: 7.19%

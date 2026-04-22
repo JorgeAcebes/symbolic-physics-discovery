@@ -1,0 +1,13 @@
+=== RESULTADOS OPTIMIZACIÓN: Polynomial en ideal_gas_no_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 3.3484e-05
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - degree: 5
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > degree: 100.00%

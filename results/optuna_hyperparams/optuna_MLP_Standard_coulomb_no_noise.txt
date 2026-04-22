@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Standard en coulomb_no_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 2.8981e-03
+Desviación Estándar (MSE):  5.6862e-04
+
+Mejores Hiperparámetros:
+  - lr: 0.0029106359131330704
+  - epochs: 200
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > epochs: 63.37%
+  > lr: 36.63%

@@ -1,0 +1,13 @@
+=== RESULTADOS OPTIMIZACIÓN: Polynomial en coulomb_no_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 7.6269e-03
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - degree: 5
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > degree: 100.00%

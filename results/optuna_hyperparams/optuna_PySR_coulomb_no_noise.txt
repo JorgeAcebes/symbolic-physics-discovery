@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: PySR en coulomb_no_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 2.0076e-13
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - niterations: 42
+  - populations: 48
+  - population_size: 79
+  - parsimony: 0.0024810409748678114
+  - maxsize: 12
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  No se pudo calcular la importancia (se requieren más trials o mayor varianza): Encountered zero total variance in all trees.

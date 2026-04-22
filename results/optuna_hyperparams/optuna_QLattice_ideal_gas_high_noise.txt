@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: QLattice en ideal_gas_high_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 9.4068e-03
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - epochs: 24
+  - max_complexity: 8
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > max_complexity: 70.80%
+  > epochs: 29.20%

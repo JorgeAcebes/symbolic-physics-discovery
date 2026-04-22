@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Sparse en boltzmann_entropy_high_noise ===
+
+Mejor Trial: #9
+MSE Medio (Espacio Físico): 3.6997e-03
+Desviación Estándar (MSE):  1.0691e-04
+
+Mejores Hiperparámetros:
+  - lr: 0.0010677482709481358
+  - epochs: 200
+  - l1_alpha: 1.3783237455007187e-05
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > l1_alpha: 42.67%
+  > lr: 29.00%
+  > epochs: 28.32%

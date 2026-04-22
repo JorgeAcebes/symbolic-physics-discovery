@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Sparse en kepler_high_noise ===
+
+Mejor Trial: #8
+MSE Medio (Espacio Físico): 2.4655e-02
+Desviación Estándar (MSE):  1.5035e-04
+
+Mejores Hiperparámetros:
+  - lr: 0.000816845589476017
+  - epochs: 250
+  - l1_alpha: 3.972110727381908e-05
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > l1_alpha: 48.08%
+  > lr: 28.43%
+  > epochs: 23.49%

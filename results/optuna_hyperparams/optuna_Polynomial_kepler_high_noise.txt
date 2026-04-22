@@ -1,0 +1,13 @@
+=== RESULTADOS OPTIMIZACIÓN: Polynomial en kepler_high_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 2.4348e-02
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - degree: 5
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > degree: 100.00%

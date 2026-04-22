@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Dropout en boltzmann_entropy_high_noise ===
+
+Mejor Trial: #8
+MSE Medio (Espacio Físico): 4.2917e-03
+Desviación Estándar (MSE):  1.9149e-04
+
+Mejores Hiperparámetros:
+  - lr: 0.000816845589476017
+  - epochs: 250
+  - mc_samples: 50
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > epochs: 47.69%
+  > lr: 41.27%
+  > mc_samples: 11.04%

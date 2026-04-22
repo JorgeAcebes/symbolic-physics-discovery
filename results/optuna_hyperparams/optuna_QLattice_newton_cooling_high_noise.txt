@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: QLattice en newton_cooling_high_noise ===
+
+Mejor Trial: #4
+MSE Medio (Espacio Físico): 8.6835e-04
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - epochs: 20
+  - max_complexity: 8
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > max_complexity: 56.50%
+  > epochs: 43.50%

@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: QLattice en boltzmann_entropy_high_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 3.4131e-03
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - epochs: 14
+  - max_complexity: 10
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > epochs: 76.29%
+  > max_complexity: 23.71%

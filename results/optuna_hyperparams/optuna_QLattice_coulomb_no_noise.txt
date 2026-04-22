@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: QLattice en coulomb_no_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 2.8674e-04
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - epochs: 24
+  - max_complexity: 8
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > max_complexity: 59.08%
+  > epochs: 40.92%

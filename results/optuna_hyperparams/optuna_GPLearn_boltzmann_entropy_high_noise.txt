@@ -1,0 +1,27 @@
+=== RESULTADOS OPTIMIZACIÓN: GPLearn en boltzmann_entropy_high_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 3.3924e-03
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - generations: 20
+  - population_size: 3000
+  - parsimony_coefficient: 0.029106359131330698
+  - w_crossover: 0.759195090518222
+  - w_subtree: 0.055245405728306586
+  - w_hoist: 0.055238410897498764
+  - w_point: 0.026844247528777843
+  - w_repro: 0.1745734676972377
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > w_point: 28.57%
+  > generations: 23.81%
+  > w_hoist: 16.67%
+  > w_repro: 16.67%
+  > w_subtree: 7.14%
+  > w_crossover: 7.14%
+  > population_size: 0.00%
+  > parsimony_coefficient: 0.00%

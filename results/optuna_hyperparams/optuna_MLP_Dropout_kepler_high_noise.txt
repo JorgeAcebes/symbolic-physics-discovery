@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Dropout en kepler_high_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 2.7692e-02
+Desviación Estándar (MSE):  1.1156e-03
+
+Mejores Hiperparámetros:
+  - lr: 0.0005611516415334506
+  - epochs: 300
+  - mc_samples: 150
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > lr: 66.46%
+  > epochs: 31.59%
+  > mc_samples: 1.95%

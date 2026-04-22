@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Dropout en coulomb_low_noise ===
+
+Mejor Trial: #8
+MSE Medio (Espacio Físico): 2.0015e-02
+Desviación Estándar (MSE):  2.2449e-03
+
+Mejores Hiperparámetros:
+  - lr: 0.000816845589476017
+  - epochs: 250
+  - mc_samples: 50
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > lr: 70.99%
+  > epochs: 26.04%
+  > mc_samples: 2.97%

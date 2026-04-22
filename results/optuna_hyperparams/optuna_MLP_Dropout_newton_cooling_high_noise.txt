@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Dropout en newton_cooling_high_noise ===
+
+Mejor Trial: #0
+MSE Medio (Espacio Físico): 1.1985e-03
+Desviación Estándar (MSE):  5.2201e-05
+
+Mejores Hiperparámetros:
+  - lr: 0.0005611516415334506
+  - epochs: 300
+  - mc_samples: 150
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > epochs: 58.90%
+  > lr: 38.53%
+  > mc_samples: 2.57%

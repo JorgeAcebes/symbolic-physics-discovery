@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: QLattice en kepler_low_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 2.6002e-04
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - epochs: 24
+  - max_complexity: 8
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > epochs: 83.28%
+  > max_complexity: 16.72%

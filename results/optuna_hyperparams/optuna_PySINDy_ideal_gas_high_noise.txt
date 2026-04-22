@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: PySINDy en ideal_gas_high_noise ===
+
+Mejor Trial: #3
+MSE Medio (Espacio Físico): 1.0138e-02
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - degree: 4
+  - threshold: 0.001136467270001117
+  - alpha: 0.7579479953348001
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > degree: 52.21%
+  > threshold: 31.86%
+  > alpha: 15.94%

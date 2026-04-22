@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: PySINDy en boltzmann_entropy_high_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 3.4707e-03
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - degree: 3
+  - threshold: 0.0026368755339723046
+  - alpha: 0.0004207053950287938
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > threshold: 68.25%
+  > alpha: 22.22%
+  > degree: 9.52%

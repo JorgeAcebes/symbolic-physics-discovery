@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: PySINDy en coulomb_no_noise ===
+
+Mejor Trial: #3
+MSE Medio (Espacio Físico): 2.4378e-02
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - degree: 4
+  - threshold: 0.001136467270001117
+  - alpha: 0.7579479953348001
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > threshold: 67.91%
+  > degree: 19.26%
+  > alpha: 12.83%

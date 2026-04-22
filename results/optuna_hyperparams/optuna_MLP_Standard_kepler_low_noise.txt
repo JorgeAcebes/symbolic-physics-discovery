@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Standard en kepler_low_noise ===
+
+Mejor Trial: #3
+MSE Medio (Espacio Físico): 3.0652e-04
+Desviación Estándar (MSE):  1.3212e-05
+
+Mejores Hiperparámetros:
+  - lr: 0.00013066739238053285
+  - epochs: 300
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > epochs: 54.18%
+  > lr: 45.82%

@@ -1,0 +1,15 @@
+=== RESULTADOS OPTIMIZACIÓN: MLP_Standard en boltzmann_entropy_no_noise ===
+
+Mejor Trial: #1
+MSE Medio (Espacio Físico): 4.2335e-06
+Desviación Estándar (MSE):  2.0713e-06
+
+Mejores Hiperparámetros:
+  - lr: 0.0029106359131330704
+  - epochs: 200
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > epochs: 74.15%
+  > lr: 25.85%

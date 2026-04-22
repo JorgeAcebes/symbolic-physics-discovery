@@ -1,0 +1,21 @@
+=== RESULTADOS OPTIMIZACIÓN: PySR en newton_cooling_high_noise ===
+
+Mejor Trial: #4
+MSE Medio (Espacio Físico): 8.6206e-04
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - niterations: 57
+  - populations: 15
+  - population_size: 43
+  - parsimony: 0.0002920433847181409
+  - maxsize: 17
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > parsimony: 65.45%
+  > niterations: 16.41%
+  > population_size: 8.26%
+  > populations: 6.58%
+  > maxsize: 3.31%

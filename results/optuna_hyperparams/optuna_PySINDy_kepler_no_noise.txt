@@ -1,0 +1,17 @@
+=== RESULTADOS OPTIMIZACIÓN: PySINDy en kepler_no_noise ===
+
+Mejor Trial: #3
+MSE Medio (Espacio Físico): 8.7950e-08
+Desviación Estándar (MSE):  0.0000e+00
+
+Mejores Hiperparámetros:
+  - degree: 4
+  - threshold: 0.001136467270001117
+  - alpha: 0.7579479953348001
+
+=================================
+IMPORTANCIA DE HIPERPARÁMETROS
+=================================
+  > threshold: 56.91%
+  > degree: 25.17%
+  > alpha: 17.92%

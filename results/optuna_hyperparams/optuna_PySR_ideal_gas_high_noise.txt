@@ -1,7 +1,7 @@
-=== RESULTADOS OPTIMIZACIÓN: PySR en kepler_no_noise ===
+=== RESULTADOS OPTIMIZACIÓN: PySR en ideal_gas_high_noise ===
 
 Mejor Trial: #2
-MSE Medio (Espacio Físico): 4.1550e-13
+MSE Medio (Espacio Físico): 9.4243e-03
 Desviación Estándar (MSE):  0.0000e+00
 
 Mejores Hiperparámetros:
@@ -14,8 +14,4 @@ Mejores Hiperparámetros:
 =================================
 IMPORTANCIA DE HIPERPARÁMETROS
 =================================
-  > populations: 20.83%
-  > population_size: 20.83%
-  > niterations: 20.83%
-  > maxsize: 20.83%
-  > parsimony: 16.67%
+  No se pudo calcular la importancia (se requieren más trials o mayor varianza): Encountered zero total variance in all trees.
