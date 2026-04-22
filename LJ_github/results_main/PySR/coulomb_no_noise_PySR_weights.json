@@ -1,0 +1,35 @@
+{
+  "best_equation": "q1*q2/(r**2)",
+  "all_equations": [
+    {
+      "equation": "q2",
+      "loss": 1.6342185,
+      "complexity": 1
+    },
+    {
+      "equation": "inv(r)",
+      "loss": 1.138322,
+      "complexity": 2
+    },
+    {
+      "equation": "q2 / r",
+      "loss": 0.7896369,
+      "complexity": 3
+    },
+    {
+      "equation": "q2 / square(r)",
+      "loss": 0.4362421,
+      "complexity": 4
+    },
+    {
+      "equation": "(q2 / r) * q1",
+      "loss": 0.37730688,
+      "complexity": 5
+    },
+    {
+      "equation": "(q2 * q1) / square(r)",
+      "loss": 2.5462897e-13,
+      "complexity": 6
+    }
+  ]
+}
