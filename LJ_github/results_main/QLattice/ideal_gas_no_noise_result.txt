@@ -1,0 +1,8 @@
+=== Model: QLattice | Dataset: ideal_gas_no_noise ===
+
+Equation / Structure:
+-0.7828*(4.93*T + 0.0003735)*(-0.5844*n - 4.202e-5)/(2.255*V + 5.106e-5) - 4.867e-5
+
+Metrics:
+Test MSE: 1.236549e-08
+Test MAE: 9.718479e-05
