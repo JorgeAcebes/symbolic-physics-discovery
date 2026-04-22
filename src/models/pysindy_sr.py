@@ -6,7 +6,7 @@ from models.base import PhysicalModel
 
 # Este modelo no cuenta con épocas por lo que no procede graficar el loss para el train y el validation
 class PySINDyWrapper(PhysicalModel):
-    def __init__(self, feature_names=None, degree=3, **kwargs):
+    def __init__(self, feature_names=None, degree=4, **kwargs):
         super().__init__()
         self.feature_names = feature_names
         self.degree = degree
@@ -20,10 +20,8 @@ class PySINDyWrapper(PhysicalModel):
         # Base funcional unificada
         self.library = GeneralizedLibrary([lib_poly, lib_custom])
 
-        threshold_val = kwargs.pop('threshold', 0.1)
-        self.optimizer = STLSQ(threshold=threshold_val, **kwargs) # Optimizador con L2 (Ridge) pero con un threshold en los pesos de
-        # 0.1 como mínimo si no se especifica lo contrario
-
+        threshold_val = kwargs.pop('threshold', 2.4934e-02)
+        self.optimizer = STLSQ(threshold=threshold_val, **kwargs) # Optimizador con L2 (Ridge) pero con un threshold en los pesos
     def fit(self, X_train, y_train):
         # Proyección sobre el espacio de características
         self.library.fit(X_train) # Ve cómo es X para saber cómo tendrán que ser las dimensiones de Theta. No actualiza nada 

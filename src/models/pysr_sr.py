@@ -5,7 +5,7 @@ from models.base import PhysicalModel
 from sklearn.metrics import mean_squared_error
 
 class PySRWrapper(PhysicalModel):
-    def __init__(self, feature_names=None, niterations=50, populations=10, population_size=33, maxsize=15, parsimony=0.0, **kwargs):  # Constructor. Definimos el número de iteraciones del algoritmo genético
+    def __init__(self, feature_names=None, niterations=39, populations=42, population_size=79, maxsize=13, parsimony=2.0500e-3, **kwargs):  # Constructor. Definimos el número de iteraciones del algoritmo genético
         super().__init__()
         self.feature_names = feature_names
         self.total_iterations = niterations

@@ -55,7 +55,7 @@ class MCDropoutMLP(nn.Module):
     
 # Wrapper (envoltorio) donde se definen los hiperparámetros comunes
 class MLPWrapper(PhysicalModel):
-    def __init__(self, input_dim, model_type='standard', epochs=50, lr=1e-3, l1_alpha=1e-3, mc_samples=100, **kwargs):
+    def __init__(self, input_dim, model_type='standard', epochs=245, lr=0.00097118, l1_alpha=2.3222e-05, mc_samples=94, **kwargs):
         super().__init__()
         self.model_type = model_type # nombre del MLP
         self.epochs = epochs 

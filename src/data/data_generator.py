@@ -37,7 +37,7 @@ DATA_OUT_DIR = os.path.join(BASE_DIR, "../../data")
 # Carpeta destino: symbolic-physics-discovery/results/
 # Subimos dos niveles desde src/data para llegar a la raíz y entrar en results
 RESULTS_DIR = os.path.abspath(os.path.join(BASE_DIR, "../../results"))
-PLOTS_OUT_DIR = os.path.join(RESULTS_DIR, "plots")
+PLOTS_OUT_DIR = os.path.join(RESULTS_DIR, "datasets_plots")
 
 os.makedirs(DATA_OUT_DIR, exist_ok=True)
 os.makedirs(PLOTS_OUT_DIR, exist_ok=True)

@@ -107,14 +107,14 @@ def run_all_experiments():
         # Inyección dinámica de los modelos. Se instancian dentro del bucle para garantizar que parámetros como input_dim o scaler_X no se hereden del experimento previo.
         # Se decide qué inputs tiene cada modelo (si espacio z-score, para MLP y Polynomial, o si es el espacio físic, para SR), así como otros inputs
         models = {
-            "MLP_Standard": MLPWrapper(input_dim=X_train.shape[1], model_type='standard', epochs=100),
-            "MLP_Sparse":   MLPWrapper(input_dim=X_train.shape[1], model_type='sparse', epochs=1000, l1_alpha=1e-3),
-            "MLP_Dropout":  MLPWrapper(input_dim=X_train.shape[1], model_type='dropout', epochs=500, mc_samples=100),
-            "Polynomial":   PolynomialWrapper(feature_names=dataset.feature_names, scaler_X=dataset.scaler_X, scaler_y=dataset.scaler_y, degree=3),
+            "MLP_Standard": MLPWrapper(input_dim=X_train.shape[1], model_type='standard'),
+            "MLP_Sparse":   MLPWrapper(input_dim=X_train.shape[1], model_type='sparse'),
+            "MLP_Dropout":  MLPWrapper(input_dim=X_train.shape[1], model_type='dropout'),
+            "Polynomial":   PolynomialWrapper(feature_names=dataset.feature_names, scaler_X=dataset.scaler_X, scaler_y=dataset.scaler_y),
             "PySR":         PySRWrapper(feature_names=dataset.feature_names),
-            "GPLearn":      GPLearnWrapper(feature_names=dataset.feature_names, generations=30),
+            "GPLearn":      GPLearnWrapper(feature_names=dataset.feature_names),
             "PySINDy":      PySINDyWrapper(feature_names=dataset.feature_names),
-            "QLattice":     QLatticeWrapper(feature_names=dataset.feature_names, target_name=ds["target"], epochs=15)
+            "QLattice":     QLatticeWrapper(feature_names=dataset.feature_names, target_name=ds["target"])
         }
         
 

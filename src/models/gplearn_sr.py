@@ -9,16 +9,16 @@ import sympy as sp
 # generations, pop size, p_crossover, p_subtree, p_hoist, p_point
 
 class GPLearnWrapper(PhysicalModel):
-    # Definimos las condiciones de contorno del algoritmo genético, por Default: 2000 ecuaciones "compitiendo" durante 30 ciclos
-    def __init__(self, feature_names=None, generations=30, population_size=2000, **kwargs): 
+    # Definimos las condiciones de contorno del algoritmo genético, por Default: 2844 ecuaciones "compitiendo" durante 26 ciclos
+    def __init__(self, feature_names=None, generations=26, population_size=2844, **kwargs): 
         super().__init__()
 
         # Extraemos los valores de kwargs de forma segura. Si no están, usan los default.
-        p_cross = kwargs.pop('p_crossover', 0.65)
-        p_sub = kwargs.pop('p_subtree_mutation', 0.1)
-        p_hoist = kwargs.pop('p_hoist_mutation', 0.15)
-        p_point = kwargs.pop('p_point_mutation', 0.05)
-        parsimony = kwargs.pop('parsimony_coefficient', 0.1)
+        p_cross = kwargs.pop('p_crossover', 0.078611)
+        p_sub = kwargs.pop('p_subtree_mutation', 0.11055)
+        p_hoist = kwargs.pop('p_hoist_mutation', 0.05724)
+        p_point = kwargs.pop('p_point_mutation', 0.03610)
+        parsimony = kwargs.pop('parsimony_coefficient', 0.020354)
 
         self.model = SymbolicRegressor(
             population_size=population_size, generations=generations,

@@ -9,7 +9,7 @@ from models.base import PhysicalModel
 
 
 class PolynomialWrapper(PhysicalModel):
-    def __init__(self, degree=3, feature_names=None, scaler_X=None, scaler_y=None, **kwargs):
+    def __init__(self, degree=5, feature_names=None, scaler_X=None, scaler_y=None, **kwargs):
         super().__init__()
         self.degree = degree # Máximo grado de polinomio 
         self.feature_names = feature_names if feature_names else ["x"]
