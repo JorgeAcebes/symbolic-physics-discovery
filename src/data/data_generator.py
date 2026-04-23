@@ -169,7 +169,7 @@ LATEX_LABELS = {
     "x": "x", "T": "T", "n": "n", "V": "V", "P": "P",
     "v0": "v_0", "theta": r"\theta", "R": "R",
     "t": "t", "v": r"\beta", "t_prime": "t'",
-    "lambda": r"\lambda", "N": "N", "k": "k",
+    "lambda_": r"\lambda", "N": "N", "k": "k",
     "omega": r"\Omega", "S": "S"
 }
 
@@ -202,7 +202,7 @@ if __name__ == "__main__":
         (generate_ideal_gas, ["n", "T", "V", "P"], "ideal_gas", "Ley de los Gases Ideales", 2, 3),
         (generate_projectile_range, ["v0", "theta", "R"], "projectile_range", "Alcance de Proyectil", 1, 2),
         (generate_time_dilation, ["t", "v", "t_prime"], "time_dilation", "Dilatación Temporal", 1, 2),
-        (generate_radioactive_decay, ["lambda", "t", "N"], "radioactive_decay", "Desintegración Radiactiva", 1, 2),
+        (generate_radioactive_decay, ["lambda_", "t", "N"], "radioactive_decay", "Desintegración Radiactiva", 1, 2),
         (generate_newton_cooling, ["k", "t", "T"], "newton_cooling", "Enfriamiento de Newton", 1, 2),
         (generate_boltzmann_entropy, ["omega", "S"], "boltzmann_entropy", "Entropía de Boltzmann", 0, 1)
     ]
