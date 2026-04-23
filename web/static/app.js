@@ -3,13 +3,14 @@ const MODELS = [
   {
     id: "MLP_Standard",
     name: "MLP Standard",
-    desc: "Red neuronal densa con activación SiLU. Input→64→64→1.",
+    desc: "Red neuronal densa con activación SiLU.",
     tag: "nn",
     tagLabel: "Neural Net",
     params: [
-      { key: "epochs", label: "Épocas",        type: "number", default: 100,   min: 1,       max: 5000,  step: 1     },
-      { key: "lr",     label: "Learning Rate",  type: "number", default: 0.001, min: 0.00001, max: 1,     step: 0.0001 },
+      { key: "epochs", label: "Épocas", type: "number", default: 245, min: 1, max: 5000, step: 1 },
+      { key: "lr", label: "Learning Rate", type: "number", default: 0.00097118, min: 0.00001, max: 1, step: 0.0001 },
     ],
+    
   },
   {
     id: "MLP_Sparse",
@@ -18,9 +19,9 @@ const MODELS = [
     tag: "nn",
     tagLabel: "Neural Net",
     params: [
-      { key: "epochs",   label: "Épocas",     type: "number", default: 1000,  min: 1,       max: 10000, step: 1     },
-      { key: "lr",       label: "Learning Rate", type: "number", default: 0.001, min: 0.00001, max: 1, step: 0.0001 },
-      { key: "l1_alpha", label: "L1 Alpha",    type: "number", default: 0.001, min: 0.00001, max: 1,     step: 0.0001 },
+      { key: "epochs", label: "Épocas", type: "number", default: 245, min: 1, max: 10000, step: 1 },
+      { key: "lr", label: "Learning Rate", type: "number", default: 0.00097118, min: 0.00001, max: 1, step: 0.0001 },
+      { key: "l1_alpha", label: "L1 Alpha", type: "number", default: 2.3222e-05, min: 0.00001, max: 1, step: 0.0001 },
     ],
   },
   {
@@ -30,9 +31,9 @@ const MODELS = [
     tag: "nn",
     tagLabel: "Neural Net",
     params: [
-      { key: "epochs",    label: "Épocas",      type: "number", default: 500, min: 1,    max: 5000, step: 1  },
-      { key: "lr",        label: "Learning Rate", type: "number", default: 0.001, min: 0.00001, max: 1, step: 0.0001 },
-      { key: "mc_samples", label: "Muestras MC", type: "number", default: 100, min: 10, max: 1000, step: 1 },
+      { key: "epochs", label: "Épocas", type: "number", default: 245, min: 1, max: 5000, step: 1 },
+      { key: "lr", label: "Learning Rate", type: "number", default: 0.00097118, min: 0.00001, max: 1, step: 0.0001 },
+      { key: "mc_samples", label: "Muestras MC", type: "number", default: 94, min: 10, max: 1000, step: 1 },
     ],
   },
   {
@@ -42,7 +43,7 @@ const MODELS = [
     tag: "math",
     tagLabel: "Analítico",
     params: [
-      { key: "degree", label: "Grado", type: "number", default: 3, min: 1, max: 10, step: 1 },
+      { key: "degree", label: "Grado", type: "number", default: 5, min: 1, max: 10, step: 1 },
     ],
   },
   {
@@ -52,9 +53,9 @@ const MODELS = [
     tag: "sr",
     tagLabel: "Simbólico",
     params: [
-      { key: "niterations", label: "Iteraciones",    type: "number", default: 50,  min: 1, max: 500,  step: 1 },
-      { key: "populations", label: "Poblaciones",    type: "number", default: 10,  min: 1, max: 100,  step: 1 },
-      { key: "maxsize",     label: "Max Complejidad", type: "number", default: 15,  min: 5, max: 50,   step: 1 },
+      { key: "niterations", label: "Iteraciones", type: "number", default: 39, min: 1, max: 500, step: 1 },
+      { key: "populations", label: "Poblaciones", type: "number", default: 42, min: 1, max: 100, step: 1 },
+      { key: "maxsize", label: "Max Complejidad", type: "number", default: 13, min: 5, max: 50, step: 1 },
     ],
   },
   {
@@ -64,8 +65,8 @@ const MODELS = [
     tag: "sr",
     tagLabel: "Simbólico",
     params: [
-      { key: "generations",    label: "Generaciones", type: "number", default: 30,   min: 1,   max: 300,   step: 1 },
-      { key: "population_size", label: "Población",    type: "number", default: 2000, min: 100, max: 10000, step: 100 },
+      { key: "generations", label: "Generaciones", type: "number", default: 26, min: 1, max: 300, step: 1 },
+      { key: "population_size", label: "Población", type: "number", default: 2844, min: 100, max: 10000, step: 100 },
     ],
   },
   {
@@ -75,8 +76,8 @@ const MODELS = [
     tag: "sr",
     tagLabel: "Simbólico",
     params: [
-      { key: "degree",    label: "Grado base",    type: "number", default: 3,   min: 1, max: 6,  step: 1    },
-      { key: "threshold", label: "Umbral STLSQ",  type: "number", default: 0.1, min: 0.001, max: 1, step: 0.01 },
+      { key: "degree", label: "Grado base", type: "number", default: 4, min: 1, max: 6, step: 1 },
+      { key: "threshold", label: "Umbral STLSQ", type: "number", default: 2.4934e-02, min: 0.001, max: 1, step: 0.01 },
     ],
   },
   {
@@ -86,8 +87,8 @@ const MODELS = [
     tag: "sr",
     tagLabel: "Simbólico",
     params: [
-      { key: "epochs",         label: "Épocas",     type: "number", default: 15, min: 1,  max: 100, step: 1 },
-      { key: "max_complexity", label: "Complejidad", type: "number", default: 7,  min: 2,  max: 20,  step: 1 },
+      { key: "epochs", label: "Épocas", type: "number", default: 16, min: 1, max: 100, step: 1 },
+      { key: "max_complexity", label: "Complejidad", type: "number", default: 9, min: 2, max: 20, step: 1 },
     ],
   },
 ];
