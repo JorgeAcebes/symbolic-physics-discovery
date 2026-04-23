@@ -8,19 +8,32 @@ Research project for the discovery of fundamental physical laws through **Symbol
 3. Evaluate the generalization capability of a Neural Network (MLP) versus the symbolic solution in extrapolation ranges.
 
 
- ## Prerequisites
+## Prerequisites
 
-This project requires a **LaTeX** distribution for mathematical typesetting in plots (`matplotlib`) and document generation. 
 
 ### 1. LaTeX Distribution (System-wide)
-To ensure font consistency and package compatibility, **TeX Live 2025** is the required distribution.
 
-* **Fast Installation (Windows Package Manager):**
-    Open PowerShell as Administrator and run:
+This project requires a **LaTeX** distribution for mathematical typesetting in plots (`matplotlib`) and document generation. 
+To ensure font consistency and package compatibility, an up-to-date distribution is required. You may choose between **TeX Live 2025** or **MiKTeX**.
+
+### **Option A: TeX Live 2025 (Recommended)**
+* **Fast Installation (PowerShell):**
     ```powershell
     winget install TeXLive.TeXLive --version 2025
     ```
-* **Manual Installation:** Download the `install-tl-windows.exe` from [TUG.org](https://tug.org/texlive/).
+* **Manual Installation:** Download from [TUG.org](https://tug.org/texlive/).
+
+### **Option B: MiKTeX**
+* **Fast Installation (PowerShell):**
+    ```powershell
+    winget install MiKTeX.MiKTeX
+    ```
+* **Manual Installation:** Download from [miktex.org](https://miktex.org/download).
+
+---
+
+> [!IMPORTANT]
+> **Technical Note:** If you choose MiKTeX, ensure that "Always install missing packages on-the-fly" is enabled in the **MiKTeX Console**. This prevents compilation interruptions when handling documents with extensive dependencies.
 
 ### 2. Python Environment
 Install the core libraries for physical computing and data analysis using the provided requirements file:
