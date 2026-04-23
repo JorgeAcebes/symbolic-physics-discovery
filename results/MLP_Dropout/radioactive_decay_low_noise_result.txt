@@ -1,0 +1,8 @@
+=== Model: MLP_Dropout | Dataset: radioactive_decay_low_noise ===
+
+Equation / Structure:
+Red Neuronal (dropout)
+
+Metrics:
+Test MSE: 1.475270e-04
+Test MAE: 9.288603e-03

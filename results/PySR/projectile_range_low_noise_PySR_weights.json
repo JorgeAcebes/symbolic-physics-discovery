@@ -1,0 +1,60 @@
+{
+  "best_equation": "v0**2*sin(theta + theta)",
+  "all_equations": [
+    {
+      "equation": "v0",
+      "loss": 3.1663194,
+      "complexity": 1
+    },
+    {
+      "equation": "square(v0)",
+      "loss": 2.7155087,
+      "complexity": 2
+    },
+    {
+      "equation": "v0 ^ 1.645219",
+      "loss": 1.2327359,
+      "complexity": 3
+    },
+    {
+      "equation": "square(v0 / 1.179531)",
+      "loss": 1.1743379,
+      "complexity": 4
+    },
+    {
+      "equation": "(v0 ^ 1.9897318) / 1.3784432",
+      "loss": 1.174296,
+      "complexity": 5
+    },
+    {
+      "equation": "square((-0.16378711 / theta) + v0)",
+      "loss": 1.0554965,
+      "complexity": 6
+    },
+    {
+      "equation": "square(v0) * sin(theta + theta)",
+      "loss": 0.00043662,
+      "complexity": 7
+    },
+    {
+      "equation": "sin(theta * 2.000043) * (v0 ^ 2.000038)",
+      "loss": 0.00043657693,
+      "complexity": 8
+    },
+    {
+      "equation": "square(v0) * sin((theta * 1.9996758) + 0.0003663712)",
+      "loss": 0.0004363722,
+      "complexity": 9
+    },
+    {
+      "equation": "(sin(theta + theta) * square(v0)) - (-0.00032100777 / theta)",
+      "loss": 0.0004359429,
+      "complexity": 11
+    },
+    {
+      "equation": "((square(v0) * sin(theta + theta)) - (-0.00047090327 / theta)) - 0.00050756615",
+      "loss": 0.0004358329,
+      "complexity": 13
+    }
+  ]
+}

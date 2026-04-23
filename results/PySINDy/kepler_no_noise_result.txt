@@ -1,0 +1,8 @@
+=== Model: PySINDy | Dataset: kepler_no_noise ===
+
+Equation / Structure:
+-5.211e-02*1 + 5.788e-01*r + 5.144e-01*r^2 + -4.175e-02*r^3
+
+Metrics:
+Test MSE: 2.198890e-05
+Test MAE: 3.834538e-03

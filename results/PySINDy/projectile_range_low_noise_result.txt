@@ -1,0 +1,8 @@
+=== Model: PySINDy | Dataset: projectile_range_low_noise ===
+
+Equation / Structure:
+-6.159e-01*1 + 1.256e+00*theta + -8.814e-02*v0^2 + 1.450e-02*v0 theta + -1.977e-01*theta^2 + 2.736e+00*v0^2 theta + -1.697e-02*v0 theta^2 + -1.094e+00*theta^3 + -1.739e+00*v0^2 theta^2 + 5.784e-01*theta^4 + 6.974e-02*(1/theta)
+
+Metrics:
+Test MSE: 1.428560e-03
+Test MAE: 2.929387e-02

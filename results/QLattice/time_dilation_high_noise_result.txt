@@ -1,0 +1,8 @@
+=== Model: QLattice | Dataset: time_dilation_high_noise ===
+
+Equation / Structure:
+0.7697*t - 0.8242*(0.901*t - 0.002461)/(3.549*v - 3.683) + 0.01206
+
+Metrics:
+Test MSE: 6.882008e-03
+Test MAE: 6.600908e-02

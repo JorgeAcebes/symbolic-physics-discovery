@@ -1,0 +1,8 @@
+=== Model: MLP_Dropout | Dataset: boltzmann_entropy_low_noise ===
+
+Equation / Structure:
+Red Neuronal (dropout)
+
+Metrics:
+Test MSE: 2.630258e-04
+Test MAE: 1.180047e-02

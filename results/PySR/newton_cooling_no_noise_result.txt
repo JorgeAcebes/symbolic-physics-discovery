@@ -1,0 +1,8 @@
+=== Model: PySR | Dataset: newton_cooling_no_noise ===
+
+Equation / Structure:
+1.0 + exp(-k*t)
+
+Metrics:
+Test MSE: 8.778045e-14
+Test MAE: 2.517700e-07

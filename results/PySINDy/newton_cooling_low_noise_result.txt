@@ -1,0 +1,8 @@
+=== Model: PySINDy | Dataset: newton_cooling_low_noise ===
+
+Equation / Structure:
+2.002e+00*1 + 1.995e-01*k^2 + -1.503e+00*k t + -2.978e-01*k^3 + 7.432e-01*k^2 t + 3.733e-01*k t^2 + 9.602e-02*k^4 + -1.633e-01*k^3 t + -2.943e-02*k^2 t^2 + -4.881e-02*k t^3
+
+Metrics:
+Test MSE: 2.074983e-04
+Test MAE: 1.093222e-02

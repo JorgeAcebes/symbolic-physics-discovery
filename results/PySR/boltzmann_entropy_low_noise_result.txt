@@ -1,0 +1,8 @@
+=== Model: PySR | Dataset: boltzmann_entropy_low_noise ===
+
+Equation / Structure:
+log(omega)
+
+Metrics:
+Test MSE: 3.476571e-05
+Test MAE: 4.665505e-03

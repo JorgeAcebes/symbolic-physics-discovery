@@ -1,0 +1,8 @@
+=== Model: MLP_Sparse | Dataset: time_dilation_no_noise ===
+
+Equation / Structure:
+Red Neuronal (sparse)
+
+Metrics:
+Test MSE: 5.757415e-05
+Test MAE: 3.306028e-03

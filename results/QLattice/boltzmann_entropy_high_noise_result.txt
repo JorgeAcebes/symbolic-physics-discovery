@@ -1,0 +1,8 @@
+=== Model: QLattice | Dataset: boltzmann_entropy_high_noise ===
+
+Equation / Structure:
+1.006*log(0.2613*omega + 0.00219) + 1.342
+
+Metrics:
+Test MSE: 3.519045e-03
+Test MAE: 4.712125e-02

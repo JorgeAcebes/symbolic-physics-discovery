@@ -1,0 +1,8 @@
+=== Model: MLP_Sparse | Dataset: newton_cooling_no_noise ===
+
+Equation / Structure:
+Red Neuronal (sparse)
+
+Metrics:
+Test MSE: 9.815160e-06
+Test MAE: 1.980121e-03

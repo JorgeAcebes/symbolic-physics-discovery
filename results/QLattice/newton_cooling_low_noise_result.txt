@@ -1,0 +1,8 @@
+=== Model: QLattice | Dataset: newton_cooling_low_noise ===
+
+Equation / Structure:
+1.0*exp((0.000273 - 0.5565*t)*(1.798*k - 0.0005221)) + 1.0
+
+Metrics:
+Test MSE: 9.273525e-06
+Test MAE: 2.410736e-03

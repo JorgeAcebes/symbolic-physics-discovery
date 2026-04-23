@@ -1,0 +1,55 @@
+{
+  "best_equation": "t/(cos(v*1.5881233)**0.4212728)",
+  "all_equations": [
+    {
+      "equation": "t",
+      "loss": 0.49853083,
+      "complexity": 1
+    },
+    {
+      "equation": "exp(v)",
+      "loss": 0.42896932,
+      "complexity": 2
+    },
+    {
+      "equation": "v + t",
+      "loss": 0.17930742,
+      "complexity": 3
+    },
+    {
+      "equation": "t / cos(v)",
+      "loss": 0.13049789,
+      "complexity": 4
+    },
+    {
+      "equation": "exp(square(v)) * t",
+      "loss": 0.042274646,
+      "complexity": 5
+    },
+    {
+      "equation": "t / cos(v * -1.229397)",
+      "loss": 0.018874481,
+      "complexity": 6
+    },
+    {
+      "equation": "t / cos(square(v + 0.16301249))",
+      "loss": 0.0021695138,
+      "complexity": 7
+    },
+    {
+      "equation": "t / (cos(v * 1.5881233) ^ 0.4212728)",
+      "loss": 0.0001321609,
+      "complexity": 8
+    },
+    {
+      "equation": "t / ((cos(v * 1.5998269) + 0.012863621) ^ 0.42553344)",
+      "loss": 0.00010495981,
+      "complexity": 10
+    },
+    {
+      "equation": "t / ((cos((v - 0.013504195) * 1.6070287) ^ 0.43411446) + 0.003471782)",
+      "loss": 9.6497926e-05,
+      "complexity": 12
+    }
+  ]
+}

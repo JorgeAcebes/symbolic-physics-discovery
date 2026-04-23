@@ -1,0 +1,8 @@
+=== Model: GPLearn | Dataset: ideal_gas_low_noise ===
+
+Equation / Structure:
+T*n/V
+
+Metrics:
+Test MSE: 9.351741e-05
+Test MAE: 7.717455e-03

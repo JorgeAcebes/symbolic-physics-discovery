@@ -1,0 +1,8 @@
+=== Model: GPLearn | Dataset: projectile_range_high_noise ===
+
+Equation / Structure:
+v0**(3/2)*sqrt(log(theta - 0.761))
+
+Metrics:
+Test MSE: 4.920722e-01
+Test MAE: 5.104397e-01

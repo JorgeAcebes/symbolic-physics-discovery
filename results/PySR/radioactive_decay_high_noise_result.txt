@@ -1,0 +1,8 @@
+=== Model: PySR | Dataset: radioactive_decay_high_noise ===
+
+Equation / Structure:
+exp(lambd)**(-t)
+
+Metrics:
+Test MSE: 8.603765e-04
+Test MAE: 2.368821e-02

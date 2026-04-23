@@ -1,0 +1,8 @@
+=== Model: Polynomial | Dataset: projectile_range_high_noise ===
+
+Equation / Structure:
+-1.153*theta**5 + 2.237*theta**4*v0 + 2.764*theta**4 + 0.009846*theta**3*v0**2 - 6.963*theta**3*v0 - 1.094*theta**3 - 0.01388*theta**2*v0**3 - 1.672*theta**2*v0**2 + 7.053*theta**2*v0 - 1.292*theta**2 + 0.05049*theta*v0**4 - 0.3577*theta*v0**3 + 3.624*theta*v0**2 - 3.684*theta*v0 + 1.29*theta + 0.002035*v0**5 - 0.1106*v0**4 + 0.7262*v0**3 - 1.865*v0**2 + 2.134*v0 - 0.7749
+
+Metrics:
+Test MSE: 4.807563e-02
+Test MAE: 1.744396e-01

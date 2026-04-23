@@ -1,0 +1,8 @@
+=== Model: MLP_Dropout | Dataset: coulomb_high_noise ===
+
+Equation / Structure:
+Red Neuronal (dropout)
+
+Metrics:
+Test MSE: 4.283192e-02
+Test MAE: 1.434655e-01

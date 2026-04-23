@@ -1,0 +1,8 @@
+=== Model: QLattice | Dataset: coulomb_low_noise ===
+
+Equation / Structure:
+2.086*(0.3505*q1 + 0.001896)*(-1.717*q2 - 0.00349)/log(exp(-2.0*(0.03469*q1 - 0.05535)**2 - 2.0*(0.7927*r + 0.001318)**2)) - 0.0005702
+
+Metrics:
+Test MSE: 2.721826e-04
+Test MAE: 1.245224e-02

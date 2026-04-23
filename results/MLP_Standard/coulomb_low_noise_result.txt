@@ -1,0 +1,8 @@
+=== Model: MLP_Standard | Dataset: coulomb_low_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 3.206062e-04
+Test MAE: 1.358954e-02

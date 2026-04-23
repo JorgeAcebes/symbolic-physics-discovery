@@ -1,0 +1,8 @@
+=== Model: PySINDy | Dataset: oscillator_high_noise ===
+
+Equation / Structure:
+-9.992e-01*x
+
+Metrics:
+Test MSE: 1.404889e-02
+Test MAE: 9.471713e-02

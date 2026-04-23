@@ -1,0 +1,8 @@
+=== Model: PySR | Dataset: kepler_low_noise ===
+
+Equation / Structure:
+r**1.5000477
+
+Metrics:
+Test MSE: 2.316103e-04
+Test MAE: 1.211694e-02

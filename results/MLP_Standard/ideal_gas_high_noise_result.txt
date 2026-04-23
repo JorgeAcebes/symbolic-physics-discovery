@@ -1,0 +1,8 @@
+=== Model: MLP_Standard | Dataset: ideal_gas_high_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 1.008925e-02
+Test MAE: 8.016484e-02

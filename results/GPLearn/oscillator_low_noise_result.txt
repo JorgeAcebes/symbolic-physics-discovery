@@ -1,0 +1,8 @@
+=== Model: GPLearn | Dataset: oscillator_low_noise ===
+
+Equation / Structure:
+-0.995*x
+
+Metrics:
+Test MSE: 1.806799e-04
+Test MAE: 1.084241e-02

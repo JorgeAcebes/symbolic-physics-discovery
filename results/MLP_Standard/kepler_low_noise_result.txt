@@ -1,0 +1,8 @@
+=== Model: MLP_Standard | Dataset: kepler_low_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 2.476984e-04
+Test MAE: 1.251482e-02

@@ -1,8 +1,8 @@
 === Model: GPLearn | Dataset: coulomb_no_noise ===
 
 Equation / Structure:
-add(add(div(div(inv(add(div(mul(q2, r), sin(r)), q2)), sin(add(add(add(sin(r), div(inv(add(q2, q2)), r)), div(inv(add(q1, q2)), sin(add(r, q2)))), mul(add(add(sin(inv(mul(mul(mul(div(0.366, add(r, q2)), inv(0.206)), cos(q1)), cos(add(q1, 0.597))))), div(sin(r), r)), div(inv(sin(r)), sin(add(r, q2)))), mul(inv(add(q1, q2)), cos(sin(mul(q2, q2)))))))), sin(r)), div(inv(add(q2, q2)), r)), mul(add(add(div(inv(add(add(q1, q2), q2)), sin(add(add(add(q1, div(inv(add(q2, q2)), r)), div(inv(add(q1, q2)), sin(add(r, q2)))), mul(add(add(sin(inv(add(q1, q1))), div(sin(r), r)), div(inv(add(q1, q2)), sin(add(r, q2)))), mul(mul(div(0.366, r), inv(0.206)), cos(sin(mul(q2, q2)))))))), add(div(inv(add(q1, q2)), sin(r)), div(inv(add(q2, q2)), r))), div(inv(add(add(q1, q2), q2)), sin(add(r, q2)))), mul(mul(mul(div(0.366, add(r, q2)), inv(0.206)), cos(q1)), cos(add(q1, 0.597)))))
+q1*q2/r**2
 
 Metrics:
-Test MSE: 7.849144e+11
-Test MAE: 1.329477e+05
+Test MSE: 3.014598e-13
+Test MAE: 2.418464e-07

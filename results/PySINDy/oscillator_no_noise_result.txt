@@ -4,5 +4,5 @@ Equation / Structure:
 -1.000e+00*x
 
 Metrics:
-Test MSE: 0.000000e+00
-Test MAE: 0.000000e+00
+Test MSE: 1.919895e-14
+Test MAE: 1.203034e-07

@@ -1,0 +1,8 @@
+=== Model: MLP_Dropout | Dataset: newton_cooling_low_noise ===
+
+Equation / Structure:
+Red Neuronal (dropout)
+
+Metrics:
+Test MSE: 1.382636e-04
+Test MAE: 8.778685e-03

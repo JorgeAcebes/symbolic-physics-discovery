@@ -1,0 +1,8 @@
+=== Model: MLP_Dropout | Dataset: kepler_low_noise ===
+
+Equation / Structure:
+Red Neuronal (dropout)
+
+Metrics:
+Test MSE: 1.590236e-03
+Test MAE: 3.057879e-02

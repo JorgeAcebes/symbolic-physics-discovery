@@ -1,0 +1,4 @@
+{
+  "best_program": "mul(r, sqrt(r))",
+  "equation": "r**(3/2)"
+}

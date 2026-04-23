@@ -1,0 +1,8 @@
+=== Model: MLP_Dropout | Dataset: projectile_range_low_noise ===
+
+Equation / Structure:
+Red Neuronal (dropout)
+
+Metrics:
+Test MSE: 1.330617e-02
+Test MAE: 8.571019e-02

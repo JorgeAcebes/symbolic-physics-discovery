@@ -1,0 +1,25 @@
+{
+  "best_equation": "exp(lambd)**(-t)",
+  "all_equations": [
+    {
+      "equation": "0.36584267",
+      "loss": 0.08817957,
+      "complexity": 1
+    },
+    {
+      "equation": "0.4313655 ^ t",
+      "loss": 0.038796302,
+      "complexity": 3
+    },
+    {
+      "equation": "inv(exp(lambd) ^ t)",
+      "loss": 4.40987e-15,
+      "complexity": 5
+    },
+    {
+      "equation": "inv((square(lambd - lambd) + exp(t)) ^ lambd)",
+      "loss": 4.35391e-15,
+      "complexity": 10
+    }
+  ]
+}

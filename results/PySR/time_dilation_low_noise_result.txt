@@ -1,0 +1,8 @@
+=== Model: PySR | Dataset: time_dilation_low_noise ===
+
+Equation / Structure:
+t/(cos(v*1.5881233)**0.4212728)
+
+Metrics:
+Test MSE: 1.246493e-04
+Test MAE: 8.868076e-03

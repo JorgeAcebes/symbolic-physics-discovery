@@ -1,0 +1,50 @@
+{
+  "best_equation": "1.0000027 + exp(-k*t)",
+  "all_equations": [
+    {
+      "equation": "1.3639364",
+      "loss": 0.089770876,
+      "complexity": 1
+    },
+    {
+      "equation": "2.1118085 - sin(k)",
+      "loss": 0.064178914,
+      "complexity": 4
+    },
+    {
+      "equation": "(0.32680365 ^ t) + 1.074983",
+      "loss": 0.037559282,
+      "complexity": 5
+    },
+    {
+      "equation": "exp(-0.11253637 - t) + 1.079743",
+      "loss": 0.036844186,
+      "complexity": 6
+    },
+    {
+      "equation": "inv(exp(t * k)) + 1.0000027",
+      "loss": 0.00088151597,
+      "complexity": 7
+    },
+    {
+      "equation": "exp((k * t) * -0.9958157) + 0.9990125",
+      "loss": 0.0008813004,
+      "complexity": 8
+    },
+    {
+      "equation": "(0.9995392 ^ t) + exp((t * -0.99692684) * k)",
+      "loss": 0.00088124943,
+      "complexity": 10
+    },
+    {
+      "equation": "(t / (t - -2.254459e-6)) + inv(exp(t * k))",
+      "loss": 0.0008811702,
+      "complexity": 11
+    },
+    {
+      "equation": "exp((-0.0018684773 - (k * 0.9930068)) * t) + (0.9990087 ^ k)",
+      "loss": 0.00088099967,
+      "complexity": 12
+    }
+  ]
+}

@@ -4,5 +4,5 @@ Equation / Structure:
 Red Neuronal (dropout)
 
 Metrics:
-Test MSE: 7.527980e+06
-Test MAE: 9.005500e+02
+Test MSE: 2.245180e-03
+Test MAE: 3.480122e-02

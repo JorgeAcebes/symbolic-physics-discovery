@@ -1,0 +1,20 @@
+{
+  "best_equation": "r**1.4999973",
+  "all_equations": [
+    {
+      "equation": "r",
+      "loss": 0.8652923,
+      "complexity": 1
+    },
+    {
+      "equation": "r ^ 1.4999973",
+      "loss": 4.1100425e-11,
+      "complexity": 3
+    },
+    {
+      "equation": "(r ^ 1.4999973) - (square(square(-0.06559798 * -0.17001289)) + (r - r))",
+      "loss": 4.1096106e-11,
+      "complexity": 13
+    }
+  ]
+}

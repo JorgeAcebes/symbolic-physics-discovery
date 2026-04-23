@@ -1,0 +1,8 @@
+=== Model: GPLearn | Dataset: newton_cooling_high_noise ===
+
+Equation / Structure:
+1.36612021857923
+
+Metrics:
+Test MSE: 9.207587e-02
+Test MAE: 2.640848e-01

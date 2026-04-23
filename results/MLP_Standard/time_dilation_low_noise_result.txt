@@ -1,0 +1,8 @@
+=== Model: MLP_Standard | Dataset: time_dilation_low_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 1.147129e-04
+Test MAE: 7.823712e-03

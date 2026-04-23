@@ -1,0 +1,8 @@
+=== Model: MLP_Sparse | Dataset: radioactive_decay_no_noise ===
+
+Equation / Structure:
+Red Neuronal (sparse)
+
+Metrics:
+Test MSE: 1.701075e-05
+Test MAE: 2.893417e-03

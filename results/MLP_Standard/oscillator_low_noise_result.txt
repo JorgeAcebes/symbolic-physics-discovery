@@ -1,0 +1,8 @@
+=== Model: MLP_Standard | Dataset: oscillator_low_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 1.598017e-04
+Test MAE: 1.017648e-02

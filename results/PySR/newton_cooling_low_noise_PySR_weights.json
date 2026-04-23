@@ -1,0 +1,50 @@
+{
+  "best_equation": "exp(k*(-1.0004783))**t + 1.000121",
+  "all_equations": [
+    {
+      "equation": "1.3639712",
+      "loss": 0.08881091,
+      "complexity": 1
+    },
+    {
+      "equation": "2.1118011 - sin(k)",
+      "loss": 0.06333336,
+      "complexity": 4
+    },
+    {
+      "equation": "(0.31983116 ^ t) + 1.0798035",
+      "loss": 0.03664724,
+      "complexity": 5
+    },
+    {
+      "equation": "sin(0.27544177 ^ t) + 1.1235987",
+      "loss": 0.03591496,
+      "complexity": 6
+    },
+    {
+      "equation": "exp(exp(-0.2956318 - (t * k)))",
+      "loss": 0.0014653645,
+      "complexity": 7
+    },
+    {
+      "equation": "(exp(k * -1.0004783) ^ t) + 1.000121",
+      "loss": 8.619979e-06,
+      "complexity": 8
+    },
+    {
+      "equation": "((exp(k * -1.0004671) ^ t) - -0.10881673) + 0.89130163",
+      "loss": 8.619961e-06,
+      "complexity": 10
+    },
+    {
+      "equation": "((exp(k / -0.999439) ^ t) + 1.0002382) - (k * 6.8622874e-5)",
+      "loss": 8.6172895e-06,
+      "complexity": 12
+    },
+    {
+      "equation": "(exp(k / -0.999439) ^ t) + (1.0002382 - (square(k) * 6.8622874e-5))",
+      "loss": 8.6136115e-06,
+      "complexity": 13
+    }
+  ]
+}

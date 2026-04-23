@@ -1,0 +1,8 @@
+=== Model: MLP_Standard | Dataset: projectile_range_no_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 5.518334e-05
+Test MAE: 5.030288e-03

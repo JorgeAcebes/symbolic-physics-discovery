@@ -1,0 +1,8 @@
+=== Model: GPLearn | Dataset: time_dilation_high_noise ===
+
+Equation / Structure:
+t*(v + 1)
+
+Metrics:
+Test MSE: 1.706376e-01
+Test MAE: 3.222452e-01

@@ -1,0 +1,8 @@
+=== Model: Polynomial | Dataset: radioactive_decay_high_noise ===
+
+Equation / Structure:
+-0.03926*lambd**5 + 0.07949*lambd**4*t + 0.1551*lambd**4 - 0.007316*lambd**3*t**2 - 0.4254*lambd**3*t - 0.157*lambd**3 - 0.004803*lambd**2*t**3 - 0.00621*lambd**2*t**2 + 1.002*lambd**2*t - 0.06902*lambd**2 + 0.02536*lambd*t**4 - 0.2041*lambd*t**3 + 0.7127*lambd*t**2 - 1.87*lambd*t + 0.1497*lambd - 0.003854*t**5 + 0.01813*t**4 + 0.0003354*t**3 - 0.1166*t**2 + 0.1622*t + 0.9673
+
+Metrics:
+Test MSE: 8.770627e-04
+Test MAE: 2.390661e-02

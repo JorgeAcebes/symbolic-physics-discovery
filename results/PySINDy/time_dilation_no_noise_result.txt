@@ -1,0 +1,8 @@
+=== Model: PySINDy | Dataset: time_dilation_no_noise ===
+
+Equation / Structure:
+2.415e-01*1 + 5.793e-01*t + 1.632e+00*v + 3.835e-01*t^2 + 5.221e-01*t v + -3.141e+00*v^2 + -1.861e-01*t^3 + -2.980e-01*t^2 v + -1.838e+00*t v^2 + -7.277e-01*v^3 + 3.440e-02*t^4 + 9.620e-02*t^3 v + -3.885e-02*t^2 v^2 + 3.519e+00*t v^3 + 2.670e+00*v^4 + -2.474e-01*(1/t) + 6.438e-02*(1/t^2)
+
+Metrics:
+Test MSE: 1.011943e-02
+Test MAE: 6.544147e-02

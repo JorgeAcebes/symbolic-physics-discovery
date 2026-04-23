@@ -1,0 +1,8 @@
+=== Model: MLP_Sparse | Dataset: boltzmann_entropy_high_noise ===
+
+Equation / Structure:
+Red Neuronal (sparse)
+
+Metrics:
+Test MSE: 3.521582e-03
+Test MAE: 4.707513e-02

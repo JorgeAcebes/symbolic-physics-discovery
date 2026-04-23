@@ -1,0 +1,8 @@
+=== Model: Polynomial | Dataset: radioactive_decay_low_noise ===
+
+Equation / Structure:
+-0.02738*lambd**5 + 0.07748*lambd**4*t + 0.09437*lambd**4 - 0.008796*lambd**3*t**2 - 0.4142*lambd**3*t - 0.04213*lambd**3 - 0.007481*lambd**2*t**3 + 0.009481*lambd**2*t**2 + 0.9724*lambd**2*t - 0.167*lambd**2 + 0.02698*lambd*t**4 - 0.2091*lambd*t**3 + 0.7075*lambd*t**2 - 1.852*lambd*t + 0.1883*lambd - 0.004592*t**5 + 0.02234*t**4 - 0.006948*t**3 - 0.1129*t**2 + 0.1635*t + 0.9592
+
+Metrics:
+Test MSE: 1.775642e-05
+Test MAE: 3.276678e-03

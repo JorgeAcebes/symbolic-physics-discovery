@@ -1,0 +1,8 @@
+=== Model: MLP_Standard | Dataset: radioactive_decay_low_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 1.190247e-05
+Test MAE: 2.765850e-03

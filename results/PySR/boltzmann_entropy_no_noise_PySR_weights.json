@@ -1,0 +1,15 @@
+{
+  "best_equation": "log(omega)",
+  "all_equations": [
+    {
+      "equation": "1.5651449",
+      "loss": 0.34492505,
+      "complexity": 1
+    },
+    {
+      "equation": "log(omega)",
+      "loss": 7.9607165e-14,
+      "complexity": 2
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "best_equation": "exp(lambd)**(-t)",
+  "all_equations": [
+    {
+      "equation": "0.3660743",
+      "loss": 0.0892893,
+      "complexity": 1
+    },
+    {
+      "equation": "0.43146518 ^ t",
+      "loss": 0.039783195,
+      "complexity": 3
+    },
+    {
+      "equation": "inv(exp(lambd) ^ t)",
+      "loss": 0.000846441,
+      "complexity": 5
+    },
+    {
+      "equation": "exp(t * (lambd * -0.99927217))",
+      "loss": 0.0008464034,
+      "complexity": 6
+    },
+    {
+      "equation": "inv(exp(t * lambd) + -0.0014125204)",
+      "loss": 0.00084619154,
+      "complexity": 7
+    },
+    {
+      "equation": "inv(exp((lambd * t) ^ 0.9984387) + -0.0019330306)",
+      "loss": 0.00084615237,
+      "complexity": 9
+    },
+    {
+      "equation": "inv(exp(lambd * t)) + (cos(lambd) * 0.000962475)",
+      "loss": 0.00084609777,
+      "complexity": 10
+    },
+    {
+      "equation": "inv(((cos(inv(t)) * 0.0039612926) + exp(t)) ^ lambd)",
+      "loss": 0.00084572524,
+      "complexity": 11
+    },
+    {
+      "equation": "inv(exp(lambd * (t + (cos(square(exp(lambd))) * 0.0032777882))))",
+      "loss": 0.00084552605,
+      "complexity": 12
+    },
+    {
+      "equation": "inv((((cos(inv(t)) * lambd) * 0.0032356698) + exp(t)) ^ lambd)",
+      "loss": 0.0008453849,
+      "complexity": 13
+    }
+  ]
+}

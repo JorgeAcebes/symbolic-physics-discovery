@@ -1,0 +1,8 @@
+=== Model: MLP_Sparse | Dataset: projectile_range_high_noise ===
+
+Equation / Structure:
+Red Neuronal (sparse)
+
+Metrics:
+Test MSE: 4.886574e-02
+Test MAE: 1.757006e-01

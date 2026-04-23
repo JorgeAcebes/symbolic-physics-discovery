@@ -1,0 +1,60 @@
+{
+  "best_equation": "t*(1.6901535 + 1/cos(v**1.3647355 + 0.49836513))*0.3521552",
+  "all_equations": [
+    {
+      "equation": "t",
+      "loss": 0.4988901,
+      "complexity": 1
+    },
+    {
+      "equation": "exp(v)",
+      "loss": 0.42905852,
+      "complexity": 2
+    },
+    {
+      "equation": "t + v",
+      "loss": 0.17929682,
+      "complexity": 3
+    },
+    {
+      "equation": "t / cos(v)",
+      "loss": 0.13061638,
+      "complexity": 4
+    },
+    {
+      "equation": "t / (1.3540314 - v)",
+      "loss": 0.0396002,
+      "complexity": 5
+    },
+    {
+      "equation": "t / cos(v * 1.2295462)",
+      "loss": 0.01878157,
+      "complexity": 6
+    },
+    {
+      "equation": "t / cos(square(v + 0.16304778))",
+      "loss": 0.0021204967,
+      "complexity": 7
+    },
+    {
+      "equation": "t / cos((v ^ 1.538257) * -1.3275338)",
+      "loss": 0.0021105276,
+      "complexity": 8
+    },
+    {
+      "equation": "(t * 1.0267785) / cos(square(v + 0.15627038))",
+      "loss": 0.0012011349,
+      "complexity": 9
+    },
+    {
+      "equation": "inv(cos((v ^ 2.3242211) + 0.41419268) + 0.06360131) * t",
+      "loss": 0.00086269027,
+      "complexity": 11
+    },
+    {
+      "equation": "t * ((inv(cos((v ^ 1.3647355) + 0.49836513)) + 1.6901535) * 0.3521552)",
+      "loss": 0.00012067464,
+      "complexity": 13
+    }
+  ]
+}

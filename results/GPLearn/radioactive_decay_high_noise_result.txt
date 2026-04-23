@@ -1,0 +1,8 @@
+=== Model: GPLearn | Dataset: radioactive_decay_high_noise ===
+
+Equation / Structure:
+cos(sqrt(t))
+
+Metrics:
+Test MSE: 5.918394e-02
+Test MAE: 1.889822e-01

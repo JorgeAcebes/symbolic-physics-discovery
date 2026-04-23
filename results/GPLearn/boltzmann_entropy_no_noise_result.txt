@@ -1,0 +1,8 @@
+=== Model: GPLearn | Dataset: boltzmann_entropy_no_noise ===
+
+Equation / Structure:
+log(omega)
+
+Metrics:
+Test MSE: 7.951219e-14
+Test MAE: 2.304552e-07

@@ -1,8 +1,8 @@
 === Model: Polynomial | Dataset: oscillator_no_noise ===
 
 Equation / Structure:
-2.862e-7 - 1.0*x
+2.52e-8*x**5 - 1.396e-8*x**4 + 6.222e-8*x**3 - 1.068e-8*x**2 - 1.0*x + 5.34e-8
 
 Metrics:
-Test MSE: 3.304448e-13
-Test MAE: 4.697964e-07
+Test MSE: 8.366254e-14
+Test MAE: 2.513538e-07

@@ -1,0 +1,8 @@
+=== Model: Polynomial | Dataset: kepler_high_noise ===
+
+Equation / Structure:
+-0.006829*r**5 + 0.07283*r**4 - 0.3143*r**3 + 0.9476*r**2 + 0.3077*r - 0.006732
+
+Metrics:
+Test MSE: 2.234709e-02
+Test MAE: 1.193654e-01

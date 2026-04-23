@@ -1,15 +1,25 @@
 {
-  "best_equation": "-x + 0.0",
+  "best_equation": "-x - x + x",
   "all_equations": [
     {
-      "equation": "-0.4475105",
-      "loss": 33.506836,
+      "equation": "-0.018561952",
+      "loss": 1.3392551,
       "complexity": 1
     },
     {
-      "equation": "-0.0 - x",
-      "loss": 0.0,
+      "equation": "4.8706497e-9 - x",
+      "loss": 2.367027e-18,
       "complexity": 3
+    },
+    {
+      "equation": "square(2.2667016e-6) - x",
+      "loss": 4.170369e-27,
+      "complexity": 4
+    },
+    {
+      "equation": "(x - x) - x",
+      "loss": 0.0,
+      "complexity": 5
     }
   ]
 }

@@ -1,0 +1,8 @@
+=== Model: QLattice | Dataset: radioactive_decay_no_noise ===
+
+Equation / Structure:
+1.0*exp((1.303e-6 - 0.9772*t)*(1.023*lambd - 3.536e-6)) - 4.261e-7
+
+Metrics:
+Test MSE: 1.482705e-12
+Test MAE: 1.016974e-06

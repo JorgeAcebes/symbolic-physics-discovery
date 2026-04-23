@@ -1,0 +1,8 @@
+=== Model: PySINDy | Dataset: radioactive_decay_no_noise ===
+
+Equation / Structure:
+9.853e-01*1 + 1.136e-01*lambd + -1.512e+00*lambd t + -1.616e-01*lambd^3 + 7.466e-01*lambd^2 t + 3.774e-01*lambd t^2 + 6.424e-02*lambd^4 + -1.629e-01*lambd^3 t + -3.057e-02*lambd^2 t^2 + -4.924e-02*lambd t^3
+
+Metrics:
+Test MSE: 1.966891e-04
+Test MAE: 1.037745e-02

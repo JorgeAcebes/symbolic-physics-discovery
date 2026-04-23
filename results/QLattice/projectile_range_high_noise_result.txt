@@ -1,0 +1,8 @@
+=== Model: QLattice | Dataset: projectile_range_high_noise ===
+
+Equation / Structure:
+1.25*(0.6304*theta + 0.1075)**2*(0.6824*v0 + 0.01763)**2*(-2.272*theta + 0.001094*v0 + 3.952)**2 - 0.03147
+
+Metrics:
+Test MSE: 4.980893e-02
+Test MAE: 1.773883e-01

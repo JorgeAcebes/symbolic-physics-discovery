@@ -1,0 +1,8 @@
+=== Model: PySR | Dataset: projectile_range_no_noise ===
+
+Equation / Structure:
+v0**2*sin(theta + theta)
+
+Metrics:
+Test MSE: 2.139891e-12
+Test MAE: 9.448528e-07

@@ -1,0 +1,30 @@
+{
+  "best_equation": "1.0 + exp(-k*t)",
+  "all_equations": [
+    {
+      "equation": "1.3639607",
+      "loss": 0.08879086,
+      "complexity": 1
+    },
+    {
+      "equation": "log(5.5297766 - t)",
+      "loss": 0.047722004,
+      "complexity": 4
+    },
+    {
+      "equation": "(0.32062224 ^ t) + 1.0792655",
+      "loss": 0.036630794,
+      "complexity": 5
+    },
+    {
+      "equation": "log(6.637324 - (t + k))",
+      "loss": 0.021484666,
+      "complexity": 6
+    },
+    {
+      "equation": "inv(exp(k * t)) + 1.0",
+      "loss": 9.05492e-14,
+      "complexity": 7
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+=== Model: Polynomial | Dataset: boltzmann_entropy_high_noise ===
+
+Equation / Structure:
+0.0001046*omega**5 - 0.003543*omega**4 + 0.04762*omega**3 - 0.3294*omega**2 + 1.366*omega - 1.052
+
+Metrics:
+Test MSE: 3.527906e-03
+Test MAE: 4.715732e-02

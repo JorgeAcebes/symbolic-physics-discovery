@@ -1,0 +1,65 @@
+{
+  "best_equation": "q1*q2/(r**2)",
+  "all_equations": [
+    {
+      "equation": "q2",
+      "loss": 1.6337992,
+      "complexity": 1
+    },
+    {
+      "equation": "inv(r)",
+      "loss": 1.1380404,
+      "complexity": 2
+    },
+    {
+      "equation": "q2 / r",
+      "loss": 0.7894782,
+      "complexity": 3
+    },
+    {
+      "equation": "q2 / square(r)",
+      "loss": 0.4362569,
+      "complexity": 4
+    },
+    {
+      "equation": "(q1 * q2) / r",
+      "loss": 0.37736154,
+      "complexity": 5
+    },
+    {
+      "equation": "(q1 * q2) / square(r)",
+      "loss": 0.0001709968,
+      "complexity": 6
+    },
+    {
+      "equation": "((r ^ -1.9998926) * q2) * q1",
+      "loss": 0.00017099065,
+      "complexity": 7
+    },
+    {
+      "equation": "(q2 ^ 0.99951476) * (q1 / square(r))",
+      "loss": 0.00017095097,
+      "complexity": 8
+    },
+    {
+      "equation": "(q1 * (q2 ^ 0.9995536)) / (r ^ 2.0001655)",
+      "loss": 0.00017092968,
+      "complexity": 9
+    },
+    {
+      "equation": "(q2 ^ 0.99951476) * (0.00025629243 + (q1 / square(r)))",
+      "loss": 0.00017086187,
+      "complexity": 10
+    },
+    {
+      "equation": "(q2 ^ 0.999274) * ((q1 / (r ^ 2.0002918)) + 0.00029558424)",
+      "loss": 0.00017083093,
+      "complexity": 11
+    },
+    {
+      "equation": "(q1 * (q2 / square(r))) + (0.00058378786 / inv(sin(square(r))))",
+      "loss": 0.00017081734,
+      "complexity": 13
+    }
+  ]
+}

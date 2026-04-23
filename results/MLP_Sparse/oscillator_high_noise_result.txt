@@ -1,0 +1,8 @@
+=== Model: MLP_Sparse | Dataset: oscillator_high_noise ===
+
+Equation / Structure:
+Red Neuronal (sparse)
+
+Metrics:
+Test MSE: 1.416679e-02
+Test MAE: 9.531507e-02

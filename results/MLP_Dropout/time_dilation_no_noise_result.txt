@@ -1,0 +1,8 @@
+=== Model: MLP_Dropout | Dataset: time_dilation_no_noise ===
+
+Equation / Structure:
+Red Neuronal (dropout)
+
+Metrics:
+Test MSE: 2.217069e-03
+Test MAE: 2.779884e-02

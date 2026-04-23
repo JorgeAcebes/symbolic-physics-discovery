@@ -1,0 +1,8 @@
+=== Model: PySINDy | Dataset: boltzmann_entropy_low_noise ===
+
+Equation / Structure:
+1.738e+00*1 + 8.819e-02*omega + -3.126e+00*(1/omega) + 1.351e+00*(1/omega^2)
+
+Metrics:
+Test MSE: 1.230401e-04
+Test MAE: 9.089567e-03

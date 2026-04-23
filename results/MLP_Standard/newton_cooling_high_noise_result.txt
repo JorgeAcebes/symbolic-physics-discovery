@@ -1,0 +1,8 @@
+=== Model: MLP_Standard | Dataset: newton_cooling_high_noise ===
+
+Equation / Structure:
+Red Neuronal (standard)
+
+Metrics:
+Test MSE: 9.723534e-04
+Test MAE: 2.486407e-02

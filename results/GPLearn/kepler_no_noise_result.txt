@@ -1,0 +1,8 @@
+=== Model: GPLearn | Dataset: kepler_no_noise ===
+
+Equation / Structure:
+r**(3/2)
+
+Metrics:
+Test MSE: 3.414882e-13
+Test MAE: 4.037377e-07
