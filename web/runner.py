@@ -19,6 +19,9 @@ import matplotlib
 matplotlib.use("Agg")   # headless rendering
 import matplotlib.pyplot as plt
 
+from utils.utils import set_plot_style
+set_plot_style(for_paper=False)
+
 # ── Resolución estricta de topología de directorios ────────────────────────────
 WEB_DIR = Path(__file__).resolve().parent
 ROOT_DIR = WEB_DIR.parent
@@ -296,58 +299,77 @@ def _save_txt(output_dir, model_name, dataset_name, mse, mae, equation):
         f.write(f"Test MAE : {mae:.6e}\n")
 
 def _save_residuals(output_dir, model_name, dataset_name, y_true, y_pred, target_name):
-    eps       = 1e-8
-    abs_err   = np.abs(y_true - y_pred)
-    rel_err   = abs_err / (np.abs(y_true) + eps)
+    eps     = 1e-8
+    abs_err = np.abs(y_true - y_pred)
+    rel_err = abs_err / (np.abs(y_true) + eps)
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
-    ax1.scatter(y_true, abs_err, alpha=0.6, color="#38bdf8", s=10, rasterized=True)
-    ax1.axhline(0, color="#64748b", linestyle="--", linewidth=1)
-    ax1.set_title(f"Error Absoluto vs {target_name}")
-    ax1.set_xlabel(f"{target_name} real")
-    ax1.set_ylabel(f"|{target_name} − pred|")
-    ax1.set_facecolor("#0a0f1e")
-    ax1.tick_params(colors="#94a3b8")
-    for spine in ax1.spines.values():
-        spine.set_edgecolor("#1e2d45")
+    # ── Error Absoluto ──────────────────────────────────────────────────────────
+    ax1.scatter(y_true, abs_err, alpha=0.6, color="#003B5C", s=15, rasterized=True)
+    ax1.axhline(y=0, color="gray", linestyle="--", linewidth=1, alpha=0.5)
+    ax1.set_title(
+        r"\textbf{Error Absoluto vs Magnitud}"
+        if target_name is None
+        else rf"\textbf{{Error Absoluto vs ${target_name}$}}"
+    )
+    ax1.set_xlabel(
+        r"$y_{\text{real}}$"
+        if target_name is None
+        else rf"${target_name}$"
+    )
+    ax1.set_ylabel(
+        r"$|y_{\text{real}} - y_{\text{pred}}|$"
+        if target_name is None
+        else rf"$|{target_name} - \hat{{{target_name}}}|$"
+    )
 
-    ax2.scatter(y_true, rel_err, alpha=0.6, color="#f87171", s=10)
-    ax2.axhline(1, color="#64748b", linestyle="--", linewidth=1)
-    ax2.set_title(f"Error Relativo vs {target_name}")
-    ax2.set_xlabel(f"{target_name} real")
-    ax2.set_ylabel("Error relativo")
+    # ── Error Relativo (log) ────────────────────────────────────────────────────
+    ax2.scatter(y_true, rel_err, alpha=0.6, color="#C60C30", s=15)
+    ax2.axhline(y=1, color="gray", linestyle="--", linewidth=1, alpha=0.5)
+    ax2.set_title(
+        r"\textbf{Error Relativo vs Magnitud}"
+        if target_name is None
+        else rf"\textbf{{Error Relativo vs ${target_name}$}}"
+    )
+    ax2.set_xlabel(
+        r"$y_{\text{real}}$"
+        if target_name is None
+        else rf"${target_name}$"
+    )
+    ax2.set_ylabel(
+        r"$\epsilon_{\text{rel}}$"
+        if target_name is None
+        else rf"$\epsilon_{{\text{{rel}}}} = \frac{{|{target_name} - \hat{{{target_name}}}|}}{{|{target_name}|}}$"
+    )
     ax2.set_yscale("log")
-    ax2.set_facecolor("#0a0f1e")
-    ax2.tick_params(colors="#94a3b8")
-    for spine in ax2.spines.values():
-        spine.set_edgecolor("#1e2d45")
 
-    fig.patch.set_facecolor("#070a12")
-    plt.suptitle(f"{model_name} — Residuos ({dataset_name})", color="#e2e8f0", fontsize=13)
+    safe_model   = model_name.replace("_", r"\_")
+    safe_dataset = dataset_name.replace("_", r"\_")
+    plt.suptitle(f"{safe_model} — Análisis de Residuos ({safe_dataset})", fontsize=14)
     plt.tight_layout()
 
     out = _model_dir(output_dir, model_name) / f"{dataset_name}_residuals.png"
-    plt.savefig(str(out), bbox_inches="tight", dpi=150, facecolor=fig.get_facecolor())
+    plt.savefig(str(out), bbox_inches="tight")
     plt.close()
 
 def _save_loss_curve(output_dir, model_name, dataset_name, history):
-    fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(history["train_loss"], label="Train", color="#38bdf8", linewidth=1.5)
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    ax.plot(history["train_loss"], label="Train Loss")
     if history.get("val_loss"):
-        ax.plot(history["val_loss"], label="Validacion", color="#818cf8", linewidth=1.5)
-    ax.set_title(f"Convergencia: {model_name}", color="#e2e8f0")
-    ax.set_xlabel("Epoca", color="#94a3b8")
-    ax.set_ylabel("MSE", color="#94a3b8")
+        ax.plot(history["val_loss"], label="Validation Loss")
+
+    safe_model   = model_name.replace("_", r"\_")
+    safe_dataset = dataset_name.replace("_", r"\_")
+
+    ax.set_title(f"Convergencia: {safe_model} ({safe_dataset})")
+    ax.set_xlabel("Épocas / Generaciones")
+    ax.set_ylabel("MSE")
     ax.set_yscale("log")
-    ax.legend(facecolor="#0a0f1e", edgecolor="#1e2d45", labelcolor="#e2e8f0")
-    ax.set_facecolor("#0a0f1e")
-    ax.tick_params(colors="#94a3b8")
-    for spine in ax.spines.values():
-        spine.set_edgecolor("#1e2d45")
-    fig.patch.set_facecolor("#070a12")
+    ax.legend()
     plt.tight_layout()
 
     out = _model_dir(output_dir, model_name) / f"{dataset_name}_loss.png"
-    plt.savefig(str(out), bbox_inches="tight", dpi=150, facecolor=fig.get_facecolor())
+    plt.savefig(str(out), bbox_inches="tight")
     plt.close()

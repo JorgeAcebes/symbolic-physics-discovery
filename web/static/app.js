@@ -170,7 +170,7 @@ async function loadDefaultDatasets() {
     renderDatasetCards(data);
   } catch {
     $("dataset-grid").innerHTML =
-      `<p style="color:var(--text-muted);font-size:13px">⚠ No se pudieron cargar datasets. ¿Está en la carpeta data/?</p>`;
+      `<p style="color:var(--text-muted);font-size:13px">No se pudieron cargar datasets. ¿Está en la carpeta data/?</p>`;
   }
 }
 
