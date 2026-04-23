@@ -71,13 +71,6 @@ if datasets_manuales:
 
 # Conjunto de archivos que se procesarán. Deben estar ubicados en la carpeta data 
 def run_all_experiments():
-    datasets_info = [
-        # {"file": "oscillator_no_noise.csv", "target": "F"},
-        # {"file": "kepler_no_noise.csv", "target": "T"},
-        {"file": "coulomb_no_noise.csv", "target": "F"},
-        {"file": "ideal_gas_no_noise.csv", "target": "P"}
-    ]
-
 
     for ds in datasets_info:
         base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) # Establecemos la ruta de la raíz del proyecto
