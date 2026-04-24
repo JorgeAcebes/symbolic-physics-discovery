@@ -93,7 +93,7 @@ symbolic-physics-discovery/
 │   ├── aggregate_hyperparams.py # Aggregation of Optuna results
 │   ├── data/
 │   │   ├── loader.py            # PhysicalDataset — data ingestion & preprocessing
-│   │   └── data_generator.py   # Synthetic dataset generator
+│   │   └── data_generator.py    # Synthetic dataset generator
 │   ├── models/
 │   │   ├── base.py              # Abstract PhysicalModel interface
 │   │   ├── mlp.py               # MLP wrappers (Standard, Sparse, Dropout)
@@ -132,12 +132,6 @@ symbolic-physics-discovery/
 │   └── README.md
 │
 ├── docs/                        # LaTeX source for the technical report
-│   └── README.md
-│
-├── LJ_github/                   # Standalone PySR + Optuna hyperparameter search module
-│   ├── pysr_optuna.py           # Multi-objective Optuna study for PySR
-│   ├── shell_hiperparam_optim.py
-│   ├── results_main/
 │   └── README.md
 │
 ├── requirements.txt
