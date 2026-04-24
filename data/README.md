@@ -72,22 +72,6 @@ import numpy as np
 data = np.load("data/data_ood/kepler_ood_data.npz")
 X_ood, y_ood = data["X_ood"], data["y_ood"]
 ```
-
----
-
-## Regenerating the Datasets
-
-To regenerate all CSVs and OOD arrays from scratch:
-
-```bash
-cd src
-python data/data_generator.py
-```
-
-This will overwrite the existing files in `data/` and `data/data_ood/`.
-
-> **Reproducibility:** The generator uses `numpy.random.seed(1)` to guarantee identical outputs across runs.
-
 ---
 
 ## Naming Convention
