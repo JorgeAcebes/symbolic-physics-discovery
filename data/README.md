@@ -22,7 +22,7 @@ This produces **27 CSV files** covering 9 laws × 3 noise levels.
 
 | File prefix | Physical law | Target column | Input columns |
 |---|---|---|---|
-| `kepler` | Kepler's Third Law — *T² ∝ a³* | `T` | `a`, `M` |
+| `kepler` | Kepler's Third Law — *T² ∝ a³* | `T` | `a`|
 | `coulomb` | Coulomb's Law — *F = kq₁q₂/r²* | `F` | `q1`, `q2`, `r` |
 | `oscillator` | Harmonic Oscillator — *F = −kx* | `F` | `k`, `x` |
 | `boltzmann_entropy` | Boltzmann Entropy — *S = k_B ln Ω* | `S` | `Omega` |
