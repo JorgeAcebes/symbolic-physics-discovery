@@ -15,7 +15,6 @@ from sympy.parsing.sympy_parser import (
     convert_xor
 )
 
-
 # --- RUTAS DE DIRECTORIO ---
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATA_OOD_DIR = os.path.abspath(os.path.join(BASE_DIR, "../data/data_ood"))
@@ -46,25 +45,37 @@ FEATURE_MAP = {
 # 1. GENERACIÓN DE DATOS OOD (Física)
 # ==========================================
 
-def coulomb_law(q1, q2, r): return (q1 * q2) / (r**2)
+def coulomb_law(q1, q2, r):
+    return (q1 * q2) / (r**2)
 
-def harmonic_oscillator(x): return -x
+def harmonic_oscillator(x):
+    return -x
 
-def kepler_third_law(r): return np.sqrt(r**3)
+def kepler_third_law(r): 
+    return np.sqrt(r**3)
 
-def ideal_gas_law(n, T, V): return (n * T) / V
+def ideal_gas_law(n, T, V): 
+    return (n * T) / V
 
-def projectile_range(v0, theta): return v0**2 * np.sin(2 * theta)
+def projectile_range(v0, theta): 
+    return v0**2 * np.sin(2 * theta)
 
-def time_dilation(t, v): return t / np.sqrt(1 - v**2)
+def time_dilation(t, v): 
+    return t / np.sqrt(1 - v**2)
 
-def radioactive_decay(lam, t): return np.exp(-lam * t)
+def radioactive_decay(lam, t): 
+    return np.exp(-lam * t)
 
 def newton_cooling(k, t):
     T_AMB, T0 = 1.0, 2.0
     return T_AMB + (T0 - T_AMB) * np.exp(-k * t)
 
-def boltzmann_entropy(omega): return np.log(omega)
+def boltzmann_entropy(omega): 
+    return np.log(omega)
+
+
+# Vamos a generar los datos sin ningún tipo de ruido. Si no logran tener un buen 
+# MAE aquí, entonces el modelo es nefasto.
 
 def generate_ood_data(law_name):
     """Genera datos en un dominio OOD."""
@@ -92,7 +103,8 @@ def generate_ood_data(law_name):
 
     elif law_name == "time_dilation":
         t = np.random.uniform(3.0, 6.0, N_SAMPLES)
-        v = np.random.uniform(0.96, 0.999, N_SAMPLES)
+        v = np.random.uniform(0.96, 0.999, N_SAMPLES) # No podía aumentar v > 1
+        # así que nos centramos cerca de 1, donde la física se vuelve interesante
         return np.column_stack((t, v)), time_dilation(t, v)
 
     elif law_name == "radioactive_decay":
@@ -113,19 +125,24 @@ def generate_ood_data(law_name):
 # 2. CARGA DE MODELOS Y PREDICCIÓN
 # ==========================================
 def load_and_predict(weights_path, X_ood, law):
-    with open(weights_path, 'r') as f:
+    with open(weights_path, 'r') as f: # Obtenemos la función o los pesos
         model_data = json.load(f)
 
+    # Definimos las transformaciones que vamos a aplicar a la expresión
+    # Implicit_multiplication: xy = x*y
+    # Convert_xor: x^y = x**y
+    # standard_transfomations: transformaciones que ya tiene implimentado sympy
     transformations = standard_transformations + (implicit_multiplication_application, convert_xor)
-    syms = [sp.Symbol(name) for name in FEATURE_MAP[law]]
-    n_samples = X_ood.shape[0]
+    syms = [sp.Symbol(name) for name in FEATURE_MAP[law]] # Instanciamos como símbolos de sympy los
+    # símbolos formato strings para cierta ley que haya en FEATURE MAP
+    n_samples = X_ood.shape[0] # Cuántos datos tenemos para esa ley
 
     def safe_evaluate(f):
-        y_pred = f(*X_ood.T)
+        y_pred = f(*X_ood.T) # Evaluamos todos los features de manera "desempacada" con la función obtenida
 
         if isinstance(y_pred, sp.Basic):
             try:
-                y_pred = float(y_pred)
+                y_pred = float(y_pred) # La intentamos convertir a float
             except TypeError:
                 raise RuntimeError(
                     f"Símbolos no resueltos en la expresión.\n"
@@ -137,6 +154,7 @@ def load_and_predict(weights_path, X_ood, law):
 
         return np.array(y_pred, dtype=float).flatten()
 
+    # Otra limpieza por si acaso
     def clean_str(eq):
         """Sanea el dialecto algebraico del modelo hacia sintaxis evaluable."""
         eq = str(eq).replace('^', '**')
@@ -152,7 +170,6 @@ def load_and_predict(weights_path, X_ood, law):
     # ---------------------------------------------------------
     if "MLP" in weights_path:
         from src.models.mlp import MLPWrapper
-
         if "Standard" in weights_path:
             model_type = 'standard'
         elif "Sparse" in weights_path:
@@ -174,8 +191,9 @@ def load_and_predict(weights_path, X_ood, law):
     # 2. Regresión Simbólica Pura (PySR, GPLearn, QLattice)
     # ---------------------------------------------------------
     elif any(m in weights_path for m in ["PySR", "GPLearn", "QLattice"]):
-        eq_str = model_data["best_equation"] if "PySR" in weights_path else model_data["equation"]
+        eq_str = model_data["best_equation"] if "PySR" in weights_path else model_data["equation"] # Obtenemos lo que ponga best_equation o equation
         
+        # Limpiamos la ecuación y le aplicamos el resto de transformaciones en caso de que sea necesario
         expr = parse_expr(clean_str(eq_str), local_dict=local_math, transformations=transformations)
         f = lambdify(syms, expr, "numpy")
         return safe_evaluate(f)
