@@ -1,8 +1,0 @@
-=== Model: GPLearn | Dataset: coulomb_no_noise ===
-
-Equation / Structure:
-q1*q2/r**2
-
-Metrics:
-Test MSE: 3.014598e-13
-Test MAE: 2.418464e-07

@@ -270,6 +270,25 @@ if __name__ == "__main__":
     with open(os.path.join(RESULTS_OOD_DIR, "ood_metrics_summary.json"), 'w') as f:
         json.dump(results, f, indent=4)
     
+    # Diccionarios de jerarquía para el eje X
+    MODEL_ORDER = {
+        "PySR": 0,
+        "GPLearn": 1,
+        "QLattice": 2,
+        "MLP_Sparse": 3,
+        "MLP_Standard": 4,
+        "MLP_Dropout": 5,
+        "PySINDy": 6,
+        "Polynomial": 7
+    }
+    
+    NOISE_ORDER = {
+        "no": 0,
+        "low": 1,
+        "high": 2
+    }
+
+    # 2. Generación de Gráficos (Barplot logarítmico ordenado)
     for law, models_data in results.items():
         valid_models = []
         mses = []
@@ -282,16 +301,32 @@ if __name__ == "__main__":
         if not valid_models:
             continue
 
-        # Ordenar modelos de menor a mayor MSE
-        sorted_indices = np.argsort(mses)
-        valid_models = [valid_models[i] for i in sorted_indices]
-        mses = [mses[i] for i in sorted_indices]
+        # Ordenamiento jerárquico explícito
+        def custom_sort_key(tag):
+            # El formato del tag es {modelo}_{ruido}_noise (ej. MLP_Sparse_low_noise)
+            parts = tag.split('_')
+            
+            # Aislamos el nivel de ruido (penúltima palabra) y el nombre de la arquitectura
+            noise_val = parts[-2] if len(parts) >= 2 and parts[-1] == "noise" else "unknown"
+            model_val = "_".join(parts[:-2]) if noise_val != "unknown" else tag
+            
+            # Asignamos el peso de la tupla (jerarquía principal: Modelo, secundaria: Ruido)
+            # Si no se encuentra en el diccionario, se le da un peso de 99 (va al final)
+            m_idx = MODEL_ORDER.get(model_val, 99)
+            n_idx = NOISE_ORDER.get(noise_val, 99)
+            
+            return (m_idx, n_idx)
+
+        # Aplicamos la ordenación a los arrays empaquetados
+        sorted_pairs = sorted(zip(valid_models, mses), key=lambda x: custom_sort_key(x[0]))
+        valid_models = [p[0] for p in sorted_pairs]
+        mses = [p[1] for p in sorted_pairs]
 
         # Transformación léxica: "coulomb_law" -> "Coulomb Law", "MLP_low_noise" -> "Mlp Low Noise"
         formatted_models = [name.replace('_', ' ').title() for name in valid_models]
         formatted_law = law.replace('_', ' ').title()
 
-        # Corrección específica si quieres preservar siglas en mayúsculas (ej. MLP, PySR)
+        # Corrección estricta de siglas
         for i in range(len(formatted_models)):
             for acronym in ["Mlp", "Pysr", "Pysindy"]:
                 if acronym in formatted_models[i]:
@@ -305,7 +340,7 @@ if __name__ == "__main__":
         ax.set_xlabel('Arquitectura de Modelo y Nivel de Ruido')
         ax.set_title(f'Evaluación Extrapolada (OOD) - {formatted_law}')
         
-        # Formateo del eje X
+        # Formateo del eje categórico
         ax.set_xticks(range(len(formatted_models)))
         ax.set_xticklabels(formatted_models, rotation=45, ha='right')
         

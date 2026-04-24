@@ -1,4 +1,0 @@
-{
-  "best_program": "div(mul(n, T), V)",
-  "equation": "T*n/V"
-}

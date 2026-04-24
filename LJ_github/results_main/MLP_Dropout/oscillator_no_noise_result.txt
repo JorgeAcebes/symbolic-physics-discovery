@@ -1,8 +1,0 @@
-=== Model: MLP_Dropout | Dataset: oscillator_no_noise ===
-
-Equation / Structure:
-Red Neuronal (dropout)
-
-Metrics:
-Test MSE: 2.451602e-02
-Test MAE: 1.110420e-01

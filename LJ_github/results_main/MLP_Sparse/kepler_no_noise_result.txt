@@ -1,8 +1,0 @@
-=== Model: MLP_Sparse | Dataset: kepler_no_noise ===
-
-Equation / Structure:
-Red Neuronal (sparse)
-
-Metrics:
-Test MSE: 2.677294e-02
-Test MAE: 1.063532e-01
