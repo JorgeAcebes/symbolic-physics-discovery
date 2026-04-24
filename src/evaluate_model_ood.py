@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import os
 import sys
 import json
@@ -7,6 +8,7 @@ import warnings
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import torch
 import re
+import random
 import sympy as sp
 from sympy import lambdify
 from sympy.parsing.sympy_parser import (
@@ -15,6 +17,17 @@ from sympy.parsing.sympy_parser import (
     implicit_multiplication_application,
     convert_xor
 )
+
+def set_seed(seed=42):
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    random.seed(seed)
+    # Si usas GPU con Torch
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
+set_seed(42)
+
 
 # --- RUTAS DE DIRECTORIO ---
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -26,6 +39,8 @@ os.makedirs(DATA_OOD_DIR, exist_ok=True)
 os.makedirs(RESULTS_OOD_DIR, exist_ok=True)
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.utils import set_plot_style
+set_plot_style(for_paper=True)
 N_SAMPLES = 5000
 
 # Base vectorial estricta del espacio de entrada
@@ -254,5 +269,49 @@ if __name__ == "__main__":
 
     with open(os.path.join(RESULTS_OOD_DIR, "ood_metrics_summary.json"), 'w') as f:
         json.dump(results, f, indent=4)
+    
+    for law, models_data in results.items():
+        valid_models = []
+        mses = []
+        
+        for tag, metrics in models_data.items():
+            if metrics.get("MSE") is not None:
+                valid_models.append(tag)
+                mses.append(metrics["MSE"])
+        
+        if not valid_models:
+            continue
 
+        # Ordenar modelos de menor a mayor MSE
+        sorted_indices = np.argsort(mses)
+        valid_models = [valid_models[i] for i in sorted_indices]
+        mses = [mses[i] for i in sorted_indices]
+
+        # Transformación léxica: "coulomb_law" -> "Coulomb Law", "MLP_low_noise" -> "Mlp Low Noise"
+        formatted_models = [name.replace('_', ' ').title() for name in valid_models]
+        formatted_law = law.replace('_', ' ').title()
+
+        # Corrección específica si quieres preservar siglas en mayúsculas (ej. MLP, PySR)
+        for i in range(len(formatted_models)):
+            for acronym in ["Mlp", "Pysr", "Pysindy"]:
+                if acronym in formatted_models[i]:
+                    formatted_models[i] = formatted_models[i].replace(acronym, acronym.upper())
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.bar(formatted_models, mses, color='steelblue', edgecolor='black')
+        
+        ax.set_yscale('log')
+        ax.set_ylabel('MSE (Escala Logarítmica)')
+        ax.set_xlabel('Arquitectura de Modelo y Nivel de Ruido')
+        ax.set_title(f'Evaluación Extrapolada (OOD) - {formatted_law}')
+        
+        # Formateo del eje X
+        ax.set_xticks(range(len(formatted_models)))
+        ax.set_xticklabels(formatted_models, rotation=45, ha='right')
+        
+        fig.tight_layout()
+        plot_path = os.path.join(RESULTS_OOD_DIR, f"{law}_mse_ood.png")
+        fig.savefig(plot_path)
+        plt.close(fig)
+        
     print(f"\nEvaluación finalizada. Resultados en: {RESULTS_OOD_DIR}")

@@ -11,7 +11,7 @@ def set_plot_style(for_paper=False):
         "xtick.labelsize": 10,
         "ytick.labelsize": 10,
         "axes.grid": False if for_paper else True,
-        "grid.alpha": 0.3,
+        "grid.alpha": 0 if for_paper else 0.3,
         "lines.linewidth": 1.5,
         "figure.titlesize": 14,
         "savefig.dpi": 300 if for_paper else 150,
