@@ -1,0 +1,40 @@
+{
+  "best_equation": "v0**2*sin(theta + theta)",
+  "all_equations": [
+    {
+      "equation": "v0",
+      "loss": 3.1657107,
+      "complexity": 1
+    },
+    {
+      "equation": "square(v0)",
+      "loss": 2.7163575,
+      "complexity": 2
+    },
+    {
+      "equation": "v0 ^ 1.6451234",
+      "loss": 1.2329515,
+      "complexity": 3
+    },
+    {
+      "equation": "square(v0 * 0.847761)",
+      "loss": 1.1743422,
+      "complexity": 4
+    },
+    {
+      "equation": "(v0 * 0.85075736) ^ 1.9903536",
+      "loss": 1.1743054,
+      "complexity": 5
+    },
+    {
+      "equation": "square(v0 * sin(inv(theta)))",
+      "loss": 1.0974672,
+      "complexity": 6
+    },
+    {
+      "equation": "sin(theta + theta) * square(v0)",
+      "loss": 2.1367823e-12,
+      "complexity": 7
+    }
+  ]
+}

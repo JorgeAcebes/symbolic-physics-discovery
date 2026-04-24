@@ -1,0 +1,4 @@
+{
+  "best_program": "mul(mul(sqrt(v0), v0), sqrt(log(add(theta, -0.761))))",
+  "equation": "v0**(3/2)*sqrt(log(theta - 0.761))"
+}

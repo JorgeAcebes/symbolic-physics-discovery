@@ -1,0 +1,30 @@
+{
+  "best_equation": "r**1.5005707",
+  "all_equations": [
+    {
+      "equation": "r",
+      "loss": 0.8915105,
+      "complexity": 1
+    },
+    {
+      "equation": "r ^ 1.5005707",
+      "loss": 0.023582276,
+      "complexity": 3
+    },
+    {
+      "equation": "(r ^ 1.4987192) / 0.99831563",
+      "loss": 0.02358062,
+      "complexity": 5
+    },
+    {
+      "equation": "((r + -0.006747428) ^ 1.4927416) / 0.9888317",
+      "loss": 0.023577737,
+      "complexity": 7
+    },
+    {
+      "equation": "(((r + -0.03329413) ^ 1.4803205) + 0.014977531) * 1.0352745",
+      "loss": 0.023576576,
+      "complexity": 9
+    }
+  ]
+}

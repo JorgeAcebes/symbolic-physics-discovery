@@ -1,0 +1,55 @@
+{
+  "best_equation": "log(omega)",
+  "all_equations": [
+    {
+      "equation": "1.5648003",
+      "loss": 0.3481504,
+      "complexity": 1
+    },
+    {
+      "equation": "log(omega)",
+      "loss": 0.0034559434,
+      "complexity": 2
+    },
+    {
+      "equation": "log(omega) * 0.999727",
+      "loss": 0.0034557348,
+      "complexity": 4
+    },
+    {
+      "equation": "log((omega * 0.999066) + 0.002083059)",
+      "loss": 0.0034555995,
+      "complexity": 6
+    },
+    {
+      "equation": "log(omega) + (4.343919e-6 / sin(omega))",
+      "loss": 0.0034547476,
+      "complexity": 7
+    },
+    {
+      "equation": "(0.00010085449 / (1.1674509 - omega)) + log(omega)",
+      "loss": 0.0034534167,
+      "complexity": 8
+    },
+    {
+      "equation": "(-4.4472483e-5 / sin(omega * 1.3237123)) + log(omega)",
+      "loss": 0.003451665,
+      "complexity": 9
+    },
+    {
+      "equation": "(-4.6657362e-5 / sin(omega / sin(omega))) + log(omega)",
+      "loss": 0.0034475352,
+      "complexity": 10
+    },
+    {
+      "equation": "(-1.6087448e-8 / square(sin(omega / sin(omega)))) + log(omega)",
+      "loss": 0.0034449876,
+      "complexity": 11
+    },
+    {
+      "equation": "(log(omega) + (-1.6087448e-8 / square(sin(omega / sin(omega))))) * 0.9997632",
+      "loss": 0.0034448178,
+      "complexity": 13
+    }
+  ]
+}

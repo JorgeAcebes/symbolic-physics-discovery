@@ -1,0 +1,4 @@
+{
+  "best_program": "add(mul(t, v), t)",
+  "equation": "t*(v + 1)"
+}

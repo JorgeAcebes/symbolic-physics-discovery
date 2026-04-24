@@ -1,0 +1,40 @@
+{
+  "best_equation": "0.0019095138 - x",
+  "all_equations": [
+    {
+      "equation": "-0.016613344",
+      "loss": 1.3506515,
+      "complexity": 1
+    },
+    {
+      "equation": "0.0019095138 - x",
+      "loss": 0.01340329,
+      "complexity": 3
+    },
+    {
+      "equation": "(0.0018847946 - x) * 0.99924386",
+      "loss": 0.013402538,
+      "complexity": 5
+    },
+    {
+      "equation": "(exp(x) * 0.0008386836) - x",
+      "loss": 0.013402024,
+      "complexity": 6
+    },
+    {
+      "equation": "(-7.8151534e-5 / (x - 1.5304494)) - x",
+      "loss": 0.013383497,
+      "complexity": 7
+    },
+    {
+      "equation": "(inv(x + 0.5671465) * 3.3575903e-5) - x",
+      "loss": 0.013378769,
+      "complexity": 8
+    },
+    {
+      "equation": "((inv(x + 0.5671465) + 43.536797) * 3.4445417e-5) - x",
+      "loss": 0.013375198,
+      "complexity": 10
+    }
+  ]
+}

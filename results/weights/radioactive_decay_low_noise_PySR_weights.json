@@ -1,0 +1,65 @@
+{
+  "best_equation": "exp(t)**(-lambd)",
+  "all_equations": [
+    {
+      "equation": "0.36588907",
+      "loss": 0.08818489,
+      "complexity": 1
+    },
+    {
+      "equation": "0.43140733 ^ t",
+      "loss": 0.038796432,
+      "complexity": 3
+    },
+    {
+      "equation": "square(0.65684396 ^ t)",
+      "loss": 0.03879643,
+      "complexity": 4
+    },
+    {
+      "equation": "inv(exp(t) ^ lambd)",
+      "loss": 9.059044e-06,
+      "complexity": 5
+    },
+    {
+      "equation": "exp(lambd * -0.99995595) ^ t",
+      "loss": 9.0588965e-06,
+      "complexity": 6
+    },
+    {
+      "equation": "inv(exp(t) ^ lambd) + 4.5192188e-5",
+      "loss": 9.057001e-06,
+      "complexity": 7
+    },
+    {
+      "equation": "(exp(lambd * -1.0007169) ^ t) - -0.00021524086",
+      "loss": 9.052308e-06,
+      "complexity": 8
+    },
+    {
+      "equation": "inv(exp(t * 1.0006984) ^ lambd) + 0.00021117573",
+      "loss": 9.052275e-06,
+      "complexity": 9
+    },
+    {
+      "equation": "(1.139404e-6 / cos(lambd)) + inv(exp(t * lambd))",
+      "loss": 9.05102e-06,
+      "complexity": 10
+    },
+    {
+      "equation": "inv(exp(lambd * t)) + (1.139404e-6 / sin(cos(lambd)))",
+      "loss": 9.051018e-06,
+      "complexity": 11
+    },
+    {
+      "equation": "inv(exp(t * lambd)) + (1.4623865e-6 / cos(-0.39764908 - lambd))",
+      "loss": 9.047388e-06,
+      "complexity": 12
+    },
+    {
+      "equation": "inv(exp(t * lambd)) + (2.4219928e-6 / cos(-1.0049587 - cos(lambd)))",
+      "loss": 9.0385e-06,
+      "complexity": 13
+    }
+  ]
+}

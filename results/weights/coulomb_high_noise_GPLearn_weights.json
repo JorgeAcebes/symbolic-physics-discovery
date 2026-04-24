@@ -1,0 +1,4 @@
+{
+  "best_program": "div(mul(mul(q1, q2), inv(r)), r)",
+  "equation": "q1*q2/r**2"
+}

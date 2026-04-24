@@ -1,0 +1,50 @@
+{
+  "best_equation": "T*n/V",
+  "all_equations": [
+    {
+      "equation": "T",
+      "loss": 0.7566076,
+      "complexity": 1
+    },
+    {
+      "equation": "T / V",
+      "loss": 0.4313946,
+      "complexity": 3
+    },
+    {
+      "equation": "exp(T - V)",
+      "loss": 0.41045254,
+      "complexity": 4
+    },
+    {
+      "equation": "(n * T) / V",
+      "loss": 0.009656058,
+      "complexity": 5
+    },
+    {
+      "equation": "n * ((T / V) + -0.0016903324)",
+      "loss": 0.009651121,
+      "complexity": 7
+    },
+    {
+      "equation": "n * (((T ^ 0.99892014) / V) - 0.0013381975)",
+      "loss": 0.009650565,
+      "complexity": 9
+    },
+    {
+      "equation": "n * ((T / V) - square(log(T) * 0.099126056))",
+      "loss": 0.009647811,
+      "complexity": 11
+    },
+    {
+      "equation": "n * ((T / V) - (square(1.2469518 - T) * 0.009849625))",
+      "loss": 0.0096452935,
+      "complexity": 12
+    },
+    {
+      "equation": "((T / V) - (square(sin(1.246894 - T)) * 0.011512962)) * n",
+      "loss": 0.0096448315,
+      "complexity": 13
+    }
+  ]
+}

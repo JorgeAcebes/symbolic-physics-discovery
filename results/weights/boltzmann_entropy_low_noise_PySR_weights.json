@@ -1,0 +1,50 @@
+{
+  "best_equation": "log(omega)",
+  "all_equations": [
+    {
+      "equation": "1.5650192",
+      "loss": 0.3449801,
+      "complexity": 1
+    },
+    {
+      "equation": "log(omega)",
+      "loss": 3.458127e-05,
+      "complexity": 2
+    },
+    {
+      "equation": "log(omega * 0.99992454)",
+      "loss": 3.457415e-05,
+      "complexity": 4
+    },
+    {
+      "equation": "log(omega * cos(-0.013556342))",
+      "loss": 3.4574125e-05,
+      "complexity": 5
+    },
+    {
+      "equation": "log(omega * 2.1543689) - 0.7675827",
+      "loss": 3.4574063e-05,
+      "complexity": 6
+    },
+    {
+      "equation": "log((cos(omega) * 0.0009464486) + omega)",
+      "loss": 3.4553777e-05,
+      "complexity": 7
+    },
+    {
+      "equation": "log((cos(omega / 0.0030322303) * 0.001067171) + omega)",
+      "loss": 3.45106e-05,
+      "complexity": 9
+    },
+    {
+      "equation": "log((cos((omega + -0.19123176) / 0.0030322303) * 0.001067171) + omega)",
+      "loss": 3.4506185e-05,
+      "complexity": 11
+    },
+    {
+      "equation": "log(((cos(omega / 0.0030322305) + cos(omega)) * 0.0010671709) + omega)",
+      "loss": 3.4484958e-05,
+      "complexity": 12
+    }
+  ]
+}
