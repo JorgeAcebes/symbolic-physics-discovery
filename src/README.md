@@ -1,6 +1,6 @@
 # Arquitectura y Pipeline de Modelos (`src/`)
 
-Este directorio contiene el pipeline de experimentación para el descubrimiento de leyes físicas a partir de datos estocásticos. La arquitectura está diseñada para garantizar rigor numérico: todos los modelos (neuronales, algebraicos o evolutivos) compiten bajo las mismas particiones de datos y se evalúan estrictamente en el espacio físico dimensional, no en el espacio escalado.
+Este directorio contiene el pipeline de experimentación para el descubrimiento de leyes físicas a partir de datos estocásticos.
 
 ## 1. Estructura del Directorio
 
