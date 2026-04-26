@@ -53,7 +53,7 @@ All experiments are **fully reproducible** (seed 42 throughout) and metrics are 
 | `oscillator` | Harmonic Oscillator | Force $F$ |
 | `boltzmann_entropy` | Boltzmann Entropy | Entropy $S$ |
 | `ideal_gas` | Ideal Gas Law | Pressure $P$ |
-| `newton_cooling` | Newton's Law of Cooling | Rate d$T$/d$t$ |
+| `newton_cooling` | Newton's Law of Cooling | Rate d*T*/d*t* |
 | `projectile_range` | Projectile Range | Range $R$ |
 | `radioactive_decay` | Radioactive Decay | Number of Particles $N$ |
 | `time_dilation` | Time Dilation | Dilated time $t'$ |
