@@ -22,15 +22,15 @@ This produces **27 CSV files** covering 9 laws × 3 noise levels.
 
 | File prefix | Physical law | Target column | Input columns |
 |---|---|---|---|
-| `kepler` | Kepler's Third Law — *T² ∝ a³* | `T` | `a`|
-| `coulomb` | Coulomb's Law — *F = kq₁q₂/r²* | `F` | `q1`, `q2`, `r` |
-| `oscillator` | Harmonic Oscillator — *F = −kx* | `F` | `k`, `x` |
-| `boltzmann_entropy` | Boltzmann Entropy — *S = k_B ln Ω* | `S` | `Omega` |
-| `ideal_gas` | Ideal Gas Law — *PV = nRT* | `P` | `n`, `R`, `T`, `V` |
-| `newton_cooling` | Newton's Law of Cooling | `dT_dt` | `T`, `T_env`, `k` |
-| `projectile_range` | Projectile Range — *R = v²sin(2θ)/g* | `R` | `v`, `theta`, `g` |
-| `radioactive_decay` | Radioactive Decay — *A = λN* | `A` | `lambda`, `N` |
-| `time_dilation` | Special Relativity — Time Dilation | `t_prime` | `t`, `v`, `c` |
+| `coulomb` | Coulomb's Law: $F = kq_1q_2/r^2$ | `F` | `q1`, `q2`, `r` |
+| `oscillator` | Harmonic Oscillator: $F = −x$ | `F` | `x` |
+| `kepler` | Kepler's Third Law: $T = a^{3/2}$ | `T` | `a` |
+| `ideal_gas` | Ideal Gas Law: $P = nT/V$ | `P` | `n`, `T`, `V` |
+| `projectile_range` | Projectile Range: $R = v^2 sin(2\theta)$ | `R` | `v`, `theta` |
+| `time_dilation` | Time Dilation: $\frac{t}{np.sqrt(1 - v^2)}$ | `t_prime` | `t`, `v` |
+| `radioactive_decay` | Radioactive Decay: $N = \exp{-\lambda * t}$ | `A` | `lambda_`, `N` |
+| `newton_cooling` | Newton's Law of Cooling: $1 + \exp{-k * t}$ | `dT_dt` | `k`, `t` |
+| `boltzmann_entropy` | Boltzmann Entropy: $S = \ln \Omega$ | `S` | `Omega` |
 
 ---
 
