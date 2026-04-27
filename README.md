@@ -48,15 +48,16 @@ All experiments are **fully reproducible** (seed 42 throughout) and metrics are 
 
 | Dataset file prefix | Law | Target variable |
 |---|---|---|
-| `kepler` | Kepler's Third Law | Period *T* |
 | `coulomb` | Coulomb's Law | Force $F$ |
 | `oscillator` | Harmonic Oscillator | Force $F$ |
-| `boltzmann_entropy` | Boltzmann Entropy | Entropy $S$ |
+| `kepler` | Kepler's Third Law | Period *T* |
 | `ideal_gas` | Ideal Gas Law | Pressure $P$ |
-| `newton_cooling` | Newton's Law of Cooling | Rate d*T*/d*t* |
 | `projectile_range` | Projectile Range | Range $R$ |
-| `radioactive_decay` | Radioactive Decay | Number of Particles $N$ |
 | `time_dilation` | Time Dilation | Dilated time $t'$ |
+| `radioactive_decay` | Radioactive Decay | Number of Particles $N$ |
+| `newton_cooling` | Newton's Law of Cooling | Rate d*T*/d*t* |
+| `boltzmann_entropy` | Boltzmann Entropy | Entropy $S$ |
+
 
 Each law is provided at **three noise levels**: `no_noise`, `low_noise`, `high_noise` (27 CSV files total).
 
