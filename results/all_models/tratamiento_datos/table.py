@@ -296,13 +296,13 @@ def main():
     generate_latex_winners(law_analysis, base_dir / "best_models.tex")
 
     # =========================
-    print("\n🏆 RANKING GLOBAL:\n")
+    print("\nRANKING GLOBAL:\n")
     print(ranking)
 
-    print("\n🔬 MEJOR MODELO POR LEY:\n")
+    print("\nMEJOR MODELO POR LEY:\n")
     print(law_analysis)
 
-    print("\n✅ Todo generado en:", base_dir)
+    print("\nTodo generado en:", base_dir)
     
     generate_latex_ranking(ranking, base_dir / "ranking_models.tex")
 
