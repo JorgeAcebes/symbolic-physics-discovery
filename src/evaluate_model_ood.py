@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import os
 import sys
 import json
@@ -220,6 +221,7 @@ def load_and_predict(weights_path, X_ood, law):
 # 3. EVALUACIÓN DE OOD
 # ==========================================
 if __name__ == "__main__":
+
     laws = [
         "coulomb", "oscillator", "kepler", "ideal_gas",
         "projectile_range", "time_dilation", "radioactive_decay",
@@ -272,14 +274,14 @@ if __name__ == "__main__":
     
     # Diccionarios de jerarquía para el eje X
     MODEL_ORDER = {
-        "PySR": 0,
-        "GPLearn": 1,
-        "QLattice": 2,
-        "MLP_Sparse": 3,
-        "MLP_Standard": 4,
-        "MLP_Dropout": 5,
-        "PySINDy": 6,
-        "Polynomial": 7
+        "Polynomial": 0,
+        "MLP_Standard": 1,
+        "MLP_Sparse": 2,
+        "MLP_Dropout": 3,
+        "PySR": 4,
+        "QLattice": 5,
+        "GPLearn": 6,
+        "PySINDy": 7
     }
     
     NOISE_ORDER = {
@@ -333,9 +335,14 @@ if __name__ == "__main__":
                     formatted_models[i] = formatted_models[i].replace(acronym, acronym.upper())
 
         fig, ax = plt.subplots(figsize=(10, 6))
-        ax.bar(formatted_models, mses, color='steelblue', edgecolor='black')
-        
+        colors = [
+            'green' if m < 1e-4 else 'orange' if m < 1e-2 else 'red' 
+            for m in mses
+        ]
+        ax.bar(formatted_models, mses, color=colors, edgecolor='black', alpha=0.5)            
+
         ax.set_yscale('log')
+        ax.set_ylim(1e-8, 1e3)  
         ax.set_ylabel('MSE (Escala Logarítmica)')
         ax.set_xlabel('Arquitectura de Modelo y Nivel de Ruido')
         ax.set_title(f'Evaluación Extrapolada (OOD) - {formatted_law}')
@@ -343,6 +350,13 @@ if __name__ == "__main__":
         # Formateo del eje categórico
         ax.set_xticks(range(len(formatted_models)))
         ax.set_xticklabels(formatted_models, rotation=45, ha='right')
+
+        green_patch = mpatches.Patch(color='green', alpha=0.5, label=r'$MSE < 10^{-4}$')
+        orange_patch = mpatches.Patch(color='orange', alpha=0.5, label=r'$10^{-4} \leq MSE < 10^{-2}$')
+        red_patch = mpatches.Patch(color='red', alpha=0.5, label=r'$MSE \geq 10^{-2}$')
+
+        # 4. Añadir la leyenda al eje
+        ax.legend(handles=[green_patch, orange_patch, red_patch], loc='upper right')
         
         fig.tight_layout()
         plot_path = os.path.join(RESULTS_OOD_DIR, f"{law}_mse_ood.png")
