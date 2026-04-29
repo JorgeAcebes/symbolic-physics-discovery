@@ -49,7 +49,19 @@ MODEL_ORDER = [
     "Polynomial", "MLP_Standard", "MLP_Sparse", "MLP_Dropout"
 ]
 
-MODEL_HEADER = {m: m.replace("_", " ") for m in MODEL_ORDER}
+# 🔥 TRADUCCIÓN A ESPAÑOL
+MODEL_ES = {
+    "GPLearn": "GPLearn",
+    "PySR": "PySR",
+    "QLattice": "QLattice",
+    "PySINDy": "PySINDy",
+    "Polynomial": "Polinomial",
+    "MLP_Standard": "Red Neuronal",
+    "MLP_Sparse": "Red Neuronal (Sparse)",
+    "MLP_Dropout": "Red Neuronal (Dropout)"
+}
+
+MODEL_HEADER = {m: MODEL_ES.get(m, m) for m in MODEL_ORDER}
 
 NOISE_KEYS = ["no_noise", "low_noise", "high_noise"]
 
@@ -129,14 +141,11 @@ def clean_equation(eq: str) -> str:
     return eq.strip()
 
 # ─────────────────────────────────────────────────────────────
-# ⭐ NUEVO: ajuste dinámico por columna
+# CELL FIT
 # ─────────────────────────────────────────────────────────────
 
 def compute_max_chars_per_col(fig_width, n_cols, base=180):
-    """
-    Aproximación: más columnas => menos caracteres por celda
-    """
-    return max(15, int(base / n_cols))
+    return max(35, int(base / n_cols))
 
 
 def truncate_to_cell_width(text, max_chars):
@@ -147,7 +156,6 @@ def truncate_to_cell_width(text, max_chars):
         return text
 
     return text[:max_chars - 3].rstrip() + "..."
-
 
 # ─────────────────────────────────────────────────────────────
 # COLOR LOGIC
@@ -185,7 +193,6 @@ def build_table(df, ood, noise, laws, models):
                 (df["noise"] == noise)
             ]
 
-            # ── BLOQUE CORREGIDO ──
             is_nn = model.startswith("MLP")
 
             if is_nn:
@@ -221,11 +228,9 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
     fig, ax = plt.subplots(figsize=(26, 10))
     ax.axis("off")
 
-    # ── CALC WIDTH PER COLUMN ──
     n_cols = len(models) + 1
     max_chars = compute_max_chars_per_col(fig.get_figwidth(), n_cols)
 
-    # APPLY TRUNCATION
     cell_text = [
         [truncate_to_cell_width(txt, max_chars) for txt in row]
         for row in cell_text
@@ -256,8 +261,6 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
 
         if c == 0:
             cell.set_text_props(weight="bold")
-
-    # ───────── LEGEND ─────────
 
     legend = [
         mpatches.Patch(color=PERFECT_GREEN,
