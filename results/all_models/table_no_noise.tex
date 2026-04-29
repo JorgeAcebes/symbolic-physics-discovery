@@ -1,0 +1,55 @@
+% ─────────────────────────────────────────────────────────────────────────────
+% Tabla generada automáticamente por src/table_final.py
+%
+% Paquetes necesarios en el preámbulo del documento:
+%   \usepackage{booktabs}
+%   \usepackage{colortbl}
+%   \usepackage{xcolor}
+%   \usepackage{adjustbox}   % para \begin{adjustbox}{max width=\linewidth}
+%   \usepackage{array}
+%
+% Añade también en el preámbulo las siguientes definiciones de color:
+%
+% \definecolor{ood0}{HTML}{1A6B0A}
+% \definecolor{ood1}{HTML}{4CAF50}
+% \definecolor{ood2}{HTML}{A5D6A7}
+% \definecolor{ood3}{HTML}{FFF176}
+% \definecolor{ood4}{HTML}{FFB74D}
+% \definecolor{ood5}{HTML}{EF6C00}
+% \definecolor{ood6}{HTML}{C62828}
+% \definecolor{oodnull}{HTML}{BDBDBD}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{table}[htbp]
+  \centering
+  \caption{Discovered equations -- No noise. Cell colour encodes OOD MAE (see legend).}}
+  \label{tab:equations_no_noise}
+  \begin{adjustbox}{max width=\linewidth}
+  \begin{tabular}{p{2.4cm} p{2.6cm} p{2.6cm} p{2.6cm} p{2.6cm} p{2.6cm} p{2.6cm} p{2.6cm} p{2.6cm}}
+    \toprule
+    \textbf{Law} & \textbf{GPLearn} & \textbf{PySR} & \textbf{QLattice} & \textbf{PySINDy} & \textbf{Polynomial} & \textbf{MLP Std.} & \textbf{MLP Sparse} & \textbf{MLP Drop.} \\
+    \midrule
+    Boltzmann entropy & \cellcolor{ood0}\textcolor{white}{\texttt{log(omega)}} & \cellcolor{ood0}\textcolor{white}{\texttt{log(omega)}} & \cellcolor{ood1}\texttt{1.0*log(0.408*omega - 9.859e-7) + 0.8966} & \cellcolor{ood4}\texttt{1.737e+00*1 + 8.828e-02*omega + -3.121e+00*(1/omega\ldots} & \cellcolor{ood6}\textcolor{white}{\texttt{0.0001172*omega\^\{\}5 - 0.003861*omega\^\{\}4 + 0.\ldots}} & \cellcolor{ood5}\texttt{Red Neuronal (standard)} & \cellcolor{ood4}\texttt{Red Neuronal (sparse)} & \cellcolor{ood5}\texttt{Red Neuronal (dropout)} \\
+    \addlinespace[2pt]
+    Coulomb & \cellcolor{ood0}\textcolor{white}{\texttt{q1*q2/r\^\{\}2}} & \cellcolor{ood0}\textcolor{white}{\texttt{q1*q2/(r\^\{\}2)}} & \cellcolor{ood3}\texttt{2.042*(-0.3664 + 0.9505/(0.4956*r - 0.1376))*(0.002\ldots} & \cellcolor{ood6}\textcolor{white}{\texttt{-1.037e+00*1 + 6.685e-01*q1 + 2.824e-01*q2 + 4.028e\ldots}} & \cellcolor{ood6}\textcolor{white}{\texttt{-0.0382*q1\^\{\}5 - 0.07292*q1\^\{\}4*q2 + 0.08007*\ldots}} & \cellcolor{ood3}\texttt{Red Neuronal (standard)} & \cellcolor{ood3}\texttt{Red Neuronal (sparse)} & \cellcolor{ood3}\texttt{Red Neuronal (dropout)} \\
+    \addlinespace[2pt]
+    Ideal gas & \cellcolor{ood0}\textcolor{white}{\texttt{T*n/V}} & \cellcolor{ood0}\textcolor{white}{\texttt{T*n/V}} & \cellcolor{ood1}\texttt{-0.7828*(4.93*T + 0.0003735)*(-0.5844*n - 4.202e-5)\ldots} & \cellcolor{ood5}\texttt{-5.103e-03*1 + 5.501e-01*n + 3.656e-01*T + 4.986e-0\ldots} & \cellcolor{ood5}\texttt{0.009562*T\^\{\}5 - 0.0006943*T\^\{\}4*V + 0.008799\ldots} & \cellcolor{ood4}\texttt{Red Neuronal (standard)} & \cellcolor{ood4}\texttt{Red Neuronal (sparse)} & \cellcolor{ood4}\texttt{Red Neuronal (dropout)} \\
+    \addlinespace[2pt]
+    Kepler & \cellcolor{ood1}\texttt{r\^\{\}(3/2)} & \cellcolor{ood1}\texttt{r\^\{\}1.4999973} & \cellcolor{ood1}\texttt{-1.481*(-0.5112*r - 0.008606)*sqrt(1.746*r - 0.0635\ldots} & \cellcolor{ood4}\texttt{-5.211e-02*1 + 5.788e-01*r + 5.144e-01*r\^\{\}2 + -\ldots} & \cellcolor{ood6}\textcolor{white}{\texttt{-0.005556*r\^\{\}5 + 0.05599*r\^\{\}4 - 0.2424*r\^\\ldots}} & \cellcolor{ood4}\texttt{Red Neuronal (standard)} & \cellcolor{ood5}\texttt{Red Neuronal (sparse)} & \cellcolor{ood5}\texttt{Red Neuronal (dropout)} \\
+    \addlinespace[2pt]
+    Newton cooling & \cellcolor{ood3}\texttt{1.36612021857923} & \cellcolor{ood0}\textcolor{white}{\texttt{1.0 + exp(-k*t)}} & \cellcolor{ood1}\texttt{1.0*exp((1.272e-5 - 0.8423*t)*(1.187*k - 5.843e-5)*\ldots} & \cellcolor{ood5}\texttt{2.002e+00*1 + 1.984e-01*k\^\{\}2 + -1.501e+00*k t +\ldots} & \cellcolor{ood5}\texttt{-0.03169*k\^\{\}5 + 0.0738*k\^\{\}4*t + 0.1245*k\^\\ldots} & \cellcolor{ood4}\texttt{Red Neuronal (standard)} & \cellcolor{ood4}\texttt{Red Neuronal (sparse)} & \cellcolor{ood4}\texttt{Red Neuronal (dropout)} \\
+    \addlinespace[2pt]
+    Oscillator & \cellcolor{ood2}\texttt{-0.995*x} & \cellcolor{ood0}\textcolor{white}{\texttt{-x - x + x}} & \cellcolor{oodnull}\texttt{-7.376*(1.356*x + 0.002145)*sqrt(1/(0.0117*x - 1.64\ldots} & \cellcolor{ood1}\texttt{-1.000e+00*x} & \cellcolor{ood1}\texttt{2.52e-8*x\^\{\}5 - 1.396e-8*x\^\{\}4 + 6.222e-8*x\^\ldots} & \cellcolor{ood2}\texttt{Red Neuronal (standard)} & \cellcolor{ood4}\texttt{Red Neuronal (sparse)} & \cellcolor{ood3}\texttt{Red Neuronal (dropout)} \\
+    \addlinespace[2pt]
+    Projectile range & \cellcolor{oodnull}\texttt{v0\^\{\}(3/2)*sqrt(log(theta - 0.761))} & \cellcolor{ood0}\textcolor{white}{\texttt{v0\^\{\}2*sin(theta + theta)}} & \cellcolor{ood5}\texttt{11.79 - 15.61*exp(-2.0*(0.142 - 0.1294*v0)\^\{\}2 -\ldots} & \cellcolor{ood3}\texttt{-6.142e-01*1 + 1.266e+00*theta + -8.802e-02*v0\^\{\\ldots} & \cellcolor{ood5}\texttt{-0.006502*theta\^\{\}5 + 2.152*theta\^\{\}4*v0 - 1.\ldots} & \cellcolor{ood5}\texttt{Red Neuronal (standard)} & \cellcolor{ood5}\texttt{Red Neuronal (sparse)} & \cellcolor{ood5}\texttt{Red Neuronal (dropout)} \\
+    \addlinespace[2pt]
+    Radioactive decay & \cellcolor{ood3}\texttt{cos(sqrt(t))} & \cellcolor{ood1}\texttt{exp(lambd)\^\{\}(-t)} & \cellcolor{ood1}\texttt{1.0*exp((1.303e-6 - 0.9772*t)*(1.023*lambd - 3.536e\ldots} & \cellcolor{ood5}\texttt{9.853e-01*1 + 1.136e-01*lambd + -1.512e+00*lambd t \ldots} & \cellcolor{ood5}\texttt{-0.0279*lambd\^\{\}5 + 0.07706*lambd\^\{\}4*t + 0.0\ldots} & \cellcolor{ood4}\texttt{Red Neuronal (standard)} & \cellcolor{ood4}\texttt{Red Neuronal (sparse)} & \cellcolor{ood4}\texttt{Red Neuronal (dropout)} \\
+    \addlinespace[2pt]
+    Time dilation & \cellcolor{ood5}\texttt{t*(v + 1)} & \cellcolor{ood4}\texttt{t*(1.6901535 + 1/cos(v\^\{\}1.3647355 + 0.49836513)\ldots} & \cellcolor{ood4}\texttt{-2.098*(1.039 - 0.7927*v)*(2.138*t - 0.0002444)/(4.\ldots} & \cellcolor{ood5}\texttt{2.415e-01*1 + 5.793e-01*t + 1.632e+00*v + 3.835e-01\ldots} & \cellcolor{ood5}\texttt{-0.01782*t\^\{\}5 + 0.2808*t\^\{\}4*v + 0.0131*t\^\\ldots} & \cellcolor{ood5}\texttt{Red Neuronal (standard)} & \cellcolor{ood5}\texttt{Red Neuronal (sparse)} & \cellcolor{ood5}\texttt{Red Neuronal (dropout)} \\
+    \bottomrule
+  \end{tabular}
+  \end{adjustbox}
+  \\[4pt]
+  \footnotesize
+  \colorbox{ood0}{\strut\,MAE = 0 (exacto)\,}\quad \colorbox{ood1}{\strut\,MAE < 0.01\,}\quad \colorbox{ood2}{\strut\,MAE < 0.1\,}\quad \colorbox{ood3}{\strut\,MAE < 1\,}\quad \colorbox{ood4}{\strut\,MAE < 10\,}\quad \colorbox{ood5}{\strut\,MAE < 100\,}\quad \colorbox{ood6}{\strut\,MAE ≥ 100\,}\quad \colorbox{oodnull}{\strut\,No OOD data\,}
+\end{table}
