@@ -1,5 +1,5 @@
 r"""
-table_final.py - FIX FINAL ROBUSTO (WRAP INTELIGENTE + LEGEND + CELL FIT)
+table_final.py - FIX FINAL ROBUSTO (WRAP INTELIGENTE + LEGEND + CELL FIT + LEYES EN ESPAÑOL)
 """
 
 import json
@@ -49,7 +49,6 @@ MODEL_ORDER = [
     "Polynomial", "MLP_Standard", "MLP_Sparse", "MLP_Dropout"
 ]
 
-# 🔥 TRADUCCIÓN A ESPAÑOL
 MODEL_ES = {
     "GPLearn": "GPLearn",
     "PySR": "PySR",
@@ -62,6 +61,21 @@ MODEL_ES = {
 }
 
 MODEL_HEADER = {m: MODEL_ES.get(m, m) for m in MODEL_ORDER}
+
+# ─────────────────────────────────────────────────────────────
+# 🔥 LEYES FÍSICAS EN ESPAÑOL
+# ─────────────────────────────────────────────────────────────
+
+LAW_ES = {
+    "hookes_law": "Ley de Hooke",
+    "ohms_law": "Ley de Ohm",
+    "newton_second_law": "Segunda Ley de Newton",
+    "kinetic_energy": "Energía Cinética",
+    "potential_energy": "Energía Potencial",
+    "coulomb": "Ley de Coulomb",
+    "wave_speed": "Velocidad de Onda",
+    "ideal_gas": "Gas Ideal",
+}
 
 NOISE_KEYS = ["no_noise", "low_noise", "high_noise"]
 
@@ -151,10 +165,8 @@ def compute_max_chars_per_col(fig_width, n_cols, base=180):
 def truncate_to_cell_width(text, max_chars):
     if text == "--":
         return text
-
     if len(text) <= max_chars:
         return text
-
     return text[:max_chars - 3].rstrip() + "..."
 
 # ─────────────────────────────────────────────────────────────
@@ -236,7 +248,11 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
         for row in cell_text
     ]
 
-    table_text = [[law_names.get(l, l)] + row for l, row in zip(laws, cell_text)]
+    # 🔥 LEYES EN ESPAÑOL AQUÍ
+    table_text = [
+        [LAW_ES.get(l, l)] + row for l, row in zip(laws, cell_text)
+    ]
+
     table_colors = [["#F5F5F5"] + row for row in cell_colors]
 
     tbl = ax.table(
