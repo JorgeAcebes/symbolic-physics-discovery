@@ -1,7 +1,3 @@
-r"""
-table_final.py - FIX FINAL ROBUSTO (WRAP INTELIGENTE + LEGEND + CELL FIT + LEYES EN ESPAÑOL)
-"""
-
 import json
 import os
 import re
