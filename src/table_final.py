@@ -1,5 +1,5 @@
 r"""
-table_final.py - FIX ESTABLE (sin errores LaTeX)
+table_final.py - FIX FINAL ROBUSTO (SIN LATEX CRASH + WRAP + LEYENDA CIENTÍFICA)
 """
 
 import json
@@ -32,18 +32,16 @@ plt.rcParams.update({
     "axes.facecolor": "#FFFFFF",
     "text.color": "#000000",
     "font.family": "serif",
-    "font.size": 12,
-    "mathtext.fontset": "cm",
+    "font.size": 11,
 })
 
 PERFECT_GREEN = "#1B5E20"
 EXCELLENT_GREEN = "#66BB6A"
 ORANGE = "#F57C00"
 RED = "#C62828"
-NULL_COLOUR = "#EEEEEE"
 
 # ─────────────────────────────────────────────────────────────
-# NAMES
+# MODELS
 # ─────────────────────────────────────────────────────────────
 
 MODEL_ORDER = [
@@ -115,49 +113,36 @@ def load_ood(path):
     return ood
 
 # ─────────────────────────────────────────────────────────────
-# SAFE LATEX (FIX PRINCIPAL)
+# SAFE TEXT (SIN LATEX -> EVITA CRASHES)
 # ─────────────────────────────────────────────────────────────
 
-def clean_latex(eq: str) -> str:
+def clean_equation(eq: str) -> str:
     if eq in ["", "--", None]:
         return "--"
 
     eq = str(eq).replace("\n", " ")
 
-    # fixes básicos
-    eq = eq.replace("omega", r"\Omega")
+    # simplificaciones seguras
     eq = eq.replace("**", "^")
+    eq = eq.replace("omega", "Ω")
 
-    # evitar sqrt roto
-    eq = re.sub(r"sqrt\((.*?)\)", r"\\sqrt{\1}", eq)
+    # sqrt seguro básico
+    eq = re.sub(r"sqrt\((.*?)\)", r"sqrt(\1)", eq)
 
-    # eliminar cosas peligrosas para matplotlib
-    eq = eq.replace("...", "")
-    eq = eq.strip()
+    # limpiar basura
+    eq = re.sub(r"\s+", " ", eq)
 
-    return eq
+    return eq.strip()
 
 
-def safe_truncate_latex(eq: str, maxlen=55) -> str:
+def truncate_text(eq: str, maxlen=45) -> str:
     if eq == "--":
         return eq
 
-    inner = eq.strip()
+    if len(eq) <= maxlen:
+        return eq
 
-    if len(inner) <= maxlen:
-        return f"${inner}$"
-
-    cut = inner[:maxlen]
-
-    # NO romper llaves
-    open_b = cut.count("{")
-    close_b = cut.count("}")
-
-    if open_b > close_b:
-        cut += "}" * (open_b - close_b)
-
-    # cierre seguro
-    return f"${cut} \\cdots$"
+    return eq[:maxlen] + "..."
 
 
 # ─────────────────────────────────────────────────────────────
@@ -169,23 +154,18 @@ def get_colour(mse, mae):
     if mse is None or (isinstance(mse, float) and np.isnan(mse)):
         return RED
 
-    if mae is not None and mae == 0:
-        return PERFECT_GREEN
-
     if mse < 1e-20:
         return PERFECT_GREEN
-
     elif mse < 1e-4:
         return EXCELLENT_GREEN
-
     elif mse <= 1e-2:
         return ORANGE
-
-    return RED
+    else:
+        return RED
 
 
 # ─────────────────────────────────────────────────────────────
-# TABLE BUILD
+# TABLE
 # ─────────────────────────────────────────────────────────────
 
 def build_table(df, ood, noise, laws, models):
@@ -196,9 +176,11 @@ def build_table(df, ood, noise, laws, models):
         row_t, row_c = [], []
 
         for model in models:
-            sub = df[(df["model"] == model) &
-                     (df["law"] == law) &
-                     (df["noise"] == noise)]
+            sub = df[
+                (df["model"] == model) &
+                (df["law"] == law) &
+                (df["noise"] == noise)
+            ]
 
             if sub.empty:
                 eq = "--"
@@ -209,8 +191,8 @@ def build_table(df, ood, noise, laws, models):
 
             mse = ood.get(law, {}).get(model, {}).get(noise)
 
-            eq_clean = clean_latex(eq)
-            eq_final = safe_truncate_latex(eq_clean)
+            eq_clean = clean_equation(eq)
+            eq_final = truncate_text(eq_clean)
 
             row_t.append(eq_final)
             row_c.append(get_colour(mse, mae))
@@ -229,7 +211,7 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
 
     headers = [MODEL_HEADER[m] for m in models]
 
-    fig, ax = plt.subplots(figsize=(24, 10))
+    fig, ax = plt.subplots(figsize=(26, 10))
     ax.axis("off")
 
     table_text = [[law_names.get(l, l)] + row for l, row in zip(laws, cell_text)]
@@ -244,10 +226,14 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
     )
 
     tbl.auto_set_font_size(False)
-    tbl.set_fontsize(11)
-    tbl.scale(1, 2.4)
+    tbl.set_fontsize(10)
+    tbl.scale(1.0, 2.2)
 
+    # 🔥 FIX: wrap + clip + ajuste
     for (r, c), cell in tbl.get_celld().items():
+        cell.get_text().set_wrap(True)
+        cell.set_clip_on(True)
+
         if r == 0:
             cell.set_facecolor("#E0E0E0")
             cell.set_text_props(weight="bold")
@@ -255,26 +241,32 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
         if c == 0:
             cell.set_text_props(weight="bold")
 
-        if cell.get_facecolor() == plt.matplotlib.colors.to_rgba(RED):
-            cell.set_text_props(color="white")
+    # ─────────────────────────────────────────────
+    # LEGEND (MEJORADA)
+    # ─────────────────────────────────────────────
 
     legend = [
-        mpatches.Patch(color=PERFECT_GREEN, label="Perfecta"),
-        mpatches.Patch(color=EXCELLENT_GREEN, label="Excelente"),
-        mpatches.Patch(color=ORANGE, label="Media"),
-        mpatches.Patch(color=RED, label="Mala"),
+        mpatches.Patch(color=PERFECT_GREEN,
+                       label=r"Perfecta ($\mathrm{MSE} < 10^{-20}$)"),
+        mpatches.Patch(color=EXCELLENT_GREEN,
+                       label=r"Excelente ($10^{-20} \leq \mathrm{MSE} < 10^{-4}$)"),
+        mpatches.Patch(color=ORANGE,
+                       label=r"Media ($10^{-4} \leq \mathrm{MSE} \leq 10^{-2}$)"),
+        mpatches.Patch(color=RED,
+                       label=r"Mala ($\mathrm{MSE} > 10^{-2}$)"),
     ]
 
     ax.legend(
         handles=legend,
         loc="upper center",
-        bbox_to_anchor=(0.5, 0.1),
-        ncol=4,
-        frameon=True
+        bbox_to_anchor=(0.5, 0.15),
+        ncol=2,
+        frameon=True,
+        fontsize=14
     )
 
-    fig.tight_layout()
-    fig.savefig(out_path, dpi=200, bbox_inches="tight")
+    plt.tight_layout()
+    fig.savefig(out_path, dpi=220, bbox_inches="tight")
     plt.close(fig)
 
 
