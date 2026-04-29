@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 def set_plot_style(for_paper=False):
     plt.rcParams.update({
-        "text.usetex": True,
+        "text.usetex": False,
         "font.family": "serif",
         "font.serif": ["Latin Modern Roman"], 
         "axes.labelsize": 12,
