@@ -100,8 +100,10 @@ def plot_recovery_grid_json():
     w_rect = 0.75  # Ancho del rectángulo
     h_rect = 0.50  # Alto del rectángulo (apaisado)
 
-    for i, model_key in enumerate(models_keys):
-        for j, law_key in enumerate(laws_keys):
+    # i recorre las leyes (filas/eje y), j recorre los modelos (columnas/eje x)
+    for i, law_key in enumerate(laws_keys):
+        for j, model_key in enumerate(models_keys):
+            
             # Centrado analítico: x_0 = j - w/2, y_0 = -i - h/2
             rect = plt.Rectangle((j - w_rect/2, -i - h_rect/2), w_rect, h_rect, color='#f5f5f5', zorder=1)
             ax.add_patch(rect)
@@ -123,21 +125,23 @@ def plot_recovery_grid_json():
                 else:
                     c = COLOR_INCORRECT
 
+                # Variación horizontal para los distintos niveles de ruido
                 dx = (n_idx - 1) * 0.25
                 ax.scatter(j + dx, -i, color=c, s=120, zorder=2, edgecolors='none')
 
-    ax.set_xticks(range(len(laws_keys)))
-    ax.set_xticklabels(laws_names, rotation=35, ha='left', va='bottom', color='#222222')
+    # Eje X configurado para los Modelos
+    ax.set_xticks(range(len(models_keys)))
+    ax.set_xticklabels(models_names, rotation=35, ha='left', va='bottom', color='#222222')
     ax.xaxis.tick_top()
 
-
-    ax.set_yticks([-i for i in range(len(models_keys))])
-    ax.set_yticklabels(models_names, color='#222222')
+    # Eje Y configurado para las Leyes Físicas
+    ax.set_yticks([-i for i in range(len(laws_keys))])
+    ax.set_yticklabels(laws_names, color='#222222')
     ax.tick_params(axis='y', pad=5)
 
-    # Ajuste exacto de los límites del eje X e Y para eliminar padding y permitir alineación de leyendas
-    ax.set_xlim(-w_rect/2, len(laws_keys) - 1 + w_rect/2)
-    ax.set_ylim(-len(models_keys) + 1 - h_rect/2, h_rect/2)
+    # Ajuste exacto de los límites considerando las nuevas dimensiones matriciales
+    ax.set_xlim(-w_rect/2, len(models_keys) - 1 + w_rect/2)
+    ax.set_ylim(-len(laws_keys) + 1 - h_rect/2, h_rect/2)
 
     for spine in ax.spines.values():
         spine.set_visible(False)
@@ -150,7 +154,6 @@ def plot_recovery_grid_json():
         Line2D([0], [0], marker='o', color='w', markerfacecolor='#666666', markersize=12, label=r'Ruido alto')
     ]
     
-    # Anclado estrictamente a la izquierda del grid ajustado
     leg_noise = ax.legend(handles=noise_elements, loc='upper left', bbox_to_anchor=(0.0, -0.10),
                           frameon=False, ncol=3, columnspacing=0.5, labelcolor='#222222', 
                           handletextpad=0.4, title=r'\textbf{Disposición espacial (izq. a der.):}',
@@ -166,7 +169,6 @@ def plot_recovery_grid_json():
         mpatches.Circle((0, 0), radius=1, color=COLOR_INCORRECT, label=r'Incorrecta ($\text{MSE} > 10^{-2}$)' )
     ]
     
-    # Anclado estrictamente a la derecha del grid ajustado
     ax.legend(handles=mse_elements, loc='upper right', bbox_to_anchor=(1.0, -0.10), 
               frameon=False, ncol=1, labelcolor='#222222', handletextpad=0.5, fontsize=14)
 
