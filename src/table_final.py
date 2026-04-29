@@ -28,7 +28,8 @@ plt.rcParams.update({
     "axes.facecolor": "#FFFFFF",
     "text.color": "#000000",
     "font.family": "serif",
-    "font.size": 11,
+    "mathtext.fontset": "cm",  # Renderiza matemáticas con tipografía tipo LM Roman
+    "font.size": 14,           # Aumento general del tamaño de fuente
 })
 
 PERFECT_GREEN = "#1B5E20"
@@ -52,25 +53,26 @@ MODEL_ES = {
     "PySINDy": "PySINDy",
     "Polynomial": "Polinomial",
     "MLP_Standard": "Red Neuronal",
-    "MLP_Sparse": "Red Neuronal (Sparse)",
-    "MLP_Dropout": "Red Neuronal (Dropout)"
+    "MLP_Sparse": "Red Neuronal Dispersa",
+    "MLP_Dropout": "Red Neuronal Dropout"
 }
 
 MODEL_HEADER = {m: MODEL_ES.get(m, m) for m in MODEL_ORDER}
 
 # ─────────────────────────────────────────────────────────────
-# 🔥 LEYES FÍSICAS EN ESPAÑOL
+# LEYES FÍSICAS EN ESPAÑOL
 # ─────────────────────────────────────────────────────────────
 
 LAW_ES = {
-    "hookes_law": "Ley de Hooke",
-    "ohms_law": "Ley de Ohm",
-    "newton_second_law": "Segunda Ley de Newton",
-    "kinetic_energy": "Energía Cinética",
-    "potential_energy": "Energía Potencial",
     "coulomb": "Ley de Coulomb",
-    "wave_speed": "Velocidad de Onda",
-    "ideal_gas": "Gas Ideal",
+    "harmonic_oscillator": "Oscilador armónico",
+    "kepler_third": "Tercera ley de Kepler",
+    "ideal_gas": "Ley de los gases ideales",
+    "time_dilation": "Dilatación temporal",
+    "projectile_range": "Rango proyectil",
+    "radioactive_decay": "Decaimiento radiactivo",
+    "newton_cooling": "Enfriamiento de Newton",
+    "boltzmann_entropy": "Entropía de Boltzmann",
 }
 
 NOISE_KEYS = ["no_noise", "low_noise", "high_noise"]
@@ -84,7 +86,6 @@ def _split_law_noise(dataset):
         if dataset.endswith(suffix):
             return dataset[:-len(suffix)], suffix[1:]
     return dataset, "unknown"
-
 
 def parse_results(path):
     with open(path, "r", encoding="utf-8") as f:
@@ -115,7 +116,6 @@ def parse_results(path):
 
     return pd.DataFrame(rows)
 
-
 def load_ood(path):
     with open(path, "r", encoding="utf-8") as f:
         raw = json.load(f)
@@ -135,42 +135,45 @@ def load_ood(path):
     return ood
 
 # ─────────────────────────────────────────────────────────────
-# CLEAN EQUATION
+# CLEAN EQUATION & CELL FIT
 # ─────────────────────────────────────────────────────────────
 
-def clean_equation(eq: str) -> str:
-    if eq in ["", "--", None]:
+def compute_max_chars_per_col(fig_width, n_cols, base=200):
+    return max(40, int(base / n_cols))
+
+def format_latex_equation(eq: str, max_chars: int) -> str:
+    if eq in ["", "--", "----", None]:
         return "--"
 
     eq = str(eq).replace("\n", " ")
+    
     eq = eq.replace("**", "^")
-    eq = eq.replace("omega", "Ω")
-    eq = re.sub(r"square\((.*?)\)", r"sqrt(\1)", eq)
-    eq = re.sub(r"\s+", " ", eq)
+    eq = eq.replace("omega", r"\Omega")
+    eq = eq.replace("pi", r"\pi")
+    eq = eq.replace("theta", r"\theta")
+    
+    eq = re.sub(r"([a-zA-Z])(\d+)", r"\1_{\2}", eq)
+    eq = re.sub(r"sqrt\((.*?)\)", r"\\sqrt{\1}", eq)
+    eq = re.sub(r"square\((.*?)\)", r"\1^2", eq)
+    eq = re.sub(r"\s+", " ", eq).strip()
 
-    return eq.strip()
-
-# ─────────────────────────────────────────────────────────────
-# CELL FIT
-# ─────────────────────────────────────────────────────────────
-
-def compute_max_chars_per_col(fig_width, n_cols, base=180):
-    return max(35, int(base / n_cols))
-
-
-def truncate_to_cell_width(text, max_chars):
-    if text == "--":
-        return text
-    if len(text) <= max_chars:
-        return text
-    return text[:max_chars - 3].rstrip() + "..."
-
+    if len(eq) > max_chars:
+        eq = eq[:max_chars - 3].rstrip()
+        
+        eq = re.sub(r'\\[a-zA-Z]*$', '', eq)
+        
+        open_braces = eq.count('{') - eq.count('}')
+        if open_braces > 0:
+            eq += '}' * open_braces
+            
+        eq += "..."
+    
+    return f"${eq}$"
 # ─────────────────────────────────────────────────────────────
 # COLOR LOGIC
 # ─────────────────────────────────────────────────────────────
 
-def get_colour(mse, mae):
-
+def get_colour(mse):
     if mse is None or (isinstance(mse, float) and np.isnan(mse)):
         return RED
 
@@ -187,8 +190,7 @@ def get_colour(mse, mae):
 # TABLE
 # ─────────────────────────────────────────────────────────────
 
-def build_table(df, ood, noise, laws, models):
-
+def build_table(df, ood, noise, laws, models, max_chars):
     text, colors = [], []
 
     for law in laws:
@@ -204,21 +206,19 @@ def build_table(df, ood, noise, laws, models):
             is_nn = model.startswith("MLP")
 
             if is_nn:
-                eq = "----"
-                mae = None
+                eq = "--"
             else:
                 if sub.empty:
                     eq = "--"
-                    mae = None
                 else:
                     eq = sub.iloc[0]["equation"]
-                    mae = sub.iloc[0]["mae"]
 
             mse = ood.get(law, {}).get(model, {}).get(noise)
 
-            eq_clean = clean_equation(eq)
+            eq_clean = format_latex_equation(eq, max_chars) if not is_nn else eq
+            
             row_t.append(eq_clean)
-            row_c.append(get_colour(mse, mae))
+            row_c.append(get_colour(mse))
 
         text.append(row_t)
         colors.append(row_c)
@@ -229,26 +229,15 @@ def build_table(df, ood, noise, laws, models):
 # RENDER
 # ─────────────────────────────────────────────────────────────
 
-def render(cell_text, cell_colors, laws, models, law_names, out_path):
-
+def render(cell_text, cell_colors, laws, models, out_path):
     headers = [MODEL_HEADER[m] for m in models]
 
-    fig, ax = plt.subplots(figsize=(26, 10))
+    fig, ax = plt.subplots(figsize=(28, 12))
     ax.axis("off")
 
-    n_cols = len(models) + 1
-    max_chars = compute_max_chars_per_col(fig.get_figwidth(), n_cols)
-
-    cell_text = [
-        [truncate_to_cell_width(txt, max_chars) for txt in row]
-        for row in cell_text
-    ]
-
-    # 🔥 LEYES EN ESPAÑOL AQUÍ
     table_text = [
         [LAW_ES.get(l, l)] + row for l, row in zip(laws, cell_text)
     ]
-
     table_colors = [["#F5F5F5"] + row for row in cell_colors]
 
     tbl = ax.table(
@@ -260,12 +249,13 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
     )
 
     tbl.auto_set_font_size(False)
-    tbl.set_fontsize(10)
-    tbl.scale(1.0, 2.2)
+    tbl.set_fontsize(14)  # Letra más grande
+    tbl.scale(1.0, 2.5)   # Celdas más altas para acomodar ecuaciones
 
     for (r, c), cell in tbl.get_celld().items():
         cell.get_text().set_wrap(True)
         cell.set_clip_on(True)
+        cell.set_edgecolor('#D3D3D3') # Bordes más sutiles para estilo paper
 
         if r == 0:
             cell.set_facecolor("#E0E0E0")
@@ -276,7 +266,7 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
 
     legend = [
         mpatches.Patch(color=PERFECT_GREEN,
-                       label=r"Perfecta ($\mathrm{MSE} < 10^{-20}$)"),
+                       label=r"Exacta ($\mathrm{MSE} < 10^{-20}$)"),
         mpatches.Patch(color=EXCELLENT_GREEN,
                        label=r"Excelente ($10^{-20} \leq \mathrm{MSE} < 10^{-4}$)"),
         mpatches.Patch(color=ORANGE,
@@ -288,14 +278,14 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
     ax.legend(
         handles=legend,
         loc="upper center",
-        bbox_to_anchor=(0.5, 0.15),
-        ncol=2,
-        frameon=True,
+        bbox_to_anchor=(0.5, 0.02), # Reducido el espacio respecto a la tabla
+        ncol=4,
+        frameon=False, # Más elegante sin recuadro exterior
         fontsize=14
     )
 
     plt.tight_layout()
-    fig.savefig(out_path, dpi=220, bbox_inches="tight")
+    fig.savefig(out_path, dpi=300, bbox_inches="tight") # Subido a 300 DPI estándar
     plt.close(fig)
 
 # ─────────────────────────────────────────────────────────────
@@ -303,7 +293,6 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
 # ─────────────────────────────────────────────────────────────
 
 def main():
-
     if not os.path.exists(RESULTS_TXT) or not os.path.exists(OOD_JSON):
         sys.exit("ERROR: archivos no encontrados")
 
@@ -313,18 +302,18 @@ def main():
     laws = list(df["law"].unique())
     models = [m for m in MODEL_ORDER if m in df["model"].unique()]
 
-    law_names = {l: l for l in laws}
-
     os.makedirs(OUT_DIR, exist_ok=True)
+    
+    n_cols = len(models) + 1
+    max_chars = compute_max_chars_per_col(28, n_cols)
 
     for noise in NOISE_KEYS:
-        text, colors = build_table(df, ood, noise, laws, models)
+        text, colors = build_table(df, ood, noise, laws, models, max_chars)
 
         out = os.path.join(OUT_DIR, f"table_{noise}.png")
-        render(text, colors, laws, models, law_names, out)
+        render(text, colors, laws, models, out)
 
-    print("✓ Tablas generadas correctamente")
-
+    print("Tablas generadas correctamente.")
 
 if __name__ == "__main__":
     main()
