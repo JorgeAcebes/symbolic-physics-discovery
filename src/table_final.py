@@ -17,25 +17,41 @@ _RESULTS = os.path.join(_HERE, "..", "results")
 
 RESULTS_TXT = os.path.join(_RESULTS, "all_models", "combined_results.txt")
 OOD_JSON = os.path.join(_RESULTS, "results_ood", "ood_metrics_summary.json")
-OUT_DIR = os.path.join(_RESULTS, "all_models")
+OUT_DIR = os.path.join(_RESULTS, "results_ood")
+
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+try:
+    from utils.utils import set_plot_style
+    set_plot_style(for_paper=True)
+except ImportError:
+    pass
 
 # ─────────────────────────────────────────────────────────────
-# STYLE
+# STYLE & TRUE EQUATIONS
 # ─────────────────────────────────────────────────────────────
 
 plt.rcParams.update({
-    "figure.facecolor": "#FFFFFF",
-    "axes.facecolor": "#FFFFFF",
-    "text.color": "#000000",
+    "mathtext.fontset": "cm",
     "font.family": "serif",
-    "mathtext.fontset": "cm",  # Renderiza matemáticas con tipografía tipo LM Roman
-    "font.size": 14,           # Aumento general del tamaño de fuente
 })
 
-PERFECT_GREEN = "#1B5E20"
-EXCELLENT_GREEN = "#66BB6A"
-ORANGE = "#F57C00"
-RED = "#C62828"
+COLOR_EXACT = '#2ca02c'
+COLOR_BUENO = 'greenyellow'
+COLOR_APPROX = '#ff7f0e'
+COLOR_INCORRECT = '#d62728'
+
+TRUE_EQUATIONS = {
+    "coulomb": r"$\frac{q_1 q_2}{r^2}$",
+    "harmonic_oscillator": r"$\frac{1}{2} k x^2$",
+    "kepler_third": r"$\frac{4 \pi^2}{G M} r^3$",
+    "ideal_gas": r"$\frac{n R T}{V}$",
+    "time_dilation": r"$\frac{t_0}{\sqrt{1 - v^2/c^2}}$",
+    "projectile_range": r"$\frac{v_0^2 \sin(2\theta)}{g}$",
+    "radioactive_decay": r"$N_0 e^{-\lambda t}$",
+    "newton_cooling": r"$T_{\text{env}} + (T_0 - T_{\text{env}})e^{-kt}$",
+    "boltzmann_entropy": r"$k_B \ln(\Omega)$",
+}
 
 # ─────────────────────────────────────────────────────────────
 # MODELS
@@ -138,8 +154,8 @@ def load_ood(path):
 # CLEAN EQUATION & CELL FIT
 # ─────────────────────────────────────────────────────────────
 
-def compute_max_chars_per_col(fig_width, n_cols, base=200):
-    return max(40, int(base / n_cols))
+def compute_max_chars_per_col(base_width=35):
+    return base_width
 
 def format_latex_equation(eq: str, max_chars: int) -> str:
     if eq in ["", "--", "----", None]:
@@ -147,44 +163,56 @@ def format_latex_equation(eq: str, max_chars: int) -> str:
 
     eq = str(eq).replace("\n", " ")
     
-    eq = eq.replace("**", "^")
+    eq = re.sub(r"\b([0-9.]+)e([-+]?[0-9]+)\b", r"\1 \\times 10^{\2}", eq)
+    
+    for func in ["log", "exp", "sin", "cos", "tan"]:
+        eq = re.sub(rf"\b{func}\b", rf"\\{func}", eq)
+    
     eq = eq.replace("omega", r"\Omega")
     eq = eq.replace("pi", r"\pi")
     eq = eq.replace("theta", r"\theta")
+    eq = eq.replace("lambd", r"\lambda")
+    
+    eq = re.sub(r"sqrt\((.*?)\)", r"\\sqrt{\1}", eq)
+    eq = re.sub(r"square\((.*?)\)", r"{\1}^2", eq)
+    
+    eq = eq.replace("**", "^")
+    eq = re.sub(r"\^\((.*?)\)", r"^{\1}", eq)
+    eq = re.sub(r"\^([a-zA-Z0-9.\-]+)", r"^{\1}", eq)
     
     eq = re.sub(r"([a-zA-Z])(\d+)", r"\1_{\2}", eq)
-    eq = re.sub(r"sqrt\((.*?)\)", r"\\sqrt{\1}", eq)
-    eq = re.sub(r"square\((.*?)\)", r"\1^2", eq)
+    eq = eq.replace("*", " ")
     eq = re.sub(r"\s+", " ", eq).strip()
 
     if len(eq) > max_chars:
-        eq = eq[:max_chars - 3].rstrip()
-        
-        eq = re.sub(r'\\[a-zA-Z]*$', '', eq)
+        eq = eq[:max_chars - 4].rstrip()
+        eq = re.sub(r'\\[a-zA-Z]*$', '', eq).rstrip()
+        eq = re.sub(r'[\^\_\+\-\/\=]+$', '', eq).rstrip()
         
         open_braces = eq.count('{') - eq.count('}')
         if open_braces > 0:
             eq += '}' * open_braces
             
-        eq += "..."
+        eq += r" \dots"
     
     return f"${eq}$"
+
 # ─────────────────────────────────────────────────────────────
 # COLOR LOGIC
 # ─────────────────────────────────────────────────────────────
 
 def get_colour(mse):
     if mse is None or (isinstance(mse, float) and np.isnan(mse)):
-        return RED
+        return COLOR_INCORRECT
 
     if mse < 1e-20:
-        return PERFECT_GREEN
+        return COLOR_EXACT
     elif mse < 1e-4:
-        return EXCELLENT_GREEN
+        return COLOR_BUENO
     elif mse <= 1e-2:
-        return ORANGE
+        return COLOR_APPROX
     else:
-        return RED
+        return COLOR_INCORRECT
 
 # ─────────────────────────────────────────────────────────────
 # TABLE
@@ -194,7 +222,9 @@ def build_table(df, ood, noise, laws, models, max_chars):
     text, colors = [], []
 
     for law in laws:
-        row_t, row_c = [], []
+        # Columna nueva: Expresión teórica analítica
+        row_t = [TRUE_EQUATIONS.get(law, "--")]
+        row_c = ["#F5F5F5"]
 
         for model in models:
             sub = df[
@@ -206,10 +236,10 @@ def build_table(df, ood, noise, laws, models, max_chars):
             is_nn = model.startswith("MLP")
 
             if is_nn:
-                eq = "--"
+                eq = r"--"
             else:
                 if sub.empty:
-                    eq = "--"
+                    eq = r"--"
                 else:
                     eq = sub.iloc[0]["equation"]
 
@@ -230,62 +260,72 @@ def build_table(df, ood, noise, laws, models, max_chars):
 # ─────────────────────────────────────────────────────────────
 
 def render(cell_text, cell_colors, laws, models, out_path):
-    headers = [MODEL_HEADER[m] for m in models]
+    headers = ["Ley"] + [MODEL_HEADER[m] for m in models]
 
-    fig, ax = plt.subplots(figsize=(28, 12))
+    # Reducción de dimensiones
+    fig, ax = plt.subplots(figsize=(24, 8))
     ax.axis("off")
 
     table_text = [
         [LAW_ES.get(l, l)] + row for l, row in zip(laws, cell_text)
     ]
-    table_colors = [["#F5F5F5"] + row for row in cell_colors]
+    table_colors = [["#E0E0E0"] + row for row in cell_colors]
+
+    # Distribución asimétrica de anchos de columna
+    widths = [0.10, 0.10] # "Ley Física" y "Ley" teórica
+    for m in models:
+        if m.startswith("MLP"):
+            widths.append(0.04) # Compresión de las celdas MLP
+        else:
+            widths.append(0.12) # Expansión para ecuaciones simbólicas
+            
+    # Normalización del espacio vectorial de anchos
+    w_sum = sum(widths)
+    widths = [w / w_sum for w in widths]
 
     tbl = ax.table(
         cellText=table_text,
         colLabels=["Ley Física"] + headers,
         cellColours=table_colors,
+        colWidths=widths,
         cellLoc="center",
         loc="center"
     )
 
     tbl.auto_set_font_size(False)
-    tbl.set_fontsize(14)  # Letra más grande
-    tbl.scale(1.0, 2.5)   # Celdas más altas para acomodar ecuaciones
+    tbl.set_fontsize(13)
+    tbl.scale(1.0, 2.0)
 
     for (r, c), cell in tbl.get_celld().items():
         cell.get_text().set_wrap(True)
         cell.set_clip_on(True)
-        cell.set_edgecolor('#D3D3D3') # Bordes más sutiles para estilo paper
+        cell.set_edgecolor('#D3D3D3')
 
         if r == 0:
-            cell.set_facecolor("#E0E0E0")
+            cell.set_facecolor("#D6D6D6")
             cell.set_text_props(weight="bold")
 
-        if c == 0:
+        if c == 0 or c == 1:
             cell.set_text_props(weight="bold")
 
     legend = [
-        mpatches.Patch(color=PERFECT_GREEN,
-                       label=r"Exacta ($\mathrm{MSE} < 10^{-20}$)"),
-        mpatches.Patch(color=EXCELLENT_GREEN,
-                       label=r"Excelente ($10^{-20} \leq \mathrm{MSE} < 10^{-4}$)"),
-        mpatches.Patch(color=ORANGE,
-                       label=r"Media ($10^{-4} \leq \mathrm{MSE} \leq 10^{-2}$)"),
-        mpatches.Patch(color=RED,
-                       label=r"Mala ($\mathrm{MSE} > 10^{-2}$)"),
+        mpatches.Patch(color=COLOR_EXACT, label=r"Exacta ($\mathrm{MSE} < 10^{-20}$)"),
+        mpatches.Patch(color=COLOR_BUENO, label=r"Buena ($10^{-20} \leq \mathrm{MSE} < 10^{-4}$)"),
+        mpatches.Patch(color=COLOR_APPROX, label=r"Media ($10^{-4} \leq \mathrm{MSE} \leq 10^{-2}$)"),
+        mpatches.Patch(color=COLOR_INCORRECT, label=r"Mala ($\mathrm{MSE} > 10^{-2}$)"),
     ]
 
     ax.legend(
         handles=legend,
         loc="upper center",
-        bbox_to_anchor=(0.5, 0.02), # Reducido el espacio respecto a la tabla
+        bbox_to_anchor=(0.5, -0.05),
         ncol=4,
-        frameon=False, # Más elegante sin recuadro exterior
-        fontsize=14
+        frameon=False,
+        fontsize=13
     )
 
     plt.tight_layout()
-    fig.savefig(out_path, dpi=300, bbox_inches="tight") # Subido a 300 DPI estándar
+    fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 # ─────────────────────────────────────────────────────────────
@@ -304,8 +344,7 @@ def main():
 
     os.makedirs(OUT_DIR, exist_ok=True)
     
-    n_cols = len(models) + 1
-    max_chars = compute_max_chars_per_col(28, n_cols)
+    max_chars = compute_max_chars_per_col(base_width=35)
 
     for noise in NOISE_KEYS:
         text, colors = build_table(df, ood, noise, laws, models, max_chars)
