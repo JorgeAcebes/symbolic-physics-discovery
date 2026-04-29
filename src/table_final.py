@@ -1,5 +1,5 @@
 r"""
-table_final.py - FIX FINAL ROBUSTO (SIN LATEX CRASH + WRAP + LEYENDA CIENTÍFICA)
+table_final.py - FIX FINAL ROBUSTO (WRAP INTELIGENTE + LEGEND + CELL FIT)
 """
 
 import json
@@ -113,7 +113,7 @@ def load_ood(path):
     return ood
 
 # ─────────────────────────────────────────────────────────────
-# SAFE TEXT (SIN LATEX -> EVITA CRASHES)
+# CLEAN EQUATION
 # ─────────────────────────────────────────────────────────────
 
 def clean_equation(eq: str) -> str:
@@ -121,28 +121,32 @@ def clean_equation(eq: str) -> str:
         return "--"
 
     eq = str(eq).replace("\n", " ")
-
-    # simplificaciones seguras
     eq = eq.replace("**", "^")
     eq = eq.replace("omega", "Ω")
-
-    # sqrt seguro básico
-    eq = re.sub(r"sqrt\((.*?)\)", r"sqrt(\1)", eq)
-
-    # limpiar basura
+    eq = re.sub(r"square\((.*?)\)", r"sqrt(\1)", eq)
     eq = re.sub(r"\s+", " ", eq)
 
     return eq.strip()
 
+# ─────────────────────────────────────────────────────────────
+# ⭐ NUEVO: ajuste dinámico por columna
+# ─────────────────────────────────────────────────────────────
 
-def truncate_text(eq: str, maxlen=45) -> str:
-    if eq == "--":
-        return eq
+def compute_max_chars_per_col(fig_width, n_cols, base=180):
+    """
+    Aproximación: más columnas => menos caracteres por celda
+    """
+    return max(15, int(base / n_cols))
 
-    if len(eq) <= maxlen:
-        return eq
 
-    return eq[:maxlen] + "..."
+def truncate_to_cell_width(text, max_chars):
+    if text == "--":
+        return text
+
+    if len(text) <= max_chars:
+        return text
+
+    return text[:max_chars - 3].rstrip() + "..."
 
 
 # ─────────────────────────────────────────────────────────────
@@ -163,7 +167,6 @@ def get_colour(mse, mae):
     else:
         return RED
 
-
 # ─────────────────────────────────────────────────────────────
 # TABLE
 # ─────────────────────────────────────────────────────────────
@@ -182,26 +185,30 @@ def build_table(df, ood, noise, laws, models):
                 (df["noise"] == noise)
             ]
 
-            if sub.empty:
-                eq = "--"
+            # ── BLOQUE CORREGIDO ──
+            is_nn = model.startswith("MLP")
+
+            if is_nn:
+                eq = "----"
                 mae = None
             else:
-                eq = sub.iloc[0]["equation"]
-                mae = sub.iloc[0]["mae"]
+                if sub.empty:
+                    eq = "--"
+                    mae = None
+                else:
+                    eq = sub.iloc[0]["equation"]
+                    mae = sub.iloc[0]["mae"]
 
             mse = ood.get(law, {}).get(model, {}).get(noise)
 
             eq_clean = clean_equation(eq)
-            eq_final = truncate_text(eq_clean)
-
-            row_t.append(eq_final)
+            row_t.append(eq_clean)
             row_c.append(get_colour(mse, mae))
 
         text.append(row_t)
         colors.append(row_c)
 
     return text, colors
-
 
 # ─────────────────────────────────────────────────────────────
 # RENDER
@@ -213,6 +220,16 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
 
     fig, ax = plt.subplots(figsize=(26, 10))
     ax.axis("off")
+
+    # ── CALC WIDTH PER COLUMN ──
+    n_cols = len(models) + 1
+    max_chars = compute_max_chars_per_col(fig.get_figwidth(), n_cols)
+
+    # APPLY TRUNCATION
+    cell_text = [
+        [truncate_to_cell_width(txt, max_chars) for txt in row]
+        for row in cell_text
+    ]
 
     table_text = [[law_names.get(l, l)] + row for l, row in zip(laws, cell_text)]
     table_colors = [["#F5F5F5"] + row for row in cell_colors]
@@ -229,7 +246,6 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
     tbl.set_fontsize(10)
     tbl.scale(1.0, 2.2)
 
-    # 🔥 FIX: wrap + clip + ajuste
     for (r, c), cell in tbl.get_celld().items():
         cell.get_text().set_wrap(True)
         cell.set_clip_on(True)
@@ -241,9 +257,7 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
         if c == 0:
             cell.set_text_props(weight="bold")
 
-    # ─────────────────────────────────────────────
-    # LEGEND (MEJORADA)
-    # ─────────────────────────────────────────────
+    # ───────── LEGEND ─────────
 
     legend = [
         mpatches.Patch(color=PERFECT_GREEN,
@@ -268,7 +282,6 @@ def render(cell_text, cell_colors, laws, models, law_names, out_path):
     plt.tight_layout()
     fig.savefig(out_path, dpi=220, bbox_inches="tight")
     plt.close(fig)
-
 
 # ─────────────────────────────────────────────────────────────
 # MAIN

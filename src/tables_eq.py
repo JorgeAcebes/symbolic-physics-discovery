@@ -257,4 +257,4 @@ def plot_equation_tables_json():
 
 if __name__ == "__main__":
     plot_recovery_grid_json()
-    # plot_equation_tables_json()
+    plot_equation_tables_json()
