@@ -1,4 +1,3 @@
-# %%
 import json
 import os
 import re
@@ -157,11 +156,11 @@ def load_ood(path):
 # ─────────────────────────────────────────────────────────────
 
 def get_max_chars(model: str) -> int:
-    """Asigna límites de truncamiento dinámicos según el ancho de columna."""
-    if model in ["PySINDy", "QLattice"]:
-        return 28
-    if model == "Polynomial":
-        return 16
+    # Aumentamos el límite para los modelos priorizados
+    if model in ["PySR", "QLattice"]:
+        return 40
+    if model in ["PySINDy", "Polynomial", "GPLearn"]:
+        return 35
     if model.startswith("MLP"):
         return 10
     return 35
@@ -171,8 +170,18 @@ def format_latex_equation(eq: str, max_chars: int) -> str:
         return "--"
 
     eq = str(eq).replace("\n", " ")
-    eq = re.sub(r"\b([0-9.]+)e([-+]?[0-9]+)\b", r"\1 \\times 10^{\2}", eq)
-    
+
+    def repl_sci(m):
+        base = float(m.group(1))
+        exp = int(m.group(2))
+        if exp == 0:
+            return f"{int(base)}" if base.is_integer() else f"{base}"
+        if base == 1.0:
+            return f"10^{{{exp}}}"
+        return f"{base} \\times 10^{{{exp}}}"
+        
+    eq = re.sub(r"\b([0-9.]+)e([-+]?[0-9]+)\b", repl_sci, eq)
+
     for func in ["log", "exp", "sin", "cos", "tan"]:
         eq = re.sub(rf"\b{func}\b", rf"\\{func}", eq)
     
@@ -187,10 +196,29 @@ def format_latex_equation(eq: str, max_chars: int) -> str:
     eq = eq.replace("**", "^")
     eq = re.sub(r"\^\((.*?)\)", r"^{\1}", eq)
     eq = re.sub(r"\^([a-zA-Z0-9.\-]+)", r"^{\1}", eq)
-    
     eq = re.sub(r"([a-zA-Z])(\d+)", r"\1_{\2}", eq)
+
+    eq = re.sub(r"\b1(?:\.0+)?\s*\*\s*", "", eq)
     eq = eq.replace("*", " ")
     eq = re.sub(r"\s+", " ", eq).strip()
+
+    m = re.match(r"^([-+]?\s*\d+(?:\.\d+)?(?: \\times 10\^\{-?\d+\})?)\s*([-+])\s*(.*)$", eq)
+    if m:
+        c, sign, rest = m.groups()
+        if rest:
+            if not c.strip().startswith("-"):
+                c = "+ " + c.strip()
+            else:
+                c = c.strip()
+                c = c.replace("-", "- ") if not c.startswith("- ") else c
+            
+            if sign == "+":
+                eq = f"{rest} {c}"
+            elif sign == "-":
+                eq = f"- {rest} {c}"
+
+    eq = eq.replace("+ -", "- ")
+    eq = eq.replace("- -", "+ ")
 
     if len(eq) > max_chars:
         eq = eq[:max_chars - 4].rstrip()
@@ -229,19 +257,25 @@ def get_colour(mse):
 def build_table_data(df, ood, noise, laws, models):
     text, colors = [], []
 
-    # Fila 0: Super-cabecera en blanco (se dibuja manualmente para centrado perfecto)
+    # Super-cabecera definida a trozos
     row0_t = [""] * (len(models) + 2)
-    row0_c = ["#D6D6D6"] * (len(models) + 2)
+    row0_c = ["#FFFFFF", "#FFFFFF"]  # Ley, Expresión
+    for m in models:
+        if m in ["GPLearn", "PySR", "QLattice", "PySINDy"]:
+            row0_c.append("#BDBDBD")
+        elif m == "Polynomial":
+            row0_c.append("#FFFFFF")
+        elif m.startswith("MLP"):
+            row0_c.append("#BDBDBD")
+            
     text.append(row0_t)
     colors.append(row0_c)
 
-    # Fila 1: Cabecera real
     row1_t = ["Ley Física", "Expresión Analítica"] + [MODEL_ES.get(m, m) for m in models]
     row1_c = ["#D6D6D6"] * (len(models) + 2)
     text.append(row1_t)
     colors.append(row1_c)
 
-    # Cuerpo
     for law in laws:
         row_t = [get_law_name(law), get_true_eq(law)]
         row_c = ["#F5F5F5", "#EAEAEA"]
@@ -272,17 +306,18 @@ def build_table_data(df, ood, noise, laws, models):
 # ─────────────────────────────────────────────────────────────
 
 def render(cell_text, cell_colors, models, out_path):
-    fig, ax = plt.subplots(figsize=(26, 8))
+    # Altura del subplot reducida para evitar espacio inútil
+    fig, ax = plt.subplots(figsize=(26, 6))
     ax.axis("off")
 
-    widths = [0.12, 0.08] 
+    widths = [0.11, 0.07] 
     for m in models:
         if m.startswith("MLP"):
             widths.append(0.04)
-        elif m == "Polynomial":
-            widths.append(0.06)
+        elif m in ["PySR", "QLattice"]:
+            widths.append(0.16)  # Incremento de área
         else:
-            widths.append(0.13) 
+            widths.append(0.12)
             
     w_sum = sum(widths)
     widths = [w / w_sum for w in widths]
@@ -304,42 +339,27 @@ def render(cell_text, cell_colors, models, out_path):
         cell.set_clip_on(True)
         cell.set_edgecolor('#D3D3D3')
 
-        # Formato geométrico de las filas de cabecera
         if r == 0:
-            # Elimina bordes divisorios internos para unificar celdas matemáticamente
-            if c in [2, 3, 4, 5]: 
-                edges = "BT"
-                if c == 2: edges += "L"
-                if c == 5: edges += "R"
-                cell.visible_edges = edges
-            elif c in [7, 8, 9]:
-                edges = "BT"
-                if c == 7: edges += "L"
-                if c == 9: edges += "R"
-                cell.visible_edges = edges
+            if c in [2, 3, 4, 5] or c in [7, 8, 9]:
+                cell.set_edgecolor("#BDBDBD")
+                cell.set_facecolor("#BDBDBD")
+            else:
+                cell.set_edgecolor("#FFFFFF")
+                cell.set_facecolor("#FFFFFF")
                 
         elif r == 1:
             cell.set_text_props(weight="bold")
 
-        # Negrita en nombres de leyes
         if c == 0 and r > 1:
             cell.set_text_props(weight="bold")
 
-    # Inyección de texto superpuesto en coordenadas del Bounding Box
     fig.canvas.draw()
     
-    # Centro: Regresores Simbólicos (cols 2 a 5)
     b_rs_L = tbl[0, 2].get_bbox()
     b_rs_R = tbl[0, 5].get_bbox()
     ax.text((b_rs_L.x0 + b_rs_R.x1) / 2, (b_rs_L.y0 + b_rs_L.y1) / 2, 
             "Regresores Simbólicos", ha='center', va='center', weight='bold', size=16, transform=ax.transAxes)
 
-    # Centro: Polinomial (col 6)
-    b_poly = tbl[0, 6].get_bbox()
-    ax.text((b_poly.x0 + b_poly.x1) / 2, (b_poly.y0 + b_poly.y1) / 2, 
-            "Polinomial", ha='center', va='center', weight='bold', size=16, transform=ax.transAxes)
-
-    # Centro: Redes Neuronales (cols 7 a 9)
     b_nn_L = tbl[0, 7].get_bbox()
     b_nn_R = tbl[0, 9].get_bbox()
     ax.text((b_nn_L.x0 + b_nn_R.x1) / 2, (b_nn_L.y0 + b_nn_L.y1) / 2, 
@@ -347,22 +367,22 @@ def render(cell_text, cell_colors, models, out_path):
 
     legend = [
         mpatches.Patch(color=COLOR_EXACT, label=r"Exacta ($\mathrm{MSE} < 10^{-20}$)"),
-        mpatches.Patch(color=COLOR_BUENO, label=r"Buena ($10^{-20} \leq \mathrm{MSE} < 10^{-4}$)"),
-        mpatches.Patch(color=COLOR_APPROX, label=r"Media ($10^{-4} \leq \mathrm{MSE} \leq 10^{-2}$)"),
-        mpatches.Patch(color=COLOR_INCORRECT, label=r"Mala ($\mathrm{MSE} > 10^{-2}$)"),
+        mpatches.Patch(color=COLOR_BUENO, label=r"Precisa ($10^{-20} \leq \mathrm{MSE} < 10^{-4}$)"),
+        mpatches.Patch(color=COLOR_APPROX, label=r"Aproximada ($10^{-4} \leq \mathrm{MSE} \leq 10^{-2}$)"),
+        mpatches.Patch(color=COLOR_INCORRECT, label=r"Incorrecta ($\mathrm{MSE} > 10^{-2}$)"),
     ]
 
     ax.legend(
         handles=legend,
         loc="upper center",
-        bbox_to_anchor=(0.5, 0.05),
+        bbox_to_anchor=(0.5, -0.02),  # Leyenda acortada al borde inferior de la tabla
         ncol=4,
         frameon=False,
         fontsize=16
     )
 
-    # Exportación estricta en PDF vectorial
-    fig.savefig(out_path, format="pdf", bbox_inches="tight", pad_inches=0.1)
+    # Padding nulo para recortar bordes blancos
+    fig.savefig(out_path, format="pdf", bbox_inches="tight", pad_inches=0.02)
     plt.close(fig)
 
 # ─────────────────────────────────────────────────────────────
