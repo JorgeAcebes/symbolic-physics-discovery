@@ -45,7 +45,7 @@ def get_true_eq(raw_law):
         "coulomb": r"$\frac{q_1 q_2}{r^2}$",
         "oscillator": r"$-x$",
         "harmonic_oscillator": r"$-x$",
-        "kepler": r"$a^{3/2}$",
+        "kepler": r"$r^{3/2}$",
         "kepler_third": r"$a^{3/2}$",
         "ideal_gas": r"$\frac{n T}{V}$",
         "time_dilation": r"$\frac{t}{\sqrt{1 - v^2}}$",
@@ -271,7 +271,7 @@ def build_table_data(df, ood, noise, laws, models):
     text.append(row0_t)
     colors.append(row0_c)
 
-    row1_t = ["Ley Física", "Expresión Analítica"] + [MODEL_ES.get(m, m) for m in models]
+    row1_t = ["Ley Física", "Forma Analítica"] + [MODEL_ES.get(m, m) for m in models]
     row1_c = ["#D6D6D6"] * (len(models) + 2)
     text.append(row1_t)
     colors.append(row1_c)
