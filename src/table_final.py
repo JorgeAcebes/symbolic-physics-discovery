@@ -42,13 +42,13 @@ COLOR_INCORRECT = '#d62728'
 
 def get_true_eq(raw_law):
     mapping = {
-        "coulomb": r"$\frac{q_1 q_2}{r^2}$",
+        "coulomb": r"$q_1 q_2/r^2$",
         "oscillator": r"$-x$",
         "harmonic_oscillator": r"$-x$",
         "kepler": r"$r^{3/2}$",
         "kepler_third": r"$a^{3/2}$",
-        "ideal_gas": r"$\frac{n T}{V}$",
-        "time_dilation": r"$\frac{t}{\sqrt{1 - v^2}}$",
+        "ideal_gas": r"$n T/V$",
+        "time_dilation": r"$t/\sqrt{1 - v^2}$",
         "projectile_range": r"$v_0^2 \sin(2\theta)$",
         "radioactive_decay": r"$e^{-\lambda t}$",
         "newton_cooling": r"$1 + e^{-kt}$",
@@ -157,9 +157,9 @@ def load_ood(path):
 
 def get_max_chars(model: str) -> int:
     # Aumentamos el límite para los modelos priorizados
-    if model in ["PySR", "QLattice"]:
+    if model in ["PySR"]:
         return 40
-    if model in ["PySINDy", "Polynomial", "GPLearn"]:
+    if model in ["PySINDy", "QLattice", "Polynomial"]:
         return 35
     if model.startswith("MLP"):
         return 10
@@ -307,15 +307,17 @@ def build_table_data(df, ood, noise, laws, models):
 
 def render(cell_text, cell_colors, models, out_path):
     # Altura del subplot reducida para evitar espacio inútil
-    fig, ax = plt.subplots(figsize=(26, 6))
+    fig, ax = plt.subplots(figsize=(28, 6))
     ax.axis("off")
 
     widths = [0.11, 0.07] 
     for m in models:
         if m.startswith("MLP"):
             widths.append(0.04)
-        elif m in ["PySR", "QLattice"]:
-            widths.append(0.16)  # Incremento de área
+        elif m in ["QLattice"]:
+            widths.append(0.14)
+        elif m in ["PySR"]:
+            widths.append(0.13)   # Incremento de área
         else:
             widths.append(0.12)
             
@@ -378,7 +380,7 @@ def render(cell_text, cell_colors, models, out_path):
         bbox_to_anchor=(0.5, -0.02),  # Leyenda acortada al borde inferior de la tabla
         ncol=4,
         frameon=False,
-        fontsize=16
+        fontsize=20
     )
 
     # Padding nulo para recortar bordes blancos
