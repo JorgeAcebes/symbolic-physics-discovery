@@ -72,13 +72,24 @@ def get_law_name(raw_law):
     }
     return mapping.get(raw_law, raw_law)
 
+LAW_ORDER = [
+    "coulomb",
+    "harmonic_oscillator", 
+    "kepler_third",
+    "ideal_gas",
+    "time_dilation",
+    "projectile_range",
+    "radioactive_decay",
+    "newton_cooling",
+    "boltzmann_entropy"
+]
+
 # ─────────────────────────────────────────────────────────────
 # MODELS
 # ─────────────────────────────────────────────────────────────
 
 MODEL_ORDER = [
-    "GPLearn", "PySR", "QLattice", "PySINDy",
-    "Polynomial", "MLP_Standard", "MLP_Sparse", "MLP_Dropout"
+ "MLP_Standard", "MLP_Sparse", "MLP_Dropout", "Polynomial",  "PySINDy" , "GPLearn", "PySR", "QLattice",
 ]
 
 MODEL_ES = {
@@ -342,7 +353,7 @@ def render(cell_text, cell_colors, models, out_path):
         cell.set_edgecolor('#D3D3D3')
 
         if r == 0:
-            if c in [2, 3, 4, 5] or c in [7, 8, 9]:
+            if c in [2, 3, 4] or c in [6, 7, 8, 9]:
                 cell.set_edgecolor("#BDBDBD")
                 cell.set_facecolor("#BDBDBD")
             else:
@@ -357,13 +368,13 @@ def render(cell_text, cell_colors, models, out_path):
 
     fig.canvas.draw()
     
-    b_rs_L = tbl[0, 2].get_bbox()
-    b_rs_R = tbl[0, 5].get_bbox()
+    b_rs_L = tbl[0, 6].get_bbox()
+    b_rs_R = tbl[0, 9].get_bbox()
     ax.text((b_rs_L.x0 + b_rs_R.x1) / 2, (b_rs_L.y0 + b_rs_L.y1) / 2, 
             "Regresores Simbólicos", ha='center', va='center', weight='bold', size=16, transform=ax.transAxes)
 
-    b_nn_L = tbl[0, 7].get_bbox()
-    b_nn_R = tbl[0, 9].get_bbox()
+    b_nn_L = tbl[0, 2].get_bbox()
+    b_nn_R = tbl[0, 4].get_bbox()
     ax.text((b_nn_L.x0 + b_nn_R.x1) / 2, (b_nn_L.y0 + b_nn_L.y1) / 2, 
             "Redes Neuronales", ha='center', va='center', weight='bold', size=16, transform=ax.transAxes)
 
@@ -398,7 +409,7 @@ def main():
     df = parse_results(RESULTS_TXT)
     ood = load_ood(OOD_JSON)
 
-    laws = list(df["law"].unique())
+    laws = [law for law in LAW_ORDER if law in df["law"].values]
     models = [m for m in MODEL_ORDER if m in df["model"].unique()]
 
     os.makedirs(OUT_DIR, exist_ok=True)
