@@ -74,8 +74,8 @@ def get_law_name(raw_law):
 
 LAW_ORDER = [
     "coulomb",
-    "harmonic_oscillator", 
-    "kepler_third",
+    "oscillator", 
+    "kepler",
     "ideal_gas",
     "time_dilation",
     "projectile_range",
@@ -192,6 +192,7 @@ def format_latex_equation(eq: str, max_chars: int) -> str:
         return f"{base} \\times 10^{{{exp}}}"
         
     eq = re.sub(r"\b([0-9.]+)e([-+]?[0-9]+)\b", repl_sci, eq)
+    
 
     for func in ["log", "exp", "sin", "cos", "tan"]:
         eq = re.sub(rf"\b{func}\b", rf"\\{func}", eq)
@@ -242,6 +243,7 @@ def format_latex_equation(eq: str, max_chars: int) -> str:
             
         eq += r" \dots"
     
+    eq = re.sub(r"(?<=\d|\})\s+1(?=\s*[\+\-]|$)", "", eq) 
     return f"${eq}$"
 
 # ─────────────────────────────────────────────────────────────
