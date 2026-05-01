@@ -285,14 +285,14 @@ if __name__ == "__main__":
     
     # Diccionarios de jerarquía para el eje X
     MODEL_ORDER = {
-        "Polynomial": 0,
-        "MLP_Standard": 1,
-        "MLP_Sparse": 2,
-        "MLP_Dropout": 3,
-        "PySR": 4,
-        "QLattice": 5,
-        "GPLearn": 6,
-        "PySINDy": 7
+        "MLP_Standard": 0,
+        "MLP_Sparse": 1,
+        "MLP_Dropout": 2,
+        "Polynomial": 3,
+        "PySINDy": 4,
+        "GPLearn": 5,
+        "PySR": 6,
+        "QLattice": 7,
     }
     
     NOISE_ORDER = {
@@ -350,14 +350,14 @@ if __name__ == "__main__":
             COLOR_EXACT if m <1e-20 else COLOR_BUENO if m < 1e-4 else COLOR_APPROX if m < 1e-2 else COLOR_INCORRECT
             for m in mses
         ]
-        ax.bar(formatted_models, mses, color=colors, edgecolor='black', alpha=0.5)            
+        ax.bar(formatted_models, mses, color=colors, edgecolor='black')            
 
 
         ax.set_yscale('log')
-        ax.set_ylim(1e-8, 1e3)  
+        ax.set_ylim(1e-21, 1e4)  
         ax.set_ylabel('MSE (Escala Logarítmica)')
         ax.set_xlabel('Arquitectura de Modelo y Nivel de Ruido')
-        ax.set_title(f'Evaluación Extrapolada (OOD) - {formatted_law}')
+        # ax.set_title(f'Evaluación Extrapolada (OOD) - {formatted_law}')
         
         # Formateo del eje categórico
         ax.set_xticks(range(len(formatted_models)))
