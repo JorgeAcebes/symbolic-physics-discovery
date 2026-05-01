@@ -1,3 +1,6 @@
+# Script enfocado en la generación de datos Outside of Domain (OOD) y a 
+# la graficación de los valores MSE para cada modelo
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
