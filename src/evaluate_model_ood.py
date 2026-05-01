@@ -60,6 +60,14 @@ FEATURE_MAP = {
     "boltzmann_entropy": ["omega"]
 }
 
+
+# Style
+
+COLOR_EXACT = '#2ca02c'
+COLOR_BUENO = 'limegreen'
+COLOR_APPROX = '#ff7f0e'
+COLOR_INCORRECT = '#d62728'
+
 # ==========================================
 # 1. GENERACIÓN DE DATOS OOD (Física)
 # ==========================================
@@ -339,10 +347,11 @@ if __name__ == "__main__":
 
         fig, ax = plt.subplots(figsize=(10, 6))
         colors = [
-            'green' if m < 1e-4 else 'orange' if m < 1e-2 else 'red' 
+            COLOR_EXACT if m <1e-20 else COLOR_BUENO if m < 1e-4 else COLOR_APPROX if m < 1e-2 else COLOR_INCORRECT
             for m in mses
         ]
         ax.bar(formatted_models, mses, color=colors, edgecolor='black', alpha=0.5)            
+
 
         ax.set_yscale('log')
         ax.set_ylim(1e-8, 1e3)  
@@ -354,12 +363,14 @@ if __name__ == "__main__":
         ax.set_xticks(range(len(formatted_models)))
         ax.set_xticklabels(formatted_models, rotation=45, ha='right')
 
-        green_patch = mpatches.Patch(color='green', alpha=0.5, label=r'$MSE < 10^{-4}$')
-        orange_patch = mpatches.Patch(color='orange', alpha=0.5, label=r'$10^{-4} \leq MSE < 10^{-2}$')
-        red_patch = mpatches.Patch(color='red', alpha=0.5, label=r'$MSE \geq 10^{-2}$')
+
+        Green_patch = mpatches.Patch(color=COLOR_EXACT, label=r'Exacta (MSE $<10^{-20}$)')
+        green_patch = mpatches.Patch(color=COLOR_BUENO, label=r'Precisa ($10^{-20}\leq $ MSE $<10^{-4})$')
+        orange_patch = mpatches.Patch(color=COLOR_APPROX, label=r'Aproximada ($10^{-4} \leq $ MSE $< 10^{-2}$)')
+        red_patch = mpatches.Patch(color=COLOR_INCORRECT, label=r'Incorrecta (MSE $\geq 10^{-2}$)')
 
         # 4. Añadir la leyenda al eje
-        ax.legend(handles=[green_patch, orange_patch, red_patch], loc='upper right')
+        ax.legend(handles=[Green_patch, green_patch, orange_patch, red_patch], loc='upper right')
         
         fig.tight_layout()
         plot_path = os.path.join(RESULTS_OOD_DIR, f"{law}_mse_ood.png")
