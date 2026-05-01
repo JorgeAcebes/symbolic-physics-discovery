@@ -76,6 +76,7 @@ NOISE_ORDER = {
 
 # --- PARÁMETROS DE VISUALIZACIÓN ---
 COLOR_EXACT = '#2ca02c'
+COLOR_BUENO = 'limegreen'
 COLOR_APPROX = '#ff7f0e'
 COLOR_INCORRECT = '#d62728'
 
@@ -118,9 +119,11 @@ def plot_recovery_grid_json():
 
                 if mse is None or mse == "null" or np.isnan(mse) or np.isinf(mse):
                     c = COLOR_INCORRECT
-                elif float(mse) <= 1e-4:
+                elif float(mse) < 1e-20:
                     c = COLOR_EXACT
-                elif float(mse) <= 1e-2:
+                elif float(mse) < 1e-4:
+                    c = COLOR_BUENO
+                elif float(mse) < 1e-2:
                     c = COLOR_APPROX
                 else:
                     c = COLOR_INCORRECT
@@ -154,7 +157,7 @@ def plot_recovery_grid_json():
         Line2D([0], [0], marker='o', color='w', markerfacecolor='#666666', markersize=12, label=r'Ruido alto')
     ]
     
-    leg_noise = ax.legend(handles=noise_elements, loc='upper left', bbox_to_anchor=(0.0, -0.10),
+    leg_noise = ax.legend(handles=noise_elements, loc='upper left', bbox_to_anchor=(-0.20, -0.15),
                           frameon=False, ncol=3, columnspacing=0.5, labelcolor='#222222', 
                           handletextpad=0.4, title=r'\textbf{Disposición espacial (izq. a der.):}',
                           fontsize=14, title_fontsize=15)
@@ -164,9 +167,10 @@ def plot_recovery_grid_json():
 
     # --- LEYENDA DE PRECISIÓN (MSE) ---
     mse_elements = [
-        mpatches.Circle((0, 0), radius=1, color=COLOR_EXACT, label=r'Exacta ($\text{MSE} \le 10^{-4}$)' ),
-        mpatches.Circle((0, 0), radius=1, color=COLOR_APPROX, label=r'Aproximada ($\text{MSE} \le 10^{-2}$)' ),
-        mpatches.Circle((0, 0), radius=1, color=COLOR_INCORRECT, label=r'Incorrecta ($\text{MSE} > 10^{-2}$)' )
+        mpatches.Circle((0, 0), radius=1, color=COLOR_EXACT,  label=r'Exacta ($\text{MSE} < 10^{-20}$)'),
+        mpatches.Circle((0, 0), radius=1, color=COLOR_BUENO,  label=r'Precisa ($10^{-4} \leq \text{MSE} < 10^{-4}$)'),
+        mpatches.Circle((0, 0), radius=1, color=COLOR_APPROX, label=r'Aproximada ($10^{-4} \leq \text{MSE} < 10^{-2}$)'),
+        mpatches.Circle((0, 0), radius=1, color=COLOR_INCORRECT, label=r'Incorrecta ($\text{MSE} \geq 10^{-2}$)' )
     ]
     
     ax.legend(handles=mse_elements, loc='upper right', bbox_to_anchor=(1.0, -0.10), 
