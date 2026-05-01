@@ -90,7 +90,8 @@ symbolic-physics-discovery/
 ├── src/                         # Core experiment pipeline
 │   ├── main.py                  # Orchestrator — runs all models on all datasets
 │   ├── run_optuna.py            # Optuna hyperparameter search
-│   ├── evaluate_model_ood.py    # OOD evaluation script
+│   ├── evaluate_model_ood.py    # OOD evaluation script (same for evaluate_model_ood_graphs.py)
+│   ├── table_equations_ood.py   # Table generator with all equations + ood MSE
 │   ├── aggregate_hyperparams.py # Aggregation of Optuna results
 │   ├── data/
 │   │   ├── loader.py            # PhysicalDataset — data ingestion & preprocessing
