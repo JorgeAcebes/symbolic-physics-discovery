@@ -13,5 +13,5 @@ Contains the technical report and project documentation.
 ## Presentation
 Contains the project presentation.
 
-* `presentation.tex`: Source file for the slides.
+* `main.tex`: Source file for the slides.
 * `presentation.pdf`: Compiled PDF of the presentation.
