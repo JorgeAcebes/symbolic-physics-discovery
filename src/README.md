@@ -10,7 +10,8 @@ This directory contains the full experiment pipeline for symbolic physics discov
 src/
 ├── main.py                  ← Orchestrator: runs all models across all datasets
 ├── run_optuna.py            ← Optuna hyperparameter search
-├── evaluate_model_ood.py    ← Out-of-distribution evaluation
+├── evaluate_model_ood.py    ← Out-of-distribution evaluation (same for evaluate_model_ood_graphs.py)
+├── table_equations_ood.py   ← Table generator with all equations + ood MSE
 ├── aggregate_hyperparams.py ← Aggregates and summarises Optuna outputs
 │
 ├── data/
