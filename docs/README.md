@@ -1,10 +1,17 @@
-# Documentación y Memoria Técnica
+# Paper and Presentation Documents
 
-Archivos fuente para la elaboración del informe final en $\LaTeX$.
+## Paper
+Contains the technical report and project documentation.
 
-## Estructura
-- `/img`: Gráficos seleccionados de la carpeta `results/`.
-- `main.tex`: Archivo principal del reporte.
-- `references.bib`: Bibliografía en formato BibTeX.
+* `/figures`: Selected graphs from the `results/` directory.
+* `main.tex`: Source file for the final report.
+* `main.pdf`: Compiled PDF of the report.
+* `biblio.bib`: Bibliography in BibTeX format.
 
-**Nota:** Utilizar siempre la fuente `LM Roman` para mantener la estética académica.
+---
+
+## Presentation
+Contains the project presentation.
+
+* `presentation.tex`: Source file for the slides.
+* `presentation.pdf`: Compiled PDF of the presentation.
