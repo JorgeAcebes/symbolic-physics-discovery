@@ -86,6 +86,11 @@ symbolic-physics-discovery/
 ├── data/                        # Synthetic CSV datasets (27 files + OOD .npz)
 │   ├── data_ood/                # Out-of-distribution test arrays (.npz)
 │   └── README.md
+|
+├── docs/                        # Project report and presentation .tex files and compiled pdf
+│   ├── paper/                   # Technical report and project documentation.
+│   ├── presentation/            # Project presentation
+│   └── README.md
 │
 ├── src/                         # Core experiment pipeline
 │   ├── main.py                  # Orchestrator — runs all models on all datasets
