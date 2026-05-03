@@ -137,7 +137,7 @@ x' = \frac{x - \mu}{\sigma},
 siendo los parámetros $\mu$ (media) y $\sigma$ (desviación estándar) calculados exclusivamente sobre el conjunto de entrenamiento, previniendo el \textit{data leakage}.
 
 
-El motivo por el cual se realiza este proceso de estandarización de los datos para los modelos mencionados es el aumento de su estabilidad, así como una mejoría en la competencia de los datos en el caso particular de la regresión polinómica. En el caso de los modelos de regresión simbólica este preprocesado no es tan relevante, no obstante, algunos métodos como QLattice poseen procesos automáticos de codificado de los argumentos de entrada para mejorar su rendimiento \cite{brolos2021feyn}.
+El motivo por el cual se realiza este proceso de estandarización de los datos para los modelos mencionados es el aumento de su estabilidad, así como una mejora en la competencia de los datos en el caso particular de la regresión polinómica. En el caso de los modelos de regresión simbólica este preprocesado no es tan relevante, no obstante, algunos métodos como QLattice poseen procesos automáticos de codificado de los argumentos de entrada para mejorar su rendimiento \cite{brolos2021feyn}.
 
 \section{Funciones de coste y evaluación}
 
@@ -241,11 +241,10 @@ La regresión polinómica ofrece relaciones analíticamente interpretables, pero
 
 
 \subsection{Redes neuronales multicapa (MLP)}
-Las redes neuronales multicapa o perceptrones multicapa (MLP) ajustan sus parámetros para modelar relaciones altamente no lineales, sacrificando interpretabilidad analítica. Estructuralmente, la red procesa la información a través de capas ocultas intermedias totalmente conectadas (\textit{fully connected}), las cuales proyectan los datos a nuevos espacios de representación mediante transformaciones afines seguidas de no linealidades para extraer características abstractas.
+Las redes neuronales multicapa o perceptrones multicapa (MLP) ajustan sus parámetros para modelar relaciones altamente no lineales, sacrificando interpretabilidad analítica. Estructuralmente, la red procesa la información a través de capas ocultas intermedias totalmente conectadas (\textit{fully connected}), mostradas en la Figura \ref{fig:mlp}, las cuales proyectan los datos a nuevos espacios de representación mediante transformaciones afines seguidas de no linealidades para extraer características abstractas.
 
-% . La propagación del estado oculto hacia la capa $l+1$ es: $$\mathbf{h}^{(l+1)}=\sigma_{l+1}\left(W^{(l)}\mathbf{h}^{(l)}+\mathbf{b}^{(l)}\right)$$con $\sigma_{l+1}$ la función de activación y $\theta=\{W^{(l)},\mathbf{b}^{(l)}\}$ los parámetros.
 
-En el marco de este estudio, los distintos MLPs fueron implementados en \texttt{PyTorch} y entrenado por lotes (\textit{batches}) mediante descenso de gradiente estocástico (\texttt{Adam}).
+En el marco de este estudio, los distintos MLPs fueron implementados en \texttt{PyTorch} y entrenados por lotes (\textit{batches}) mediante descenso de gradiente estocástico (\texttt{Adam}).
 \FloatBarrier
 \begin{figure}[h!]
     \centering
@@ -291,13 +290,16 @@ En el marco de este estudio, los distintos MLPs fueron implementados en \texttt{
     \end{tikzpicture}
     \shorthandon{>}
     \caption{Diagrama general de la arquitectura de un Perceptrón Multicapa (MLP).}
+    \label{fig:mlp}
 \end{figure}
 
 
 \subsubsection{MLP estándar}
 
 El modelo estándar consta de dos capas ocultas: $d_{\text{in}} \rightarrow 64 \rightarrow 64 \rightarrow 1$ y cuya función de activación es SiLU (\textit{Sigmoid Linear Unit}). Esta función se define como: 
-$$\text{SiLU}(x) = x \cdot \sigma(x).$$
+\begin{equation}
+\text{SiLU}(x) = x \cdot \sigma(x).    
+\end{equation}
 Se trata de una función continua de clase $C^\infty$, es decir, es infinitamente derivable, lo que evita la aparición de discontinuidades en los gradientes. En la Figura \ref{fig:mlp_standard} se puede apreciar tanto la arquitectura de la red, como el comportamiento de la función de activación.
 
 
@@ -480,8 +482,12 @@ Este término induce \textit{sparsidad}, provocando que aquellos pesos con menor
 
 Para dotar al modelo de capacidad predictiva probabilística y estimar su incertidumbre epistémica, se implementa \textit{Monte Carlo Dropou}t (MC Dropout). La arquitectura empleada es $d_{\text{in}} \rightarrow 32 \rightarrow 32 \rightarrow 1$, utilizando activaciones ReLU y aplicando \textit{dropout} con probabilidad $p=0.2$ tras las dos capas ocultas.
 
-A diferencia de su uso tradicional, el \textit{dropout} se mantiene activo durante la fase de inferencia. Para una entrada dada, se realizan $M$ pases estocásticos hacia adelante, evaluando equivalentes a $M$ subredes distintas. Esto permite aproximar la distribución predictiva marginal, obteniendo la predicción final como la media empírica de las salidas, $$\mathbb{E}[y] \approx \frac{1}{M}\sum_{i=1}^M \hat{y}_i,$$
-y cuantificando la incertidumbre epistémica del modelo a través de su varianza muestral, $$\text{Var}[y] \approx \frac{1}{M}\sum_{i=1}^M (\hat{y}_i - \mathbb{E}[y])^2.$$
+A diferencia de su uso tradicional, el \textit{dropout} se mantiene activo durante la fase de inferencia. Para una entrada dada, se realizan $M$ pases estocásticos hacia adelante, evaluando equivalentes a $M$ subredes distintas. Esto permite aproximar la distribución predictiva marginal, obteniendo la predicción final como la media empírica de las salidas, \begin{equation}
+\mathbb{E}[y] \approx \frac{1}{M}\sum_{i=1}^M \hat{y}_i,
+\end{equation}
+y cuantificando la incertidumbre epistémica del modelo a través de su varianza muestral, \begin{equation}
+\text{Var}[y] \approx \frac{1}{M}\sum_{i=1}^M (\hat{y}_i - \mathbb{E}[y])^2.
+\end{equation}
 
 El esquema correspondiente a la arquitectura del \textit{Monte Carlo Dropout} junto con su función de activación se presenta en la Figura \ref{fig:mlp_mcdropout}.
 \FloatBarrier
@@ -575,14 +581,18 @@ La regresión simbólica explora el espacio de expresiones matemáticas para enc
 \subsubsection{PySINDy}
 
 PySINDy (\textit{Sparse Identification of Nonlinear Dynamics}) \cite{brunton2016discovering}, concebido originalmente para la extracción de ecuaciones diferenciales, se implementa en este contexto como un regresor simbólico fundamentado en la optimización dispersa sobre un diccionario de funciones elementales. El modelo aproxima la variable objetivo mediante una combinación lineal:
-$$y \approx \Theta(X) \boldsymbol{\xi},$$
+\begin{equation}
+y \approx \Theta(X) \boldsymbol{\xi},\end{equation}
 donde $\Theta(X)$ es la matriz de diseño que evalúa la biblioteca de funciones sobre los datos empíricos, y $\boldsymbol{\xi}$ es el vector de coeficientes a determinar.
 
 La matriz $\Theta(X)$ define un espacio funcional que amalgama términos polinómicos y racionales. La base polinómica, truncada a un grado máximo $d$ (hiperparámetro que acota la complejidad topológica), incluye potencias e interacciones cruzadas ($\{x_i, x_i^2, x_i x_j, \dots\}$). Para modelar las dependencias inversas inherentes a múltiples leyes físicas, se adjuntan funciones racionales regularizadas: $\{ (x + \epsilon)^{-1}, (x^2 + \epsilon)^{-1} \}$, donde $\epsilon = 10^{-8}$ actúa como un factor de estabilidad numérica frente a singularidades en el entorno del cero.
 
 El cálculo del vector $\boldsymbol{\xi}$ se delega al algoritmo STLSQ (\textit{Sequential Thresholded Least Squares}). Este método iterativo resuelve un problema de mínimos cuadrados con penalización $L_2$ (regularización \textit{Ridge}), aplicando simultáneamente un truncamiento que anula todo coeficiente inferior a un umbral de corte (\texttt{threshold}). La convergencia del algoritmo garantiza la retención exclusiva de los términos dinámicos dominantes.
 
-Tras el ajuste, la expresión analítica emerge como la superposición de los términos activos ($\mathcal{S}$):$$y \approx \sum_{i \in \mathcal{S}} \theta_i(X) \xi_i $$Si bien la linealidad de esta combinación garantiza una alta interpretabilidad, revela la principal vulnerabilidad del método: la dependencia absoluta del sesgo inductivo del diccionario. Si la fenomenología subyacente requiere operadores excluidos del espacio generador de $\Theta(X)$, el algoritmo sacrifica la dispersión para forzar la minimización de la pérdida, densificando $\boldsymbol{\xi}$ y derivando inevitablemente en el sobreajuste del modelo.
+Tras el ajuste, la expresión analítica emerge como la superposición de los términos activos ($\mathcal{S}$):\begin{equation}
+y \approx \sum_{i \in \mathcal{S}} \theta_i(X) \xi_i.
+\end{equation}
+Si bien la linealidad de esta combinación garantiza una alta interpretabilidad, revela la principal vulnerabilidad del método: la dependencia absoluta del sesgo inductivo del diccionario. Si la fenomenología subyacente requiere operadores excluidos del espacio generador de $\Theta(X)$, el algoritmo sacrifica la dispersión para forzar la minimización de la pérdida, densificando $\boldsymbol{\xi}$ y derivando inevitablemente en el sobreajuste del modelo.
 
 
 \FloatBarrier
@@ -713,7 +723,7 @@ PySR (\textit{Symbolic Regression via Evolutionary Algorithms}) \cite{cranmer202
 
 La búsqueda se ejecuta mediante un algoritmo genético estructurado en múltiples poblaciones independientes o ``islas'', las cuales evolucionan en paralelo aplicando operadores de mutación, recombinación y simplificación. Periódicamente, las islas intercambian individuos a través de torneos donde la probabilidad de supervivencia depende estrictamente de la bondad de ajuste. Esta topología mitiga la convergencia en mínimos locales y asegura un muestreo exhaustivo del espacio de soluciones.
 
-En el marco de este estudio, el espacio de funciones se genera combinando las variables independientes mediante operadores binarios ($\{+, -, \times, \div, \wedge\}$) y transformaciones unarias ($\{x^{-1}, x^2, e^x, \cos x, \sin x, \ln x\}$). Para garantizar la extracción de relaciones algebraicas interpretables, se impone una restricción explícita de complejidad que limita el número de nodos permitidos en los árboles de expresión. 
+En el marco de este estudio, el espacio de funciones se genera combinando las variables mediante operadores binarios ($\{+, -, \times, \div, \wedge\}$) y transformaciones unarias ($\{x^{-1}, x^2, e^x, \cos x, \sin x, \ln x\}$). Para garantizar la extracción de relaciones algebraicas interpretables, se impone una restricción explícita de complejidad que limita el número de nodos permitidos en los árboles de expresión. 
 
 Durante este proceso de ajuste, PySR construye un frente de Pareto que registra las ecuaciones candidatas evaluadas, contrastando su error frente a su complejidad. Sobre este conjunto, el criterio \texttt{model\_selection = "best"} aísla el modelo definitivo, seleccionando matemáticamente la expresión que ofrece el compromiso óptimo entre precisión predictiva y parsimonia.
 
