@@ -5,7 +5,7 @@ Contains the technical report and project documentation.
 
 * `/figures`: Selected graphs from the `results/` directory.
 * `main.tex`: Source file for the final report.
-* `main.pdf`: Compiled PDF of the report.
+* `paper.pdf`: Compiled PDF of the report.
 * `biblio.bib`: Bibliography in BibTeX format.
 
 ---
